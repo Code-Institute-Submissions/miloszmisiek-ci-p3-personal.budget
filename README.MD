@@ -49,7 +49,7 @@ LINK HERE
 
 LINK HERE
 
-The live link can be found here - [Tic Tac Toe](https://miloszmisiek.github.io/ci_p2_tictactoe/).
+<!-- The live link can be found here - [Tic Tac Toe](https://miloszmisiek.github.io/ci_p2_tictactoe/). -->
 ## Fork a repository.
 A fork is a copy of a repository. Forking a repository allows you to freely experiment with changes without affecting the original project. The steps are as follows:
 1. On the GitHub.com navigate to repository page.
