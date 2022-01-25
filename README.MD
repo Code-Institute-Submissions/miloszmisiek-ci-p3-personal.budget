@@ -2,7 +2,7 @@
 
 SHORT OVERVIEW
 
-<h2 align="center"><img src="assets/images/readme/am-i-responsive.png" alt="Tic Tac Toe game on different screen sizes" style="max-width='100%'"></h2>
+<!-- <h2 align="center"><img src="assets/images/readme/am-i-responsive.png" alt="Tic Tac Toe game on different screen sizes" style="max-width='100%'"></h2> -->
 
 # Contents
 
