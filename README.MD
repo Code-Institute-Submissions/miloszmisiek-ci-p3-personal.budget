@@ -31,23 +31,18 @@ SHORT OVERVIEW
 - [Heroku](https://www.heroku.com) - container-based cloud Platform as a Service (PaaS). Developers use Heroku to deploy, manage, and scale modern apps.
 - [LucidChart](https://www.lucidchart.com/) - intelligent diagramming application to create logic flow diagram.
 
+## Third Party Libraries
+- Gspread / Google Auth
+- Pyfiglet
+- Termcolor
+- PyInputPlus
+- PrettyTable
+
 # Testing
 All various test results are presented in separate [TESTING](TESTING.md) file.
 
 # Deployment
-## Using GitHub Pages to deploy the project.
-The website was deployed to GitHub pages. The steps are as follows:
-1. In GitHub project repository, click on **Settings** tab.
-
-LINK HERE
-
-2. On the left side, find **Pages** tab.
-3. On the right side of navigation table, find **Source** section and select *main* in the *branch* tab, make sure *root* directory is selected, and press **Save**.
-4. If steps were successfully followed, the green box will appear with a message that the site was deployed.
-
-    *Until the site is published and ready to view, it can take several minutes for the server to response.*
-
-LINK HERE
+## Using Heroku to deploy the project.
 
 <!-- The live link can be found here - [Tic Tac Toe](https://miloszmisiek.github.io/ci_p2_tictactoe/). -->
 ## Fork a repository.
@@ -75,7 +70,7 @@ LINK HERE
 
 # Credits
 ## Content
-- Part of code used for game's Score Area come from [Code Institute](https://codeinstitute.net/) 'Love Sandwiches' Essential Project.
+- Setting up the Google APIs origin is [Code Institute](https://codeinstitute.net/) 'Love Sandwiches' Essential Project.
 - README file is based on game’s owner previous project [ECOCITY](https://github.com/miloszmisiek/ci_p1_ecocity) and some concepts are inspired by fellow Code Institute student [Mycrosys](https://github.com/Mycrosys/marblesgame) project.
 - README and TESTING files text grammar and typing were checked using [Microsoft Word](https://www.microsoft.com/pl-pl/microsoft-365/word).
 - Markdown table for Responsiveness section in TESTING file was created using [Tables Generator](https://www.tablesgenerator.com/markdown_tables).
