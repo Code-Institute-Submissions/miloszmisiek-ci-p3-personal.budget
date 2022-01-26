@@ -26,9 +26,9 @@ class Budget(ClearDisplayMixin):
     Budget class that handles user option for calculations.
     """
     def __init__(self):
-        self.plan = self.choose_budget_plan()
+        self.plan = self.choose_budget_plan()[0]
         self.income = self.enter_income()
-        self.currency = self.choose_currency()
+        # self.currency = self.choose_currency()
         self.clear_display()
         self.update_worksheet('general', self.income, MONTH_NOW, 'monthly income')
         
@@ -38,7 +38,15 @@ class Budget(ClearDisplayMixin):
         Gets user input for budget plan based on menu presented on the screen, validates the choice, clears terinal and returns user's choice.
         """
         response = pyip.inputMenu(['50/30/20', '70/20/10', 'About plans'], numbered=True)
-        return response
+        if response == '50/30/20':
+            needs = 0.5
+            wants = 0.3
+            savings = 0.2
+        elif response == '70/20/10':
+            needs = 0.7
+            wants = 0.2
+            savings = 0.1
+        return [response, needs, wants, savings]
 
     def enter_income(self):
         """
@@ -62,7 +70,7 @@ class Budget(ClearDisplayMixin):
         month_cell = SHEET.worksheet(worksheet).find(row)
         month_income = SHEET.worksheet(worksheet).find(column)
         SHEET.worksheet(worksheet).update_cell(month_cell.row, month_income.col, value)
-        print(f"{column.capitalize()} updated successfully!\n")
+        print(f"{column.capitalize()} updated successfully!\n\n")
     
     
 
@@ -79,6 +87,23 @@ class Savings(Budget, ClearDisplayMixin):
             return round(self.income * 0.2, 1)
         elif self.plan == "70/20/10":
             return round(self.income * 0.1, 1)
+        else:
+            raise TypeError("Incorrect type for plan argument")
+        self.clear_display()
+
+class Needs(Budget, ClearDisplayMixin):
+    """
+    Budget child class to handle Needs calculations.
+    """
+
+    def calculate_needs(self):
+        """
+        Calculates how much money is stored as Needs based on user's choice of budget plan.
+        """
+        if self.plan == "50/30/20":
+            return round(self.income * 0.5, 1)
+        elif self.plan == "70/20/10":
+            return round(self.income * 0.7, 1)
         else:
             raise TypeError("Incorrect type for plan argument")
         self.clear_display()
