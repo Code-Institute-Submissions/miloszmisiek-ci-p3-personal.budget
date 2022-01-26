@@ -29,7 +29,7 @@ class Budget(ClearDisplayMixin):
         self.income = self.enter_income()
         self.currency = self.choose_currency()
         self.clear_display()
-        self.update_income()
+        self.update_worksheet('general', self.income, 'monthly income')
         
     
     def choose_budget_plan(self):
@@ -53,15 +53,17 @@ class Budget(ClearDisplayMixin):
         currency = pyip.inputMenu(['PLN', 'EUR', 'GBP', 'USD'], prompt="Enter your currency: \n",  numbered=True)
         return currency
 
-    def update_income(self):
+    def update_worksheet(self, worksheet, value, column):
         """
-        Updates Google Sheet with user input income based on present month.
+        Updates Google Sheet worksheet based on present month, value and column arguments.
         """
+        print(f"Updating {column} in spreadsheet... ")
         current_month = datetime.now().strftime('%B').lower()
-        months = SHEET.worksheet('general').col_values(1)
-        cell = SHEET.worksheet('general').find(current_month)
-        
-        SHEET.worksheet('general').update_cell(cell.row, cell.col+1, self.income)
+        months = SHEET.worksheet(worksheet).col_values(1)
+        month_cell = SHEET.worksheet(worksheet).find(current_month)
+        month_income = SHEET.worksheet(worksheet).find(column)
+        SHEET.worksheet(worksheet).update_cell(month_cell.row, month_income.col, value)
+        print(f"{column.capitalize()} updated successfully!")
     
     
 
@@ -75,9 +77,9 @@ class Savings(Budget, ClearDisplayMixin):
         Calculates how much money is stored as Savings based on user's choice of budget plan.
         """
         if self.plan == "50/30/20":
-            return self.income * 0.2
+            return round(self.income * 0.2, 1)
         elif self.plan == "70/20/10":
-            return self.income * 0.1
+            return round(self.income * 0.1, 1)
         else:
             raise TypeError("Incorrect type for plan argument")
         self.clear_display()
@@ -86,4 +88,4 @@ class Savings(Budget, ClearDisplayMixin):
 
 save = Savings()
 cal_save = save.calculate_savings()
-print(cal_save)
+save.update_worksheet('general', cal_save, 'savings')
