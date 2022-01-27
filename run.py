@@ -35,7 +35,7 @@ class Budget(ClearDisplayMixin):
         self.plan_elements = self.choose_budget_plan()
         # self.currency = self.choose_currency()
         self.clear_display()
-        self.update_worksheet('general', self.income, MONTH_NOW, 'monthly income')
+        self.update_worksheet_cell('general', self.income, MONTH_NOW, 'monthly income')
         
     
     def choose_budget_plan(self):
@@ -73,7 +73,7 @@ class Budget(ClearDisplayMixin):
         currency = pyip.inputMenu(['PLN', 'EUR', 'GBP', 'USD'], prompt="Enter your currency: \n",  numbered=True)
         return currency
 
-    def update_worksheet(self, worksheet, value, row, column):
+    def update_worksheet_cell(self, worksheet, value, row, column):
         """
         Updates Google Sheet worksheet based on present month, value and column arguments.
         """
@@ -89,7 +89,7 @@ class Savings(Budget, ClearDisplayMixin):
     """
     def __init__(self, money):
         self.money = money
-        self.update_worksheet('general', self.money, MONTH_NOW, 'savings')
+        self.update_worksheet_cell('general', self.money, MONTH_NOW, 'savings')
 
 class Needs(Budget, ClearDisplayMixin,):
     """
@@ -97,6 +97,7 @@ class Needs(Budget, ClearDisplayMixin,):
     """
     def __init__(self, money):
         self.money = money
+        self.categories = self.create_needs_categories()
 
     def create_needs_categories(self):
         """
@@ -105,6 +106,7 @@ class Needs(Budget, ClearDisplayMixin,):
         needs__options_menu = pyip.inputMenu(['Default', 'Create Categories'], prompt="Select how you want to manage your Needs:\n", numbered=True)
         if needs__options_menu == 'Create Categories':
             print("\nEnter your categories WITHOUT whitespaces such as spaces or tabs and seperated with commas.\n")
+            print("Limit your categories to one word only\n")
             print("Example: Vehicle,Apartment,School,Bank")
             commas = False
             while not commas:
@@ -113,11 +115,22 @@ class Needs(Budget, ClearDisplayMixin,):
                     commas = True
                 else:
                     print("\nYour inputs must be seperated with commas! Try again.")
-                
+            return user_needs_categories
+
+    def update_needs_categories(self, needs_cat):
+        """
+        Updates NEEDS worksheet with categories of user's choice.
+        """
+        split_categories = needs_cat.split(',')
+        month_row = SHEET.worksheet('needs').find('month')
+        for num, item in enumerate(split_categories):
+                SHEET.worksheet('needs').update_cell(month_row.row, num+2, item)
 
 
 budget = Budget()
 # save = Savings(budget.plan_elements[3])
 
 needs = Needs(budget.plan_elements[1])
-needs.create_needs_categories()
+needs.update_needs_categories(needs.categories)
+
+
