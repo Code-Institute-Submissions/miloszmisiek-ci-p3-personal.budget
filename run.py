@@ -99,17 +99,20 @@ class Needs(Budget, ClearDisplayMixin,):
         self.money = money
 
     def create_needs_categories(self):
+        """
+        Gets user input to create peronsalized categories or use default option. Validates inputs.
+        """
         needs__options_menu = pyip.inputMenu(['Default', 'Create Categories'], prompt="Select how you want to manage your Needs:\n", numbered=True)
         if needs__options_menu == 'Create Categories':
-            print("Enter your categories WITHOUT whitespaces such as spaces or tabs and seperated with commas")
+            print("\nEnter your categories WITHOUT whitespaces such as spaces or tabs and seperated with commas.\n")
             print("Example: Vehicle,Apartment,School,Bank")
             commas = False
             while not commas:
-                user_needs_categories = pyip.inputStr(prompt="Enter you categories:\n", blockRegexes = ' ')
+                user_needs_categories = pyip.inputStr(prompt="\nEnter you categories:\n", blockRegexes = ' ')
                 if (user_needs_categories.find(',') != -1):
                     commas = True
                 else:
-                    print("Your inputs must be seperated with commas! Try again.")
+                    print("\nYour inputs must be seperated with commas! Try again.")
                 
 
 
