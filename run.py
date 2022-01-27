@@ -4,43 +4,35 @@ import pyinputplus as pyip
 import os
 from datetime import datetime
 
+# Global Variables for Google API
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive.file",
     "https://www.googleapis.com/auth/drive"
     ]
-
 CREDS = Credentials.from_service_account_file('creds.json')
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('personal-budget')
+
+# Global Variables for app processes
 MONTH_NOW = datetime.now().strftime('%B').lower()
 
 
 class ClearDisplayMixin:
+    """
+    Mixin to celar terminal screen.
+    """
     def clear_display(self):
         os.system('clear')
-
-class DistribiuteMoneyMixin:
-    def calculate_money(self, multiplier):
-        """
-        Calculates how much money is stored as Savings based on user's choice of budget plan.
-        """
-        if self.plan_list[0] == "50/30/20":
-            return round(self.income * multiplier, 1)
-        elif self.plan_list[0] == "70/20/10":
-            return round(self.income * multiplier, 1)
-        else:
-            raise TypeError("Incorrect type for plan argument")
-    
 
 class Budget(ClearDisplayMixin):
     """
     Budget class that handles user option for calculations.
     """
     def __init__(self):
-        self.plan_list = self.choose_budget_plan()
         self.income = self.enter_income()
+        self.plan_elements = self.choose_budget_plan()
         # self.currency = self.choose_currency()
         self.clear_display()
         self.update_worksheet('general', self.income, MONTH_NOW, 'monthly income')
@@ -53,14 +45,14 @@ class Budget(ClearDisplayMixin):
         while True:
             response = pyip.inputMenu(['50/30/20', '70/20/10', 'About plans'], prompt="Please select which budget plan you choose:\n", numbered=True)
             if response == '50/30/20':
-                needs = 0.5
-                wants = 0.3
-                savings = 0.2
+                needs = round(self.income * 0.5, 1)
+                wants = round(self.income * 0.3, 1)
+                savings = round(self.income * 0.2, 1)
                 break
             elif response == '70/20/10':
-                needs = 0.7
-                wants = 0.2
-                savings = 0.1
+                needs = round(self.income * 0.7, 1)
+                wants = round(self.income * 0.2, 1)
+                savings = round(self.income * 0.1, 1)
                 break
             else:
                 self.clear_display()
@@ -91,27 +83,38 @@ class Budget(ClearDisplayMixin):
         SHEET.worksheet(worksheet).update_cell(month_cell.row, month_income.col, value)
         print(f"{column.capitalize()} updated successfully!\n\n")
     
-class Savings(Budget, ClearDisplayMixin, DistribiuteMoneyMixin):
+class Savings(Budget, ClearDisplayMixin):
     """
     Budget child class to handle savings calculations.
     """
-    def __init__(self, plan):
-        self.plan = plan
-        self.calc_save = self.calculate_money(self.plan)
-        self.update_worksheet('general', self.calc_save, MONTH_NOW, 'savings')
-        # self.clear_display()
+    def __init__(self, money):
+        self.money = money
+        self.update_worksheet('general', self.money, MONTH_NOW, 'savings')
 
-class Needs(Budget, ClearDisplayMixin, DistribiuteMoneyMixin):
+class Needs(Budget, ClearDisplayMixin,):
     """
     Budget child class to handle Needs calculations.
     """
-    def __init__(self, plan):
-        self.plan = plan
-        self.calc_need = self.calculate_money(self.plan)
-        # self.clear_display()
+    def __init__(self, money):
+        self.money = money
 
+    def create_needs_categories(self):
+        needs__options_menu = pyip.inputMenu(['Default', 'Create Categories'], prompt="Select how you want to manage your Needs:\n", numbered=True)
+        if needs__options_menu == 'Create Categories':
+            print("Enter your categories WITHOUT whitespaces such as spaces or tabs and seperated with commas")
+            print("Example: Vehicle,Apartment,School,Bank")
+            commas = False
+            while not commas:
+                user_needs_categories = pyip.inputStr(prompt="Enter you categories:\n", blockRegexes = ' ')
+                if (user_needs_categories.find(',') != -1):
+                    commas = True
+                else:
+                    print("Your inputs must be seperated with commas! Try again.")
+                
 
 
 budget = Budget()
-save = Savings(budget.plan_list[3])
-need = Needs()
+# save = Savings(budget.plan_elements[3])
+
+needs = Needs(budget.plan_elements[1])
+needs.create_needs_categories()
