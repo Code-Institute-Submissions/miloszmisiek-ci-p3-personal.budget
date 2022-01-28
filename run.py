@@ -97,7 +97,8 @@ class Needs(Budget, ClearDisplayMixin,):
     """
     def __init__(self, money):
         self.money = money
-        self.categories = self.create_needs_categories()
+        self.categories_string = self.create_needs_categories()
+        self.categories_list = self.update_needs_categories(self.categories_string)
 
     def create_needs_categories(self):
         """
@@ -110,7 +111,7 @@ class Needs(Budget, ClearDisplayMixin,):
             print("Example: Vehicle,Apartment,School,Bank")
             commas = False
             while not commas:
-                user_needs_categories = pyip.inputStr(prompt="\nEnter you categories:\n", blockRegexes = ' ')
+                user_needs_categories = pyip.inputStr(prompt="\nEnter your categories:\n", blockRegexes = ' ')
                 if (user_needs_categories.find(',') != -1):
                     commas = True
                 else:
@@ -125,12 +126,21 @@ class Needs(Budget, ClearDisplayMixin,):
         month_row = SHEET.worksheet('needs').find('month')
         for num, item in enumerate(split_categories):
                 SHEET.worksheet('needs').update_cell(month_row.row, num+2, item)
+        return split_categories
+        
+    def input_values_for_needs(self):
+        spendings = {}
+        for item in self.categories_list:
+            spendings[item] = pyip.inputFloat(prompt=f"Enter value for {item}: \n")
+        
+        return(spendings)
+
 
 
 budget = Budget()
 # save = Savings(budget.plan_elements[3])
 
 needs = Needs(budget.plan_elements[1])
-needs.update_needs_categories(needs.categories)
+needs.input_values_for_needs()
 
 
