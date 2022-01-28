@@ -124,11 +124,13 @@ class Needs(Budget, ClearDisplayMixin,):
         Updates NEEDS worksheet with categories of user's choice.
         """
         self.clear_display()
-        print("\nUpdating Needs spreadsheet...")
+        print("\nUpdating Needs spreadsheet...\nIt might take a while...")
         split_categories = needs_cat.split(',')
-        month_row = SHEET.worksheet('needs').find('month')
+        month = SHEET.worksheet('needs').find('month')
+        for i in range (month.col+1,28):
+            SHEET.worksheet('needs').update_cell(month.row, i, "")
         for num, item in enumerate(split_categories):
-                SHEET.worksheet('needs').update_cell(month_row.row, num+2, item)
+                SHEET.worksheet('needs').update_cell(month.row, num+2, item)
         print("\nNeeds spreadsheet updated successfully!")
         return split_categories
         
@@ -159,5 +161,4 @@ budget = Budget()
 
 needs = Needs(budget.plan_elements[1])
 needs.input_values_for_needs()
-
 
