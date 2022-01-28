@@ -26,6 +26,70 @@ class ClearDisplayMixin:
     def clear_display(self):
         os.system('clear')
 
+class UpdateWorksheetMixin:
+    def input_values_for_worksheet(self, worksheet):
+        """
+        Return user input for individual categories.
+        """
+        self.clear_display()
+        spendings = {}
+        for item in self.categories_list:
+            if item != 'TOTAL':
+                spendings[item] = pyip.inputFloat(prompt=f"\nEnter value for {item}: \n")
+            else:
+                spendings[item] = sum(spendings.values())
+        self.clear_display()
+        print(f"\nUpdating {worksheet} spreadsheet with passed values...")
+        for key, value in spendings.items():
+            key_location = SHEET.worksheet(worksheet).find(key)
+            SHEET.worksheet(worksheet).update_cell(key_location.row+1, key_location.col, value)
+        print(f"\n{worksheet.capitalize()} spreadsheet updated successfully!")
+        print(f"Your summarize costs for {worksheet} is: {spendings['TOTAL']}")
+        
+        return spendings
+
+    def clear_cells(self, worksheet, cell):
+        print(f"Clearing {worksheet} worksheet...\nIt might take a while...")
+        location = SHEET.worksheet(worksheet).find(cell)
+        for i in range (location.col+1,28):
+            SHEET.worksheet(worksheet).update_cell(location.row, i, "")
+            SHEET.worksheet(worksheet).update_cell(location.row+1, i, "")
+        print(f"\n{worksheet.capitalize()} worksheet is now clear.")
+
+    def update_worksheet_categories(self, categories, worksheet, cell):
+        """
+        Updates worksheet with categories of user's choice.
+        """
+        self.clear_display()
+        print(f"\nUpdating {worksheet} spreadsheet...")
+        split_categories = categories.split(',')
+        month = SHEET.worksheet(worksheet).find(cell)
+        for num, item in enumerate(split_categories):
+                SHEET.worksheet(worksheet).update_cell(month.row, num+2, item)
+        print(f"\n{worksheet.capitalize()} spreadsheet updated successfully!")
+        return split_categories
+    
+    def create_categories(self, worksheet):
+        """
+        Gets user input to create peronsalized categories or use default option. Validates inputs.
+        """
+        self.clear_display()
+        options_menu = pyip.inputMenu(['Default', 'Create Categories'], prompt=f"Select how you want to manage your {worksheet.capitalize()}:\n", numbered=True)
+        if options_menu == 'Create Categories':
+            self.clear_cells(worksheet, 'month')
+            print("\nEnter your categories WITHOUT whitespaces such as spaces or tabs and seperated with commas.")
+            print("Limit yourself to one word entries only.")
+            print("\nExample: Vehicle,Apartment,School,Bank")
+            commas = False
+            while not commas:
+                user_categories = pyip.inputStr(prompt="\nEnter your categories:\n", blockRegexes = ' ') + ',TOTAL'
+                if (user_categories.find(',') != -1):
+                    commas = True
+                else:
+                    print("\nYour inputs must be seperated with commas! Try again.")
+            return user_categories
+
+
 class Budget(ClearDisplayMixin):
     """
     Budget class that handles user option for calculations.
@@ -91,68 +155,18 @@ class Savings(Budget, ClearDisplayMixin):
         self.money = money
         self.update_worksheet_cell('general', self.money, MONTH_NOW, 'savings')
 
-class Needs(Budget, ClearDisplayMixin,):
+class Needs(Budget, ClearDisplayMixin, UpdateWorksheetMixin):
     """
     Budget child class to handle Needs calculations.
     """
     def __init__(self, money):
         self.money = money
-        self.categories_string = self.create_needs_categories()
-        self.categories_list = self.update_needs_categories(self.categories_string)
+        self.categories_string = self.create_categories('needs')
+        self.categories_list = self.update_worksheet_categories(self.categories_string, 'needs', 'month')
 
-    def create_needs_categories(self):
-        """
-        Gets user input to create peronsalized categories or use default option. Validates inputs.
-        """
-        self.clear_display()
-        needs__options_menu = pyip.inputMenu(['Default', 'Create Categories'], prompt="Select how you want to manage your Needs:\n", numbered=True)
-        if needs__options_menu == 'Create Categories':
-            print("\nEnter your categories WITHOUT whitespaces such as spaces or tabs and seperated with commas.\n")
-            print("Limit yourself to one word entries only\n")
-            print("Example: Vehicle,Apartment,School,Bank")
-            commas = False
-            while not commas:
-                user_needs_categories = pyip.inputStr(prompt="\nEnter your categories:\n", blockRegexes = ' ') + ',TOTAL'
-                if (user_needs_categories.find(',') != -1):
-                    commas = True
-                else:
-                    print("\nYour inputs must be seperated with commas! Try again.")
-            return user_needs_categories
+    
 
-    def update_needs_categories(self, needs_cat):
-        """
-        Updates NEEDS worksheet with categories of user's choice.
-        """
-        self.clear_display()
-        print("\nUpdating Needs spreadsheet...\nIt might take a while...")
-        split_categories = needs_cat.split(',')
-        month = SHEET.worksheet('needs').find('month')
-        for i in range (month.col+1,28):
-            SHEET.worksheet('needs').update_cell(month.row, i, "")
-        for num, item in enumerate(split_categories):
-                SHEET.worksheet('needs').update_cell(month.row, num+2, item)
-        print("\nNeeds spreadsheet updated successfully!")
-        return split_categories
-        
-    def input_values_for_needs(self):
-        """
-        Return user input for individual Needs categories.
-        """
-        self.clear_display()
-        spendings = {}
-        for item in self.categories_list:
-            if item != 'TOTAL':
-                spendings[item] = pyip.inputFloat(prompt=f"\nEnter value for {item}: \n")
-            else:
-                spendings[item] = sum(spendings.values())
-
-        print("\nUpdating Needs spreadsheet with passed values...")
-        for key, value in spendings.items():
-            key_location = SHEET.worksheet('needs').find(key)
-            SHEET.worksheet('needs').update_cell(key_location.row+1, key_location.col, value)
-        print("\nNeeds spreadsheet updated successfully!")
-        
-        return spendings
+    
     
 
 
@@ -160,5 +174,5 @@ budget = Budget()
 # save = Savings(budget.plan_elements[3])
 
 needs = Needs(budget.plan_elements[1])
-needs.input_values_for_needs()
+needs.input_values_for_worksheet('needs')
 
