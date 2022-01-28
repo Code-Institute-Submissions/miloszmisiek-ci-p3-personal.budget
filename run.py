@@ -122,18 +122,29 @@ class Needs(Budget, ClearDisplayMixin,):
         """
         Updates NEEDS worksheet with categories of user's choice.
         """
+        print("\nUpdating Needs spreadsheet...")
         split_categories = needs_cat.split(',')
         month_row = SHEET.worksheet('needs').find('month')
         for num, item in enumerate(split_categories):
                 SHEET.worksheet('needs').update_cell(month_row.row, num+2, item)
+        print("\nNeeds spreadsheet updated successfully!")
         return split_categories
         
     def input_values_for_needs(self):
+        """
+        Return user input for individual Needs categories.
+        """
         spendings = {}
         for item in self.categories_list:
-            spendings[item] = pyip.inputFloat(prompt=f"Enter value for {item}: \n")
+            spendings[item] = pyip.inputFloat(prompt=f"\nEnter value for {item}: \n")
+
+        print("\nUpdating Needs spreadsheet with passed values...")
+        for key, value in spendings.items():
+            key_location = SHEET.worksheet('needs').find(key)
+            SHEET.worksheet('needs').update_cell(key_location.row+1, key_location.col, value)
+        print("\nNeeds spreadsheet updated successfully!")
         
-        return(spendings)
+        return spendings
 
 
 
