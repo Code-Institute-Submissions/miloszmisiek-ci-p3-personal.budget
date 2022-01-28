@@ -104,6 +104,7 @@ class Needs(Budget, ClearDisplayMixin,):
         """
         Gets user input to create peronsalized categories or use default option. Validates inputs.
         """
+        self.clear_display()
         needs__options_menu = pyip.inputMenu(['Default', 'Create Categories'], prompt="Select how you want to manage your Needs:\n", numbered=True)
         if needs__options_menu == 'Create Categories':
             print("\nEnter your categories WITHOUT whitespaces such as spaces or tabs and seperated with commas.\n")
@@ -122,6 +123,7 @@ class Needs(Budget, ClearDisplayMixin,):
         """
         Updates NEEDS worksheet with categories of user's choice.
         """
+        self.clear_display()
         print("\nUpdating Needs spreadsheet...")
         split_categories = needs_cat.split(',')
         month_row = SHEET.worksheet('needs').find('month')
@@ -134,10 +136,13 @@ class Needs(Budget, ClearDisplayMixin,):
         """
         Return user input for individual Needs categories.
         """
+        self.clear_display()
         spendings = {}
         for item in self.categories_list:
             if item != 'TOTAL':
                 spendings[item] = pyip.inputFloat(prompt=f"\nEnter value for {item}: \n")
+            else:
+                spendings[item] = sum(spendings.values())
 
         print("\nUpdating Needs spreadsheet with passed values...")
         for key, value in spendings.items():
@@ -146,7 +151,7 @@ class Needs(Budget, ClearDisplayMixin,):
         print("\nNeeds spreadsheet updated successfully!")
         
         return spendings
-
+    
 
 
 budget = Budget()
