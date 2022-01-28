@@ -107,11 +107,11 @@ class Needs(Budget, ClearDisplayMixin,):
         needs__options_menu = pyip.inputMenu(['Default', 'Create Categories'], prompt="Select how you want to manage your Needs:\n", numbered=True)
         if needs__options_menu == 'Create Categories':
             print("\nEnter your categories WITHOUT whitespaces such as spaces or tabs and seperated with commas.\n")
-            print("Limit your categories to one word only\n")
+            print("Limit yourself to one word entries only\n")
             print("Example: Vehicle,Apartment,School,Bank")
             commas = False
             while not commas:
-                user_needs_categories = pyip.inputStr(prompt="\nEnter your categories:\n", blockRegexes = ' ')
+                user_needs_categories = pyip.inputStr(prompt="\nEnter your categories:\n", blockRegexes = ' ') + ',TOTAL'
                 if (user_needs_categories.find(',') != -1):
                     commas = True
                 else:
@@ -136,7 +136,8 @@ class Needs(Budget, ClearDisplayMixin,):
         """
         spendings = {}
         for item in self.categories_list:
-            spendings[item] = pyip.inputFloat(prompt=f"\nEnter value for {item}: \n")
+            if item != 'TOTAL':
+                spendings[item] = pyip.inputFloat(prompt=f"\nEnter value for {item}: \n")
 
         print("\nUpdating Needs spreadsheet with passed values...")
         for key, value in spendings.items():
