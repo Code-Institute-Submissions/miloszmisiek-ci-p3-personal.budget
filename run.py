@@ -37,10 +37,13 @@ class UpdateSpreadsheetMixin:
         self.clear_display()
         spendings = {}
         for item in self.categories_list:
-            if item != 'TOTAL':
+            if item != 'TOTAL' and item!= 'SURPLUS':
                 spendings[item] = pyip.inputFloat(prompt=f"\nEnter value for {item}: \n")
             else:
-                spendings[item] = sum(spendings.values())
+                if item == 'TOTAL':
+                    spendings[item] = sum(spendings.values())
+                elif item == 'SURPLUS':
+                    spendings[item] = self.money - spendings['TOTAL']
         self.clear_display()
         print(f"\nUpdating {worksheet} worksheet with passed values...")
         for key, value in spendings.items():
@@ -87,12 +90,12 @@ class UpdateSpreadsheetMixin:
             print("\nExample: Vehicle,Apartment,School,Bank")
             commas = False
             while not commas:
-                user_categories = pyip.inputStr(prompt="\nEnter your categories:\n", blockRegexes = ' ') + ',TOTAL'
-                if (user_categories.find(',') != -1):
+                user_categories = pyip.inputStr(prompt="\nEnter your categories:\n", blockRegexes = ' ')
+                if user_categories.find(',') != -1 or user_categories != False:
                     commas = True
                 else:
                     print("\nYour inputs must be seperated with commas! Try again.")
-            return user_categories
+            return user_categories + ',TOTAL' + ',SURPLUS'
 
 
 class Budget(ClearDisplayMixin):
@@ -177,9 +180,6 @@ class Wants(Budget, ClearDisplayMixin, UpdateSpreadsheetMixin):
         self.money = money
         self.categories_string = self.create_categories('wants')
         self.categories_list = self.update_worksheet_categories(self.categories_string, 'wants', 'month')    
-
-    
-    
 
 
 budget = Budget()
