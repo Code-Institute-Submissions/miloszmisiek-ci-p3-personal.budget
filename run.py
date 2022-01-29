@@ -30,6 +30,17 @@ class UpdateSpreadsheetMixin:
     """
     Mixin for functions related to spreadsheet operations.
     """
+
+    def update_worksheet_cell(self, worksheet, value, row, column):
+        """
+        Updates Google Sheet worksheet based on present month, value and column arguments.
+        """
+        print(f"Updating {column} in worksheet...\n")
+        month_cell = SHEET.worksheet(worksheet).find(row)
+        month_income = SHEET.worksheet(worksheet).find(column)
+        SHEET.worksheet(worksheet).update_cell(month_cell.row, month_income.col, value)
+        print(f"{column.capitalize()} updated successfully!\n\n")
+
     def input_values_for_worksheet(self, worksheet):
         """
         Return user input for individual categories.
@@ -98,7 +109,7 @@ class UpdateSpreadsheetMixin:
             return user_categories + ',TOTAL' + ',SURPLUS'
 
 
-class Budget(ClearDisplayMixin):
+class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
     """
     Budget class that handles user option for calculations.
     """
@@ -145,15 +156,33 @@ class Budget(ClearDisplayMixin):
         currency = pyip.inputMenu(['PLN', 'EUR', 'GBP', 'USD'], prompt="Enter your currency: \n",  numbered=True)
         return currency
 
-    def update_worksheet_cell(self, worksheet, value, row, column):
+    def manage_your_budget(self, worksheet, surplus, savings):
         """
-        Updates Google Sheet worksheet based on present month, value and column arguments.
+        Manages SURPLUS values for selected worksheet. Transfer SURPLUS to cell selected by user.
         """
-        print(f"Updating {column} in worksheet...\n")
-        month_cell = SHEET.worksheet(worksheet).find(row)
-        month_income = SHEET.worksheet(worksheet).find(column)
-        SHEET.worksheet(worksheet).update_cell(month_cell.row, month_income.col, value)
-        print(f"{column.capitalize()} updated successfully!\n\n")
+        print("Managing budget...")
+        extra_cell = SHEET.worksheet('general').find('extra')
+        savings_cell = SHEET.worksheet('general').find('savings')
+        surplus_cell = SHEET.worksheet(worksheet).find('SURPLUS')
+        if surplus < 0:
+            print("Checking possibles to manage your debt...")
+            cover = savings + surplus
+            if cover < 0:
+                print("You don't have enough money for your spends! You must reduce your costs!...")
+                quit()
+            else:
+               SHEET.worksheet(worksheet).update_cell(surplus_cell.row+1, surplus_cell.col, 0) 
+               SHEET.worksheet(worksheet).update_cell(savings_cell.row+1, savings_cell.col, cover)
+        else:
+            add_money = pyip.inputMenu(['Savings', 'Extra Money'], prompt="Select where you want to invest your money:\n", numbered=True)
+            if add_money == 'Savings':
+                SHEET.worksheet('general').update_cell(savings_cell.row+1, savings_cell.col, savings+surplus)
+                SHEET.worksheet(worksheet).update_cell(surplus_cell.row+1, surplus_cell.col, '') 
+            else:
+                SHEET.worksheet('general').update_cell(extra_cell.row+1, extra_cell.col, surplus)
+                SHEET.worksheet(worksheet).update_cell(surplus_cell.row+1, surplus_cell.col, '')
+        print("Budget up-to-date!")
+
     
 class Savings(Budget, ClearDisplayMixin):
     """
@@ -183,10 +212,11 @@ class Wants(Budget, ClearDisplayMixin, UpdateSpreadsheetMixin):
 
 
 budget = Budget()
-# save = Savings(budget.plan_elements[3])
+save = Savings(budget.plan_elements[3])
 
 needs = Needs(budget.plan_elements[1])
-needs.input_values_for_worksheet('needs')
-wants = Wants(budget.plan_elements[2])
-wants.input_values_for_worksheet('wants')
+needs_spendings = needs.input_values_for_worksheet('needs')
+needs.manage_your_budget('needs', needs_spendings['SURPLUS'], budget.plan_elements[3])
+# wants = Wants(budget.plan_elements[2])
+# wants_spendings = wants.input_values_for_worksheet('wants')
 
