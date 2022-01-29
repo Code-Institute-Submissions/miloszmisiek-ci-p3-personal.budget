@@ -21,12 +21,15 @@ MONTH_NOW = datetime.now().strftime('%B').lower()
 
 class ClearDisplayMixin:
     """
-    Mixin to celar terminal screen.
+    Mixin to clear terminal screen.
     """
     def clear_display(self):
         os.system('clear')
 
-class UpdateWorksheetMixin:
+class UpdateSpreadsheetMixin:
+    """
+    Mixin for functions related to spreadsheet operations.
+    """
     def input_values_for_worksheet(self, worksheet):
         """
         Return user input for individual categories.
@@ -39,21 +42,23 @@ class UpdateWorksheetMixin:
             else:
                 spendings[item] = sum(spendings.values())
         self.clear_display()
-        print(f"\nUpdating {worksheet} spreadsheet with passed values...")
+        print(f"\nUpdating {worksheet} worksheet with passed values...")
         for key, value in spendings.items():
             key_location = SHEET.worksheet(worksheet).find(key)
             SHEET.worksheet(worksheet).update_cell(key_location.row+1, key_location.col, value)
-        print(f"\n{worksheet.capitalize()} spreadsheet updated successfully!")
+        print(f"\n{worksheet.capitalize()} worksheet updated successfully!")
         print(f"Your summarize costs for {worksheet} is: {spendings['TOTAL']}")
         
         return spendings
 
     def clear_cells(self, worksheet, cell):
         print(f"Clearing {worksheet} worksheet...\nIt might take a while...")
-        location = SHEET.worksheet(worksheet).find(cell)
-        for i in range (location.col+1,28):
-            SHEET.worksheet(worksheet).update_cell(location.row, i, "")
-            SHEET.worksheet(worksheet).update_cell(location.row+1, i, "")
+        
+        SHEET.worksheet(worksheet).batch_clear(["B1:AA1000"])
+        # location = SHEET.worksheet(worksheet).find(cell)
+        # for i in range (location.col+1,28):
+        #     SHEET.worksheet(worksheet).update_cell(location.row, i, "")
+        #     SHEET.worksheet(worksheet).update_cell(location.row+1, i, "")
         print(f"\n{worksheet.capitalize()} worksheet is now clear.")
 
     def update_worksheet_categories(self, categories, worksheet, cell):
@@ -61,12 +66,12 @@ class UpdateWorksheetMixin:
         Updates worksheet with categories of user's choice.
         """
         self.clear_display()
-        print(f"\nUpdating {worksheet} spreadsheet...")
+        print(f"\nUpdating {worksheet} worksheet...")
         split_categories = categories.split(',')
         month = SHEET.worksheet(worksheet).find(cell)
         for num, item in enumerate(split_categories):
                 SHEET.worksheet(worksheet).update_cell(month.row, num+2, item)
-        print(f"\n{worksheet.capitalize()} spreadsheet updated successfully!")
+        print(f"\n{worksheet.capitalize()} worksheet updated successfully!")
         return split_categories
     
     def create_categories(self, worksheet):
@@ -141,7 +146,7 @@ class Budget(ClearDisplayMixin):
         """
         Updates Google Sheet worksheet based on present month, value and column arguments.
         """
-        print(f"Updating {column} in spreadsheet...\n")
+        print(f"Updating {column} in worksheet...\n")
         month_cell = SHEET.worksheet(worksheet).find(row)
         month_income = SHEET.worksheet(worksheet).find(column)
         SHEET.worksheet(worksheet).update_cell(month_cell.row, month_income.col, value)
@@ -149,13 +154,13 @@ class Budget(ClearDisplayMixin):
     
 class Savings(Budget, ClearDisplayMixin):
     """
-    Budget child class to handle savings calculations.
+    Budget child class to handle Savings calculations.
     """
     def __init__(self, money):
         self.money = money
         self.update_worksheet_cell('general', self.money, MONTH_NOW, 'savings')
 
-class Needs(Budget, ClearDisplayMixin, UpdateWorksheetMixin):
+class Needs(Budget, ClearDisplayMixin, UpdateSpreadsheetMixin):
     """
     Budget child class to handle Needs calculations.
     """
@@ -164,7 +169,14 @@ class Needs(Budget, ClearDisplayMixin, UpdateWorksheetMixin):
         self.categories_string = self.create_categories('needs')
         self.categories_list = self.update_worksheet_categories(self.categories_string, 'needs', 'month')
 
-    
+class Wants(Budget, ClearDisplayMixin, UpdateSpreadsheetMixin):
+    """
+    Budget child class to handle Wants calculations.
+    """
+    def __init__(self, money):
+        self.money = money
+        self.categories_string = self.create_categories('wants')
+        self.categories_list = self.update_worksheet_categories(self.categories_string, 'wants', 'month')    
 
     
     
@@ -175,4 +187,6 @@ budget = Budget()
 
 needs = Needs(budget.plan_elements[1])
 needs.input_values_for_worksheet('needs')
+wants = Wants(budget.plan_elements[2])
+wants.input_values_for_worksheet('wants')
 
