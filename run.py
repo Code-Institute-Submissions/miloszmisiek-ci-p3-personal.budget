@@ -3,6 +3,8 @@ from google.oauth2.service_account import Credentials
 import pyinputplus as pyip
 import os
 import pyfiglet
+from termcolor import colored
+from prettytable import PrettyTable
 from datetime import datetime
 
 # Global Variables for Google API
@@ -17,7 +19,7 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('personal-budget')
 
 # Global Variables for app processes
-MONTH_NOW = datetime.now().strftime('%B').lower()
+MONTH_NOW = datetime.now().strftime('%B')
 
 
 class ClearDisplayMixin:
@@ -67,13 +69,12 @@ class UpdateSpreadsheetMixin:
         return spendings
 
     def clear_cells(self, worksheet, cell):
-        print(f"Clearing {worksheet} worksheet...\nIt might take a while...")
+        """
+        Function to clear all cells except first column.
+        """
+        print(f"\nClearing {worksheet} worksheet...")
         
         SHEET.worksheet(worksheet).batch_clear(["B1:AA1000"])
-        # location = SHEET.worksheet(worksheet).find(cell)
-        # for i in range (location.col+1,28):
-        #     SHEET.worksheet(worksheet).update_cell(location.row, i, "")
-        #     SHEET.worksheet(worksheet).update_cell(location.row+1, i, "")
         print(f"\n{worksheet.capitalize()} worksheet is now clear.")
 
     def update_worksheet_categories(self, categories, worksheet, cell):
@@ -96,7 +97,7 @@ class UpdateSpreadsheetMixin:
         self.clear_display()
         options_menu = pyip.inputMenu(['Default', 'Create Categories'], prompt=f"Select how you want to manage your {worksheet.capitalize()}:\n", numbered=True)
         if options_menu == 'Create Categories':
-            self.clear_cells(worksheet, 'month')
+            self.clear_cells(worksheet, 'Month')
             print("\nEnter your categories WITHOUT whitespaces such as spaces or tabs and seperated with commas.")
             print("Limit yourself to one word entries only.")
             print("\nExample: Vehicle,Apartment,School,Bank")
@@ -117,12 +118,41 @@ class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
     Budget class that handles user option for calculations.
     """
     def __init__(self):
+        self.main_menu()
         self.income = self.enter_income()
         self.plan_elements = self.choose_budget_plan()
         # self.currency = self.choose_currency()
         self.clear_display()
-        self.update_worksheet_cell('general', self.income, MONTH_NOW, 'monthly income')
+        self.update_worksheet_cell('general', self.income, MONTH_NOW, 'Monthly Income')
         
+    
+    def main_menu(self):
+        """
+        Function to display main menu.
+        """
+        # Concept for pyfiglet styling comes from https://www.youtube.com/watch?v=U1aUteSg2a4
+        print(colored(pyfiglet.figlet_format("personal budget manager", font = "graceful", justify="center", width=110), "green"))
+        
+        while True:
+            show_menu = pyip.inputMenu(['About the app','Print tables', 'Manage your budget', 'Exit'], prompt="Select one of the following and hit Enter:\n", numbered=True)
+            if show_menu == 'About the app':
+                print("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vitae erat pellentesque, bibendum quam in, molestie augue. Integer vitae neque efficitur nunc feugiat dignissim sed non est. Pellentesque eu ullamcorper nibh. Nullam tempus lacus enim, quis vulputate mi condimentum vitae. Cras vel ullamcorper risus. Mauris nec rutrum lacus. Sed sit amet molestie lacus. Duis sit amet quam diam. Maecenas cursus risus ut magna egestas pellentesque. Curabitur dapibus maximus blandit. Nunc aliquet ante id nisl pharetra, in rhoncus neque luctus. Quisque rutrum nisi vel eros fringilla hendrerit.")
+
+            elif show_menu == 'Print tables':
+                tables_choice = pyip.inputMenu(["general", "needs", "wants"], prompt="Select which table to print in terminal:\n", numbered=True)
+                values = SHEET.worksheet(tables_choice).get_all_values()
+                table = PrettyTable()
+                table.field_names = values[0]
+                table.add_rows(values[1:])
+                print(table)
+            
+            elif show_menu == "Manage your budget":
+                pass
+
+            else:
+                break
+
+
     
     def choose_budget_plan(self):
         """
@@ -164,8 +194,8 @@ class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
         Manages SURPLUS values for selected worksheet. Transfer SURPLUS to cell selected by user.
         """
         print("Managing budget...")
-        extra_cell = SHEET.worksheet('general').find('extra')
-        savings_cell = SHEET.worksheet('general').find('savings')
+        extra_cell = SHEET.worksheet('general').find('Extra')
+        savings_cell = SHEET.worksheet('general').find('Savings')
         surplus_cell = SHEET.worksheet(worksheet).find('SURPLUS')
         if surplus < 0:
             print("Checking possibles to manage your debt...")
@@ -195,7 +225,7 @@ class Savings(Budget, ClearDisplayMixin):
     """
     def __init__(self, money):
         self.money = money
-        self.update_worksheet_cell('general', self.money, MONTH_NOW, 'savings')
+        self.update_worksheet_cell('general', self.money, MONTH_NOW, 'Savings')
 
 class Needs(Budget, ClearDisplayMixin, UpdateSpreadsheetMixin):
     """
@@ -204,7 +234,7 @@ class Needs(Budget, ClearDisplayMixin, UpdateSpreadsheetMixin):
     def __init__(self, money):
         self.money = money
         self.categories_string = self.create_categories('needs', 'Housing,Vehicle,Insurance,Food,Banking')
-        self.categories_list = self.update_worksheet_categories(self.categories_string, 'needs', 'month')
+        self.categories_list = self.update_worksheet_categories(self.categories_string, 'needs', 'Month')
 
 class Wants(Budget, ClearDisplayMixin, UpdateSpreadsheetMixin):
     """
@@ -213,17 +243,14 @@ class Wants(Budget, ClearDisplayMixin, UpdateSpreadsheetMixin):
     def __init__(self, money):
         self.money = money
         self.categories_string = self.create_categories('wants', 'Enteraintment,Wellbeing,Travel')
-        self.categories_list = self.update_worksheet_categories(self.categories_string, 'wants', 'month')    
+        self.categories_list = self.update_worksheet_categories(self.categories_string, 'wants', 'Month')    
 
 
-# budget = Budget()
-# save = Savings(budget.plan_elements[3])
+budget = Budget()
+save = Savings(budget.plan_elements[3])
 
-# needs = Needs(budget.plan_elements[1])
-# needs_spendings = needs.input_values_for_worksheet('needs')
-# needs.manage_your_budget('needs', needs_spendings['SURPLUS'], budget.plan_elements[3])
-# # wants = Wants(budget.plan_elements[2])
-# # wants_spendings = wants.input_values_for_worksheet('wants')
-
-fig = pyfiglet.Figlet()
-for font in fig.getFonts(): print(font + "\n\n" + pyfiglet.figlet_format("personal budget", font=font), "\n\n")
+needs = Needs(budget.plan_elements[1])
+needs_spendings = needs.input_values_for_worksheet('needs')
+needs.manage_your_budget('needs', needs_spendings['SURPLUS'], budget.plan_elements[3])
+# wants = Wants(budget.plan_elements[2])
+# wants_spendings = wants.input_values_for_worksheet('wants')
