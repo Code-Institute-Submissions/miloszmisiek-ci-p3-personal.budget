@@ -61,8 +61,9 @@ class UpdateSpreadsheetMixin:
         self.clear_display()
         print(f"\nUpdating {worksheet} worksheet with passed values...")
         for key, value in spendings.items():
-            key_location = SHEET.worksheet(worksheet).find(key)
-            SHEET.worksheet(worksheet).update_cell(key_location.row+1, key_location.col, value)
+            if key != 'SURPLUS':
+                key_location = SHEET.worksheet(worksheet).find(key)
+                SHEET.worksheet(worksheet).update_cell(key_location.row+1, key_location.col, value)
         print(f"\n{worksheet.capitalize()} worksheet updated successfully!")
         print(f"Your summarize costs for {worksheet} is: {spendings['TOTAL']}")
         
@@ -86,6 +87,7 @@ class UpdateSpreadsheetMixin:
         split_categories = categories.split(',')
         month = SHEET.worksheet(worksheet).find(cell)
         for num, item in enumerate(split_categories):
+            if item != 'SURPLUS':
                 SHEET.worksheet(worksheet).update_cell(month.row, num+2, item)
         print(f"\n{worksheet.capitalize()} worksheet updated successfully!")
         return split_categories
@@ -110,7 +112,8 @@ class UpdateSpreadsheetMixin:
                     print("\nYour inputs must be seperated with commas! Try again.")
         else:
             user_categories = default_cat
-            return user_categories + ',TOTAL' + ',SURPLUS'
+        
+        return user_categories + ',TOTAL' + ',SURPLUS'
 
 
 class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
@@ -201,7 +204,6 @@ class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
         print("Managing budget...")
         extra_cell = SHEET.worksheet('general').find('Extra')
         savings_cell = SHEET.worksheet('general').find('Savings')
-        surplus_cell = SHEET.worksheet(worksheet).find('SURPLUS')
         if surplus < 0:
             print("Checking possibles to manage your debt...")
             cover = savings + surplus
@@ -210,17 +212,14 @@ class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
                 quit()
             else:
                 print("Enough Savings to cover debt. Updating SURPLUS and Savings...")
-                SHEET.worksheet(worksheet).update_cell(surplus_cell.row+1, surplus_cell.col, 0)
                 SHEET.worksheet(worksheet).update_cell(savings_cell.row+1, savings_cell.col, cover)
                 print("SURPLUS and Savings up-to-date.")
         else:
             add_money = pyip.inputMenu(['Savings', 'Extra Money'], prompt="Select where you want to invest your money:\n", numbered=True)
             if add_money == 'Savings':
                 SHEET.worksheet('general').update_cell(savings_cell.row+1, savings_cell.col, savings+surplus)
-                SHEET.worksheet(worksheet).update_cell(surplus_cell.row+1, surplus_cell.col, '') 
             else:
                 SHEET.worksheet('general').update_cell(extra_cell.row+1, extra_cell.col, surplus)
-                SHEET.worksheet(worksheet).update_cell(surplus_cell.row+1, surplus_cell.col, '')
         print("Budget up-to-date!")
 
     
@@ -253,10 +252,11 @@ class Wants(Budget, ClearDisplayMixin, UpdateSpreadsheetMixin):
 
 budget = Budget()
 print(budget.app_logic)
-# save = Savings(budget.plan_elements[3])
+save = Savings(budget.plan_elements[3])
 
-# needs = Needs(budget.plan_elements[1])
-# needs_spendings = needs.input_values_for_worksheet('needs')
-# needs.manage_your_budget('needs', needs_spendings['SURPLUS'], budget.plan_elements[3])
-# # wants = Wants(budget.plan_elements[2])
-# # wants_spendings = wants.input_values_for_worksheet('wants')
+needs = Needs(budget.plan_elements[1])
+needs_spendings = needs.input_values_for_worksheet('needs')
+needs.manage_your_budget('needs', needs_spendings['SURPLUS'], budget.plan_elements[3])
+wants = Wants(budget.plan_elements[2])
+wants_spendings = wants.input_values_for_worksheet('wants')
+wants.manage_your_budget('wants', wants_spendings['SURPLUS'], budget.plan_elements[3])
