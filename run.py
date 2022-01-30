@@ -2,6 +2,7 @@ import gspread
 from google.oauth2.service_account import Credentials
 import pyinputplus as pyip
 import os
+import pyfiglet
 from datetime import datetime
 
 # Global Variables for Google API
@@ -88,7 +89,7 @@ class UpdateSpreadsheetMixin:
         print(f"\n{worksheet.capitalize()} worksheet updated successfully!")
         return split_categories
     
-    def create_categories(self, worksheet):
+    def create_categories(self, worksheet, default_cat):
         """
         Gets user input to create peronsalized categories or use default option. Validates inputs.
         """
@@ -106,6 +107,8 @@ class UpdateSpreadsheetMixin:
                     commas = True
                 else:
                     print("\nYour inputs must be seperated with commas! Try again.")
+        else:
+            user_categories = default_cat
             return user_categories + ',TOTAL' + ',SURPLUS'
 
 
@@ -171,8 +174,10 @@ class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
                 print("You don't have enough money for your spends! You must reduce your costs!...")
                 quit()
             else:
-               SHEET.worksheet(worksheet).update_cell(surplus_cell.row+1, surplus_cell.col, 0) 
-               SHEET.worksheet(worksheet).update_cell(savings_cell.row+1, savings_cell.col, cover)
+                print("Enough Savings to cover debt. Updating SURPLUS and Savings...")
+                SHEET.worksheet(worksheet).update_cell(surplus_cell.row+1, surplus_cell.col, 0)
+                SHEET.worksheet(worksheet).update_cell(savings_cell.row+1, savings_cell.col, cover)
+                print("SURPLUS and Savings up-to-date.")
         else:
             add_money = pyip.inputMenu(['Savings', 'Extra Money'], prompt="Select where you want to invest your money:\n", numbered=True)
             if add_money == 'Savings':
@@ -198,7 +203,7 @@ class Needs(Budget, ClearDisplayMixin, UpdateSpreadsheetMixin):
     """
     def __init__(self, money):
         self.money = money
-        self.categories_string = self.create_categories('needs')
+        self.categories_string = self.create_categories('needs', 'Housing,Vehicle,Insurance,Food,Banking')
         self.categories_list = self.update_worksheet_categories(self.categories_string, 'needs', 'month')
 
 class Wants(Budget, ClearDisplayMixin, UpdateSpreadsheetMixin):
@@ -207,16 +212,18 @@ class Wants(Budget, ClearDisplayMixin, UpdateSpreadsheetMixin):
     """
     def __init__(self, money):
         self.money = money
-        self.categories_string = self.create_categories('wants')
+        self.categories_string = self.create_categories('wants', 'Enteraintment,Wellbeing,Travel')
         self.categories_list = self.update_worksheet_categories(self.categories_string, 'wants', 'month')    
 
 
-budget = Budget()
-save = Savings(budget.plan_elements[3])
+# budget = Budget()
+# save = Savings(budget.plan_elements[3])
 
-needs = Needs(budget.plan_elements[1])
-needs_spendings = needs.input_values_for_worksheet('needs')
-needs.manage_your_budget('needs', needs_spendings['SURPLUS'], budget.plan_elements[3])
-# wants = Wants(budget.plan_elements[2])
-# wants_spendings = wants.input_values_for_worksheet('wants')
+# needs = Needs(budget.plan_elements[1])
+# needs_spendings = needs.input_values_for_worksheet('needs')
+# needs.manage_your_budget('needs', needs_spendings['SURPLUS'], budget.plan_elements[3])
+# # wants = Wants(budget.plan_elements[2])
+# # wants_spendings = wants.input_values_for_worksheet('wants')
 
+fig = pyfiglet.Figlet()
+for font in fig.getFonts(): print(font + "\n\n" + pyfiglet.figlet_format("personal budget", font=font), "\n\n")
