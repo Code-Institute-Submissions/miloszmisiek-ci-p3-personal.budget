@@ -118,7 +118,7 @@ class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
     Budget class that handles user option for calculations.
     """
     def __init__(self):
-        self.main_menu()
+        self.app_logic = self.main_menu()
         self.income = self.enter_income()
         self.plan_elements = self.choose_budget_plan()
         # self.currency = self.choose_currency()
@@ -133,7 +133,9 @@ class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
         # Concept for pyfiglet styling comes from https://www.youtube.com/watch?v=U1aUteSg2a4
         print(colored(pyfiglet.figlet_format("personal budget manager", font = "graceful", justify="center", width=110), "green"))
         
-        while True:
+        start_sequence = False
+        
+        while start_sequence == False:
             show_menu = pyip.inputMenu(['About the app','Print tables', 'Manage your budget', 'Exit'], prompt="Select one of the following and hit Enter:\n", numbered=True)
             if show_menu == 'About the app':
                 print("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vitae erat pellentesque, bibendum quam in, molestie augue. Integer vitae neque efficitur nunc feugiat dignissim sed non est. Pellentesque eu ullamcorper nibh. Nullam tempus lacus enim, quis vulputate mi condimentum vitae. Cras vel ullamcorper risus. Mauris nec rutrum lacus. Sed sit amet molestie lacus. Duis sit amet quam diam. Maecenas cursus risus ut magna egestas pellentesque. Curabitur dapibus maximus blandit. Nunc aliquet ante id nisl pharetra, in rhoncus neque luctus. Quisque rutrum nisi vel eros fringilla hendrerit.")
@@ -147,10 +149,12 @@ class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
                 print(table)
             
             elif show_menu == "Manage your budget":
-                pass
+                start_sequence = True
 
             else:
-                break
+                quit()
+        
+        return start_sequence
 
 
     
@@ -179,8 +183,9 @@ class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
         """
         Gets user's input for income, validates the choice, clears terinal and returns user's choice.
         """
-        income = pyip.inputFloat("Enter your monthly income (-TAX): \n")
-        return income
+        if self.app_logic == True:
+            income = pyip.inputFloat("Enter your monthly income (-TAX): \n")
+            return income
     
     def choose_currency(self):
         """
@@ -247,10 +252,11 @@ class Wants(Budget, ClearDisplayMixin, UpdateSpreadsheetMixin):
 
 
 budget = Budget()
-save = Savings(budget.plan_elements[3])
+print(budget.app_logic)
+# save = Savings(budget.plan_elements[3])
 
-needs = Needs(budget.plan_elements[1])
-needs_spendings = needs.input_values_for_worksheet('needs')
-needs.manage_your_budget('needs', needs_spendings['SURPLUS'], budget.plan_elements[3])
-# wants = Wants(budget.plan_elements[2])
-# wants_spendings = wants.input_values_for_worksheet('wants')
+# needs = Needs(budget.plan_elements[1])
+# needs_spendings = needs.input_values_for_worksheet('needs')
+# needs.manage_your_budget('needs', needs_spendings['SURPLUS'], budget.plan_elements[3])
+# # wants = Wants(budget.plan_elements[2])
+# # wants_spendings = wants.input_values_for_worksheet('wants')
