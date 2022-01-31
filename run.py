@@ -73,34 +73,17 @@ class UpdateSpreadsheetMixin:
         
         return spendings
 
-    def clear_cells(self, worksheet):
+    def clear_cells(self, worksheet, month):
         """
-        Function to clear all cells except first column.
+        Function to clear cells for the selected month and worksheet.
         """
-        print(f"\nClearing {worksheet} worksheet...")
-        SHEET.worksheet(worksheet).batch_clear(["B1:AA1000"])
-        print(f"\n{worksheet.capitalize()} worksheet is now clear.")
 
-    def clear_values_only(self, worksheet, month):
-        """
-        Clears all values for selected month and worksheet.
-        """
-        
-        print("Clearing cells...")
-        all_values = SHEET.worksheet(worksheet).get_all_records()
         month_cell = SHEET.worksheet(worksheet).find(month)
-        month_dict = None
-        
-        for dict in all_values:
-            if dict['Month'] == month:
-                month_dict = dict
-        
-        for key, value in month_dict.items():
-            if key != 'Month':
-                cell = SHEET.worksheet(worksheet).find(key)
-                SHEET.worksheet(worksheet).update_cell(month_cell.row, cell.col, '')
 
-        print("Cells are empty!")
+        print(f"\nClearing {worksheet} worksheet...")
+        SHEET.worksheet(worksheet).batch_clear([f"{month_cell.row}:{month_cell.row}"])
+        SHEET.worksheet(worksheet).update_cell(month_cell.row, month_cell.col, month)
+        print(f"\n{worksheet.capitalize()} worksheet is now clear.")
 
 
     def update_worksheet_categories(self, categories, worksheet, cell):
@@ -305,9 +288,9 @@ needs = Needs(budget.plan_elements[1])
 # needs_spendings = needs.input_values_for_worksheet('needs', budget.income[1])
 # needs.manage_your_budget(needs_spendings['SURPLUS'], budget.plan_elements[3], budget.income[1])
 
-wants = Wants(budget.plan_elements[2])
+# wants = Wants(budget.plan_elements[2])
 # # wants_spendings = wants.input_values_for_worksheet('wants', budget.income[1])
 # # wants.manage_your_budget(wants_spendings['SURPLUS'], budget.plan_elements[3], budget.income[1])
 
-needs.clear_values_only('needs', budget.income[1])
-wants.clear_values_only('wants', budget.income[1])
+needs.clear_cells('needs', budget.income[1])
+# wants.clear_values_only('wants', budget.income[1])
