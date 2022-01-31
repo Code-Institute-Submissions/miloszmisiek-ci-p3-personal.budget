@@ -81,16 +81,27 @@ class UpdateSpreadsheetMixin:
         SHEET.worksheet(worksheet).batch_clear(["B1:AA1000"])
         print(f"\n{worksheet.capitalize()} worksheet is now clear.")
 
-    def clear_values_only(self, worksheet, categories):
-        all_values = SHEET.worksheet(worksheet).get_all_values()
-        sep_values = []
-        for lists in all_values:
-            for value in lists:
-                sep_values.append(value) 
-        for item in categories:
-            if item in sep_values:
-                cell = SHEET.worksheet(worksheet).find(item)
-                SHEET.worksheet(worksheet).update_cell(cell.row+1, cell.col, '')
+    def clear_values_only(self, worksheet, month):
+        """
+        Clears all values for selected month and worksheet.
+        """
+        
+        print("Clearing cells...")
+        all_values = SHEET.worksheet(worksheet).get_all_records()
+        month_cell = SHEET.worksheet(worksheet).find(month)
+        month_dict = None
+        
+        for dict in all_values:
+            if dict['Month'] == month:
+                month_dict = dict
+        
+        for key, value in month_dict.items():
+            if key != 'Month':
+                cell = SHEET.worksheet(worksheet).find(key)
+                SHEET.worksheet(worksheet).update_cell(month_cell.row, cell.col, '')
+
+        print("Cells are empty!")
+
 
     def update_worksheet_categories(self, categories, worksheet, cell):
         """
@@ -252,7 +263,10 @@ class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
             else:
                 for dict in all_values:
                     if dict['Month'] == month:
-                        SHEET.worksheet('general').update_cell(month_cell.row, extra_cell.col, dict['Extra']+surplus)
+                        if dict['Extra'] == '':
+                            SHEET.worksheet('general').update_cell(month_cell.row, extra_cell.col, surplus)
+                        else:
+                            SHEET.worksheet('general').update_cell(month_cell.row, extra_cell.col, float(dict['Extra'])+surplus)
         print("Budget up-to-date!")
 
     
@@ -288,11 +302,12 @@ budget = Budget()
 save = Savings(budget.plan_elements[3], budget.income[1])
 
 needs = Needs(budget.plan_elements[1])
-needs_spendings = needs.input_values_for_worksheet('needs', budget.income[1])
-needs.manage_your_budget(needs_spendings['SURPLUS'], budget.plan_elements[3], budget.income[1])
+# needs_spendings = needs.input_values_for_worksheet('needs', budget.income[1])
+# needs.manage_your_budget(needs_spendings['SURPLUS'], budget.plan_elements[3], budget.income[1])
 
 wants = Wants(budget.plan_elements[2])
-wants_spendings = wants.input_values_for_worksheet('wants', budget.income[1])
-wants.manage_your_budget(wants_spendings['SURPLUS'], budget.plan_elements[3], budget.income[1])
+# # wants_spendings = wants.input_values_for_worksheet('wants', budget.income[1])
+# # wants.manage_your_budget(wants_spendings['SURPLUS'], budget.plan_elements[3], budget.income[1])
 
-# # needs.clear_values_only('needs', needs.categories_list)
+needs.clear_values_only('needs', budget.income[1])
+wants.clear_values_only('wants', budget.income[1])
