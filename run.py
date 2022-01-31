@@ -109,7 +109,7 @@ class UpdateSpreadsheetMixin:
         flow = True
         while flow:
             self.clear_display()
-            options_menu = pyip.inputMenu(['Default', 'Create Categories'], prompt=f"Select how you want to manage your {worksheet.capitalize()}:\n", numbered=True)
+            options_menu = pyip.inputMenu(['Default', 'Create Categories', 'Input values only'], prompt=f"Select how you want to manage your {worksheet.capitalize()}:\n", numbered=True)
             if options_menu == 'Create Categories':
                 print("\nCreating custom categories will delete all values in the worksheet.")
                 continue_bool = pyip.inputStr("Do you want to continue?\nType (Y)es or(N):\n")
@@ -121,18 +121,28 @@ class UpdateSpreadsheetMixin:
                     print("\nExample: Vehicle,Apartment,School,Bank")
                     commas = False
                     while not commas:
-                        user_categories = pyip.inputStr(prompt="\nEnter your categories:\n", blockRegexes = ' ')
-                        if user_categories.find(',') != -1 or user_categories != False:
+                        user_categories = pyip.inputStr(prompt="\nEnter your categories:\n", blockRegexes = [r'(,)\1+|^,'])
+                        if user_categories.find(',') != -1 and user_categories[-1] != ',':
                             commas = True
                             flow = False
                         else:
-                            print("\nYour inputs must be seperated with commas! Try again.")
+                            print("\nYour entry is invalid! Try again.")
                 else:
                     continue
-            else:
+            elif options_menu == 'Default':
                 self.clear_cells(worksheet, 'Month')
                 user_categories = default_cat
                 flow = False
+            else:
+                all_values = SHEET.worksheet(worksheet).get_all_values()
+                get_categories = all_values[0][1:]
+                categories_string = ''
+                for item in get_categories:
+                    if item != '' and item != 'TOTAL':
+                        categories_string += (item + ',')
+                user_categories = var_string[:-1]
+                flow = False
+
         return user_categories + ',TOTAL' + ',SURPLUS'
 
 
@@ -144,8 +154,6 @@ class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
         self.app_logic = self.main_menu()
         self.income = self.enter_income()
         self.plan_elements = self.choose_budget_plan()
-        # self.currency = self.choose_currency()
-        self.clear_display()
         self.update_worksheet_cell('general', self.income[0], self.income[1], 'Monthly Income')
         
     
