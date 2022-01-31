@@ -20,6 +20,7 @@ SHEET = GSPREAD_CLIENT.open('personal-budget')
 
 # Global Variables for app processes
 MONTH_NOW = datetime.now().strftime('%B')
+MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
 
 class ClearDisplayMixin:
@@ -28,6 +29,8 @@ class ClearDisplayMixin:
     """
     def clear_display(self):
         os.system('clear')
+        # Concept for pyfiglet styling comes from https://www.youtube.com/watch?v=U1aUteSg2a4
+        print(colored(pyfiglet.figlet_format("personal budget manager", font = "graceful", justify="center", width=110), "green"))
 
 class UpdateSpreadsheetMixin:
     """
@@ -44,11 +47,12 @@ class UpdateSpreadsheetMixin:
         SHEET.worksheet(worksheet).update_cell(month_cell.row, month_income.col, value)
         print(f"{column.capitalize()} updated successfully!\n\n")
 
-    def input_values_for_worksheet(self, worksheet):
+    def input_values_for_worksheet(self, worksheet, month):
         """
         Return user input for individual categories.
         """
         self.clear_display()
+        month_cell = SHEET.worksheet(worksheet).find(month)
         spendings = {}
         for item in self.categories_list:
             if item != 'TOTAL' and item!= 'SURPLUS':
@@ -63,20 +67,30 @@ class UpdateSpreadsheetMixin:
         for key, value in spendings.items():
             if key != 'SURPLUS':
                 key_location = SHEET.worksheet(worksheet).find(key)
-                SHEET.worksheet(worksheet).update_cell(key_location.row+1, key_location.col, value)
+                SHEET.worksheet(worksheet).update_cell(month_cell.row, key_location.col, value)
         print(f"\n{worksheet.capitalize()} worksheet updated successfully!")
         print(f"Your summarize costs for {worksheet} is: {spendings['TOTAL']}")
         
         return spendings
 
-    def clear_cells(self, worksheet, cell):
+    def clear_cells(self, worksheet):
         """
         Function to clear all cells except first column.
         """
         print(f"\nClearing {worksheet} worksheet...")
-        
         SHEET.worksheet(worksheet).batch_clear(["B1:AA1000"])
         print(f"\n{worksheet.capitalize()} worksheet is now clear.")
+
+    def clear_values_only(self, worksheet, categories):
+        all_values = SHEET.worksheet(worksheet).get_all_values()
+        sep_values = []
+        for lists in all_values:
+            for value in lists:
+                sep_values.append(value) 
+        for item in categories:
+            if item in sep_values:
+                cell = SHEET.worksheet(worksheet).find(item)
+                SHEET.worksheet(worksheet).update_cell(cell.row+1, cell.col, '')
 
     def update_worksheet_categories(self, categories, worksheet, cell):
         """
@@ -99,7 +113,7 @@ class UpdateSpreadsheetMixin:
         self.clear_display()
         options_menu = pyip.inputMenu(['Default', 'Create Categories'], prompt=f"Select how you want to manage your {worksheet.capitalize()}:\n", numbered=True)
         if options_menu == 'Create Categories':
-            self.clear_cells(worksheet, 'Month')
+            self.clear_cells(worksheet)
             print("\nEnter your categories WITHOUT whitespaces such as spaces or tabs and seperated with commas.")
             print("Limit yourself to one word entries only.")
             print("\nExample: Vehicle,Apartment,School,Bank")
@@ -126,7 +140,7 @@ class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
         self.plan_elements = self.choose_budget_plan()
         # self.currency = self.choose_currency()
         self.clear_display()
-        self.update_worksheet_cell('general', self.income, MONTH_NOW, 'Monthly Income')
+        self.update_worksheet_cell('general', self.income[0], self.income[1], 'Monthly Income')
         
     
     def main_menu(self):
@@ -168,14 +182,14 @@ class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
         while True:
             response = pyip.inputMenu(['50/30/20', '70/20/10', 'About plans'], prompt="Please select which budget plan you choose:\n", numbered=True)
             if response == '50/30/20':
-                needs = round(self.income * 0.5, 1)
-                wants = round(self.income * 0.3, 1)
-                savings = round(self.income * 0.2, 1)
+                needs = round(self.income[0] * 0.5, 1)
+                wants = round(self.income[0] * 0.3, 1)
+                savings = round(self.income[0] * 0.2, 1)
                 break
             elif response == '70/20/10':
-                needs = round(self.income * 0.7, 1)
-                wants = round(self.income * 0.2, 1)
-                savings = round(self.income * 0.1, 1)
+                needs = round(self.income[0] * 0.7, 1)
+                wants = round(self.income[0] * 0.2, 1)
+                savings = round(self.income[0] * 0.1, 1)
                 break
             else:
                 self.clear_display()
@@ -187,8 +201,19 @@ class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
         Gets user's input for income, validates the choice, clears terinal and returns user's choice.
         """
         if self.app_logic == True:
+            month = pyip.inputMenu(['Present month', 'Select month'], prompt="Select which month will include calculations:\n", numbered=True)
+            if month == 'Present month':
+                month_calc = MONTH_NOW
+            else:
+                while True:
+                    month_calc = pyip.inputStr("Type month for calculations:\n")
+                    if month_calc in MONTHS:
+                        break
+                    else:
+                        print("Incorrect input. Make sure it is capitalized name of the month.\nExample: July")
             income = pyip.inputFloat("Enter your monthly income (-TAX): \n")
-            return income
+            print(month_calc)
+            return income, month_calc
     
     def choose_currency(self):
         """
@@ -197,13 +222,17 @@ class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
         currency = pyip.inputMenu(['PLN', 'EUR', 'GBP', 'USD'], prompt="Enter your currency: \n",  numbered=True)
         return currency
 
-    def manage_your_budget(self, worksheet, surplus, savings):
+    def manage_your_budget(self, surplus, savings, month):
         """
         Manages SURPLUS values for selected worksheet. Transfer SURPLUS to cell selected by user.
         """
         print("Managing budget...")
+        
+        all_values = SHEET.worksheet('general').get_all_records()
+        month_cell = SHEET.worksheet('general').find(month)
         extra_cell = SHEET.worksheet('general').find('Extra')
         savings_cell = SHEET.worksheet('general').find('Savings')
+        
         if surplus < 0:
             print("Checking possibles to manage your debt...")
             cover = savings + surplus
@@ -212,14 +241,18 @@ class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
                 quit()
             else:
                 print("Enough Savings to cover debt. Updating SURPLUS and Savings...")
-                SHEET.worksheet(worksheet).update_cell(savings_cell.row+1, savings_cell.col, cover)
+                SHEET.worksheet('general').update_cell(month_cell.row, savings_cell.col, cover)
                 print("SURPLUS and Savings up-to-date.")
         else:
             add_money = pyip.inputMenu(['Savings', 'Extra Money'], prompt="Select where you want to invest your money:\n", numbered=True)
             if add_money == 'Savings':
-                SHEET.worksheet('general').update_cell(savings_cell.row+1, savings_cell.col, savings+surplus)
+                for dict in all_values:
+                    if dict['Month'] == month:
+                        SHEET.worksheet('general').update_cell(month_cell.row, savings_cell.col, dict['Savings']+surplus)
             else:
-                SHEET.worksheet('general').update_cell(extra_cell.row+1, extra_cell.col, surplus)
+                for dict in all_values:
+                    if dict['Month'] == month:
+                        SHEET.worksheet('general').update_cell(month_cell.row, extra_cell.col, dict['Extra']+surplus)
         print("Budget up-to-date!")
 
     
@@ -227,9 +260,10 @@ class Savings(Budget, ClearDisplayMixin):
     """
     Budget child class to handle Savings calculations.
     """
-    def __init__(self, money):
+    def __init__(self, money, month):
+        self.month = month
         self.money = money
-        self.update_worksheet_cell('general', self.money, MONTH_NOW, 'Savings')
+        self.update_worksheet_cell('general', self.money, self.month , 'Savings')
 
 class Needs(Budget, ClearDisplayMixin, UpdateSpreadsheetMixin):
     """
@@ -251,12 +285,14 @@ class Wants(Budget, ClearDisplayMixin, UpdateSpreadsheetMixin):
 
 
 budget = Budget()
-print(budget.app_logic)
-save = Savings(budget.plan_elements[3])
+save = Savings(budget.plan_elements[3], budget.income[1])
 
 needs = Needs(budget.plan_elements[1])
-needs_spendings = needs.input_values_for_worksheet('needs')
-needs.manage_your_budget('needs', needs_spendings['SURPLUS'], budget.plan_elements[3])
+needs_spendings = needs.input_values_for_worksheet('needs', budget.income[1])
+needs.manage_your_budget(needs_spendings['SURPLUS'], budget.plan_elements[3], budget.income[1])
+
 wants = Wants(budget.plan_elements[2])
-wants_spendings = wants.input_values_for_worksheet('wants')
-wants.manage_your_budget('wants', wants_spendings['SURPLUS'], budget.plan_elements[3])
+wants_spendings = wants.input_values_for_worksheet('wants', budget.income[1])
+wants.manage_your_budget(wants_spendings['SURPLUS'], budget.plan_elements[3], budget.income[1])
+
+# # needs.clear_values_only('needs', needs.categories_list)
