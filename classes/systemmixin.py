@@ -15,7 +15,7 @@ class SystemMixin:
         """
         os.system('clear')
         # Concept for pyfiglet styling comes from https://www.youtube.com/watch?v=U1aUteSg2a4
-        print(colored(pyfiglet.figlet_format("personal budget manager", font = "graceful", justify="center", width=110), "green"))
+        print(colored(pyfiglet.figlet_format("personal budget manager", font = "graceful", justify="center", width=80), "green"))
 
     def restart_program(self):
         """
