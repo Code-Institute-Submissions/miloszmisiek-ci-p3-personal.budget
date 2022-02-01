@@ -1,6 +1,7 @@
 import gspread
 from google.oauth2.service_account import Credentials
 import pyinputplus as pyip
+import time
 import os
 import pyfiglet
 from termcolor import colored
@@ -43,10 +44,12 @@ class UpdateSpreadsheetMixin:
         """
         self.clear_display()
         print(f"Updating {column} in worksheet...\n")
+        time.sleep(3)
         month_cell = SHEET.worksheet(worksheet).find(row)
         month_income = SHEET.worksheet(worksheet).find(column)
         SHEET.worksheet(worksheet).update_cell(month_cell.row, month_income.col, value)
         print(f"{column.capitalize()} updated successfully!\n\n")
+        time.sleep(3)
 
     def input_values_for_worksheet(self, worksheet, month):
         """
@@ -67,12 +70,15 @@ class UpdateSpreadsheetMixin:
                     spendings[item] = self.money - spendings['TOTAL']
         self.clear_display()
         print(f"\nUpdating {worksheet} worksheet with passed values...")
+        time.sleep(3)
         for key, value in spendings.items():
             if key != 'SURPLUS':
                 key_location = SHEET.worksheet(worksheet).find(key)
                 SHEET.worksheet(worksheet).update_cell(month_cell.row, key_location.col, value)
         print(f"\n{worksheet.capitalize()} worksheet updated successfully!")
+        time.sleep(3)
         print(f"Your summarize costs for {worksheet} is: {spendings['TOTAL']}")
+        time.sleep(5)
         
         return spendings
 
@@ -83,9 +89,11 @@ class UpdateSpreadsheetMixin:
         self.clear_display()
         month_cell = SHEET.worksheet(worksheet).find(month)
         print(f"\nClearing {worksheet} worksheet...")
+        time.sleep(3)
         SHEET.worksheet(worksheet).batch_clear([f"{month_cell.row}:{month_cell.row}"])
         SHEET.worksheet(worksheet).update_cell(month_cell.row, month_cell.col, month)
         print(f"\n{worksheet.capitalize()} worksheet is now clear.")
+        time.sleep(3)
 
 
     def update_worksheet_categories(self, categories, worksheet, cell):
@@ -94,12 +102,14 @@ class UpdateSpreadsheetMixin:
         """
         self.clear_display()
         print(f"\nUpdating {worksheet} worksheet...")
+        time.sleep(3)
         split_categories = categories.split(',')
         month = SHEET.worksheet(worksheet).find(cell)
         for num, item in enumerate(split_categories):
             if item != 'SURPLUS':
                 SHEET.worksheet(worksheet).update_cell(month.row, num+2, item)
         print(f"\n{worksheet.capitalize()} worksheet updated successfully!")
+        time.sleep(3)
         return split_categories
     
     def create_categories(self, worksheet, default_cat):
@@ -109,13 +119,13 @@ class UpdateSpreadsheetMixin:
         flow = True
         while flow:
             self.clear_display()
-            options_menu = pyip.inputMenu(['Default', 'Create Categories', 'Input values only'], prompt=f"Select how you want to manage your {worksheet.capitalize()}:\n", numbered=True)
+            options_menu = pyip.inputMenu(['Default Categories', 'Customize Categories', 'Input Values Only'], prompt=f"Select how you want to manage your {worksheet.capitalize()}:\n", numbered=True)
             if options_menu == 'Create Categories':
                 print("\nCreating custom categories will delete all values in the worksheet.")
-                continue_bool = pyip.inputStr("Do you want to continue?\nType (Y)es or(N):\n")
-                if continue_bool.lower() == 'y':
-                    self.clear_display()
+                continue_bool = pyip.inputYesNo(prompt="\nDo you want to continue? Type Yes or No:\n")
+                if continue_bool.lower() == 'yes':
                     self.clear_cells(worksheet, 'Month')
+                    self.clear_display()
                     print("\nEnter your categories WITHOUT whitespaces such as spaces or tabs and seperated with commas.")
                     print("Limit yourself to one word entries only.")
                     print("\nExample: Vehicle,Apartment,School,Bank")
@@ -140,7 +150,7 @@ class UpdateSpreadsheetMixin:
                 for item in get_categories:
                     if item != '' and item != 'TOTAL':
                         categories_string += (item + ',')
-                user_categories = var_string[:-1]
+                user_categories = categories_string[:-1]
                 flow = False
 
         return user_categories + ',TOTAL' + ',SURPLUS'
@@ -233,11 +243,24 @@ class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
                     else:
                         print("Incorrect input. Make sure it is capitalized name of the month.\nExample: July")
             self.clear_display()
-            income = pyip.inputFloat("Enter your monthly income (-TAX): \n")
-            print(month_calc)
+            while True:
+                input_decision = pyip.inputMenu(['Enter monthly income', 'Get income from spreadsheet'], prompt="Select income for calculations:\n", numbered=True)
+                if input_decision == 'Enter mothly income':
+                    income = pyip.inputFloat("Enter your monthly income (-TAX): \n")
+                else:
+                    try:
+                        all_values = SHEET.worksheet('general').get_all_records()
+                        for dict in all_values:
+                            if dict['Month'] == month_calc and dict['Monthly Income'] != 0:
+                                income = dict['Monthly Income']
+                        break
+                    except:
+                        print("Something went wrong. Check if name of columns and rows in spreadsheet are correct and if Monthly Income is not empty.\n")
+                        continue
+
             return income, month_calc
 
-    def manage_your_budget(self, surplus, savings, month):
+    def manage_your_budget(self, worksheet, surplus, savings, month):
         """
         Manages SURPLUS values for selected worksheet. Transfer SURPLUS to cell selected by user.
         """
@@ -249,30 +272,43 @@ class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
         extra_cell = SHEET.worksheet('general').find('Extra')
         savings_cell = SHEET.worksheet('general').find('Savings')
         
+        print(f"Your Surplus for {worksheet} is {surplus}\n")
+        time.sleep(3)
         if surplus < 0:
             print("\nChecking possibles to manage your debt...")
+            time.sleep(3)
             cover = savings + surplus
             if cover < 0:
                 print("\nYou don't have enough money for your spends! You must reduce your costs!...")
                 quit()
             else:
                 print("\nEnough Savings to cover debt. Updating SURPLUS and Savings...")
+                time.sleep(3)
                 SHEET.worksheet('general').update_cell(month_cell.row, savings_cell.col, cover)
                 print("\nSURPLUS and Savings up-to-date.")
+                time.sleep(3)
         else:
             self.clear_display()
             add_money = pyip.inputMenu(['Savings', 'Extra Money'], prompt="Select where you want to invest your money:\n", numbered=True)
             if add_money == 'Savings':
+                print("Updating Savings value...\n")
+                time.sleep(3)
                 for dict in all_values:
                     if dict['Month'] == month:
                         SHEET.worksheet('general').update_cell(month_cell.row, savings_cell.col, dict['Savings']+surplus)
+                print("Savings value up-to date!\n")
+                time.sleep(3)
             else:
+                print("Updating Extra value...\n")
+                time.sleep(3)
                 for dict in all_values:
                     if dict['Month'] == month:
                         if dict['Extra'] == '':
                             SHEET.worksheet('general').update_cell(month_cell.row, extra_cell.col, surplus)
                         else:
                             SHEET.worksheet('general').update_cell(month_cell.row, extra_cell.col, dict['Extra']+surplus)
+                print("Extra value up-to-date!")
+                time.sleep(3)
         print("\nBudget up-to-date!")
 
     
@@ -309,8 +345,8 @@ save = Savings(budget.plan_elements[3], budget.income[1])
 
 needs = Needs(budget.plan_elements[1])
 needs_spendings = needs.input_values_for_worksheet('needs', budget.income[1])
-needs.manage_your_budget(needs_spendings['SURPLUS'], budget.plan_elements[3], budget.income[1])
+needs.manage_your_budget('needs', needs_spendings['SURPLUS'], budget.plan_elements[3], budget.income[1])
 
 wants = Wants(budget.plan_elements[2])
 wants_spendings = wants.input_values_for_worksheet('wants', budget.income[1])
-wants.manage_your_budget(wants_spendings['SURPLUS'], budget.plan_elements[3], budget.income[1])
+wants.manage_your_budget('wants', wants_spendings['SURPLUS'], budget.plan_elements[3], budget.income[1])
