@@ -109,7 +109,8 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                         for dict in all_values:
                             if dict['Month'] == month_calc and dict['Monthly Income'] != '':
                                 income = dict['Monthly Income']
-                                break
+                                print(income)
+                        break
                     except:
                         print("Something went wrong. Check if name of columns and rows in spreadsheet are correct and if Monthly Income is not empty.\n")
 
