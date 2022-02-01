@@ -3,6 +3,7 @@ from google.oauth2.service_account import Credentials
 import pyinputplus as pyip
 import time
 import os
+import sys
 import pyfiglet
 from termcolor import colored
 from prettytable import PrettyTable
@@ -24,14 +25,30 @@ MONTH_NOW = datetime.now().strftime('%B')
 MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
 
-class ClearDisplayMixin:
+class SystemMixin:
     """
     Mixin to clear terminal screen.
     """
     def clear_display(self):
+        """
+        Method to clear the display - logo remains.
+        """
         os.system('clear')
         # Concept for pyfiglet styling comes from https://www.youtube.com/watch?v=U1aUteSg2a4
         print(colored(pyfiglet.figlet_format("personal budget manager", font = "graceful", justify="center", width=110), "green"))
+
+    def restart_program(self):
+        """
+        Method to restart or quit the program.
+        """
+        # Code copied from https://stackoverflow.com/questions/48129942/python-restart-program
+        restart = pyip.inputYesNo("\nDo you want to restart the program? Type Yes or No:\n")
+
+        if restart == "yes":
+            os.execl(sys.executable, os.path.abspath(__file__), *sys.argv) 
+        else:
+            print("\nThe programm will be closed...")
+            sys.exit(0)
 
 class UpdateSpreadsheetMixin:
     """
@@ -51,7 +68,7 @@ class UpdateSpreadsheetMixin:
         print(f"{column.capitalize()} updated successfully!\n\n")
         time.sleep(3)
 
-    def input_values_for_worksheet(self, worksheet, month):
+    def input_values_for_worksheet(self, worksheet, month, value):
         """
         Return user input for individual categories.
         """
@@ -62,7 +79,9 @@ class UpdateSpreadsheetMixin:
         for item in self.categories_list:
             if item != 'TOTAL' and item!= 'SURPLUS':
                 self.clear_display()
+                print(f"Your {worksheet.capitalize()} value for the {month} is: {value}")
                 spendings[item] = pyip.inputFloat(prompt=f"\nEnter value for {item}: \n")
+                value -= spendings[item]
             else:
                 if item == 'TOTAL':
                     spendings[item] = sum(spendings.values())
@@ -119,7 +138,7 @@ class UpdateSpreadsheetMixin:
         flow = True
         while flow:
             self.clear_display()
-            options_menu = pyip.inputMenu(['Default Categories', 'Customize Categories', 'Input Values Only'], prompt=f"Select how you want to manage your {worksheet.capitalize()}:\n", numbered=True)
+            options_menu = pyip.inputMenu(['Default Categories', 'Customize Categories', 'Get Categories from Spreadsheet'], prompt=f"Select how do you want to manage your {worksheet.capitalize()}:\n", numbered=True)
             if options_menu == 'Create Categories':
                 print("\nCreating custom categories will delete all values in the worksheet.")
                 continue_bool = pyip.inputYesNo(prompt="\nDo you want to continue? Type Yes or No:\n")
@@ -156,7 +175,7 @@ class UpdateSpreadsheetMixin:
         return user_categories + ',TOTAL' + ',SURPLUS'
 
 
-class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
+class Budget(SystemMixin, UpdateSpreadsheetMixin):
     """
     Budget class that handles user option for calculations.
     """
@@ -171,8 +190,7 @@ class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
         """
         Function to display main menu.
         """
-        # Concept for pyfiglet styling comes from https://www.youtube.com/watch?v=U1aUteSg2a4
-        print(colored(pyfiglet.figlet_format("personal budget manager", font = "graceful", justify="center", width=110), "green"))
+        self.clear_display()
         
         start_sequence = False
         
@@ -198,7 +216,7 @@ class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
 
             else:
                 quit()
-        
+
         return start_sequence
 
 
@@ -209,7 +227,7 @@ class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
         """
         self.clear_display()
         while True:
-            response = pyip.inputMenu(['50/30/20', '70/20/10', 'About plans'], prompt="Please select which budget plan you choose:\n", numbered=True)
+            response = pyip.inputMenu(['About plans', '50/30/20', '70/20/10'], prompt="Please select which budget plan you choose:\n", numbered=True)
             if response == '50/30/20':
                 needs = round(self.income[0] * 0.5, 1)
                 wants = round(self.income[0] * 0.3, 1)
@@ -243,10 +261,13 @@ class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
                     else:
                         print("Incorrect input. Make sure it is capitalized name of the month.\nExample: July")
             self.clear_display()
+            
             while True:
                 input_decision = pyip.inputMenu(['Enter monthly income', 'Get income from spreadsheet'], prompt="Select income for calculations:\n", numbered=True)
-                if input_decision == 'Enter mothly income':
+                if input_decision == 'Enter monthly income':
+                    self.clear_display()
                     income = pyip.inputFloat("Enter your monthly income (-TAX): \n")
+                    break
                 else:
                     try:
                         all_values = SHEET.worksheet('general').get_all_records()
@@ -280,7 +301,7 @@ class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
             cover = savings + surplus
             if cover < 0:
                 print("\nYou don't have enough money for your spends! You must reduce your costs!...")
-                quit()
+                self.restart_program()
             else:
                 print("\nEnough Savings to cover debt. Updating SURPLUS and Savings...")
                 time.sleep(3)
@@ -289,7 +310,7 @@ class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
                 time.sleep(3)
         else:
             self.clear_display()
-            add_money = pyip.inputMenu(['Savings', 'Extra Money'], prompt="Select where you want to invest your money:\n", numbered=True)
+            add_money = pyip.inputMenu(['Savings', 'Extra Money'], prompt="Select where to invest your money:\n", numbered=True)
             if add_money == 'Savings':
                 print("Updating Savings value...\n")
                 time.sleep(3)
@@ -312,7 +333,7 @@ class Budget(ClearDisplayMixin, UpdateSpreadsheetMixin):
         print("\nBudget up-to-date!")
 
     
-class Savings(Budget, ClearDisplayMixin):
+class Savings(Budget, SystemMixin):
     """
     Budget child class to handle Savings calculations.
     """
@@ -321,7 +342,7 @@ class Savings(Budget, ClearDisplayMixin):
         self.money = money
         self.update_worksheet_cell('general', self.money, self.month , 'Savings')
 
-class Needs(Budget, ClearDisplayMixin, UpdateSpreadsheetMixin):
+class Needs(Budget, SystemMixin, UpdateSpreadsheetMixin):
     """
     Budget child class to handle Needs calculations.
     """
@@ -330,7 +351,7 @@ class Needs(Budget, ClearDisplayMixin, UpdateSpreadsheetMixin):
         self.categories_string = self.create_categories('needs', 'Housing,Vehicle,Insurance,Food,Banking')
         self.categories_list = self.update_worksheet_categories(self.categories_string, 'needs', 'Month')
 
-class Wants(Budget, ClearDisplayMixin, UpdateSpreadsheetMixin):
+class Wants(Budget, SystemMixin, UpdateSpreadsheetMixin):
     """
     Budget child class to handle Wants calculations.
     """
@@ -344,9 +365,9 @@ budget = Budget()
 save = Savings(budget.plan_elements[3], budget.income[1])
 
 needs = Needs(budget.plan_elements[1])
-needs_spendings = needs.input_values_for_worksheet('needs', budget.income[1])
+needs_spendings = needs.input_values_for_worksheet('needs', budget.income[1], needs.money)
 needs.manage_your_budget('needs', needs_spendings['SURPLUS'], budget.plan_elements[3], budget.income[1])
 
 wants = Wants(budget.plan_elements[2])
-wants_spendings = wants.input_values_for_worksheet('wants', budget.income[1])
+wants_spendings = wants.input_values_for_worksheet('wants', budget.income[1], wants.money)
 wants.manage_your_budget('wants', wants_spendings['SURPLUS'], budget.plan_elements[3], budget.income[1])
