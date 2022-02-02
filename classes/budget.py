@@ -99,7 +99,6 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
             self.clear_display()
             
             while True:
-            # the whole while loop to check for proper operation
                 input_decision = pyip.inputMenu(['Enter monthly income', 'Get income from spreadsheet'], 
                                                 prompt="Select income for calculations:\n", 
                                                 numbered=True)
@@ -114,7 +113,6 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                                 print(month_calc)
                                 print(dict['Month'])
                                 print(dict['Monthly Income'])
-                                # here is bug to fix - to include empty value not pass
                                 income = dict['Monthly Income']
                                 print(income)
                             elif dict['Month'] == month_calc and dict['Monthly Income'] == '':
