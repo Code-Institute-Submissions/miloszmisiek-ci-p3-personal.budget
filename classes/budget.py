@@ -100,6 +100,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
             self.clear_display()
             
             while True:
+            # the whole while loop to check for proper operation
                 self.clear_display()
                 input_decision = pyip.inputMenu(['Enter monthly income', 'Get income from spreadsheet'], 
                                                 prompt="Select income for calculations:\n", 
@@ -112,14 +113,15 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                     try:
                         for dict in all_values:
                             if dict['Month'] == month_calc:
+                                # here is bug to fix - to include empty value not pass
                                 income = dict['Monthly Income']
                                 print(income)
                                 break
                         break
                     except:
                         print("Something went wrong. Check if name of columns and rows in spreadsheet are correct and if Monthly Income is not empty.\n")
-
                 return income, month_calc
+        
         return income, month_calc
     
     def choose_budget_plan(self, month):
