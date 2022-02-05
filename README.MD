@@ -15,8 +15,7 @@ The program can be run [here](https://personal-budget-manager.herokuapp.com/).
 - [User Experience](#user-experience)
   - [User Stories](#user-stories)
   - [Logic flow](#logic-flow)
-  - [Site Structure](#site-structure)
-    - [Fonts](#fonts)
+  - [Program Structure](#program-structure)
     - [Colour](#colour)
 - [Features](#features)
   - [Future Features](#future-features)
@@ -34,16 +33,26 @@ The program can be run [here](https://personal-budget-manager.herokuapp.com/).
 
 # User Experience
 ## User Stories
+-	As a user, I want to handle automate my budget calculations.
+-	As a user, I want to have access to my data.
+-	As a user, I want to edit my data if needed.
+-	As a user, I want to run my program without crashing.ś
+-	As a user, I want to be notified if I exceeded my budget.
+-	As a user, I want to handle my debt if I exceed my budget.
 
 ## Logic flow
+Logic flow was presented using [Lucidchart](https://www.lucidchart.com/pages/) to visualize how the program will run.
 
+![Lucicdchart Logic Flow](docs/readme-files/logic-flow.png)
 
-## Site Structure
-
-
-### Fonts
+## Program Structure
+Personal Budget Manager is run in terminal and Google Sheets. User inputs data through selection based on menu provided or by typing. All inputs are validated for proper program operation.
 
 ### Colour
+Third party library [termcolor](https://pypi.org/project/termcolor/) was used to colour title heading in the terminal for enhanced UX. 
+
+<span style="color: green">Green</span> was selected, inspired by Matrix movie.
+
 
 # Features
 
