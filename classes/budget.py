@@ -51,7 +51,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                                         numbered=True)
             if show_menu == 'About the app':
                 self.clear_display()
-                print("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vitae erat pellentesque, bibendum quam in, molestie augue. Integer vitae neque efficitur nunc feugiat dignissim sed non est. Pellentesque eu ullamcorper nibh. Nullam tempus lacus enim, quis vulputate mi condimentum vitae. Cras vel ullamcorper risus. Mauris nec rutrum lacus. Sed sit amet molestie lacus. Duis sit amet quam diam. Maecenas cursus risus ut magna egestas pellentesque. Curabitur dapibus maximus blandit. Nunc aliquet ante id nisl pharetra, in rhoncus neque luctus. Quisque rutrum nisi vel eros fringilla hendrerit.")
+                print("This app is designed to control your monthly costs. With this program you will be able to:\n- Enter your income or get income from spreadsheet,\n- Choose investing plan from two available,\n-Create your own groups of costs which will be included in Needs or Wants worksheets,\n-Enter your costs and receive information how much you have left\n- If you exceed your limit, the program will check if the debt can be covered, if not you will be prompt to restart program and enter inputs again.")
 
             elif show_menu == 'Print tables':
                 self.clear_display()
