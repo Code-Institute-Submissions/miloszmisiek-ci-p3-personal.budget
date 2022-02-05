@@ -85,6 +85,7 @@ class UpdateSpreadsheetMixin:
         SHEET.worksheet(worksheet).update_cell(month_cell.row, month_cell.col, month)
         print(f"\n{worksheet.capitalize()} worksheet is now clear.")
         time.sleep(3)
+        self.clear_display()
 
     def clear_worksheet(self, worksheet):
         """

@@ -18,6 +18,7 @@ The program can be run [here](https://personal-budget-manager.herokuapp.com/).
   - [Program Structure](#program-structure)
     - [Colour](#colour)
 - [Features](#features)
+  - [Main Menu](#main-menu)
   - [Future Features](#future-features)
 - [Technologies Used](#technologies-used)
   - [Third Party Libraries](#third-party-libraries)
@@ -55,6 +56,11 @@ Third party library [termcolor](https://pypi.org/project/termcolor/) was used to
 
 
 # Features
+
+## Main Menu
+The main menu is loaded when program starts and when user decides to restart.
+
+[Main Menu](docs/readme-files/main-page.png)
 
 ## Future Features
 
