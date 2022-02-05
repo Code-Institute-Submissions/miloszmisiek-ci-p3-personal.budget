@@ -19,7 +19,10 @@ The program can be run [here](https://personal-budget-manager.herokuapp.com/).
     - [Colour](#colour)
 - [Features](#features)
   - [Main Menu](#main-menu)
-  - [](#)
+  - [About the app](#about-the-app)
+  - [Print tables](#print-tables)
+  - [Manage the budget](#manage-the-budget)
+  - [Exit](#exit)
   - [Future Features](#future-features)
 - [Technologies Used](#technologies-used)
   - [Third Party Libraries](#third-party-libraries)
@@ -63,7 +66,17 @@ The main menu is loaded when program starts and when user decides to restart.
 
 [Main Menu](docs/readme-files/main-page.png)
 
-## 
+## About the app
+This section can be accessed through main menu. It provides user with program operation brief description.
+
+## Print tables
+Users can see the most recently updated worksheets: General, Needs or Wants depending on the input.
+
+## Manage the budget
+This section is starting point for all budget calulations. Step by step user is prompt to enter the data which will be handled depending on his choice.
+
+## Exit
+If user decides to leave the program he can choose Exit and the program will be stopped.
 
 ## Future Features
 
