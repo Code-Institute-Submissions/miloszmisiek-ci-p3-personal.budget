@@ -147,7 +147,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                     break
                 else:
                     self.clear_display()
-                    print("The 50/30/20 rule is a money management technique that divides your income into three categories:\n50% Needs(essentials)\n30% Wants(non-essentials)\n20% Savings.\n\nBy default this app provides following sub-categories:\nNeeds: Housing, Vehicle costs, Insurance, Food and Banking\nWants: Entertaintment, Wellbeing and Travel\n* Savings is what is meant to be left untouched and used only in case there is absolute need for it. It can cover any unexpected costs.\n\nThe 70/20/10 rule is less robust investment type, where the budget is split in proportion:\n70% Needs\n20% Wants\n10% Savings\n")
+                    print("The 50/30/20 rule is a money management technique that divides your income into three categories:\n50% Needs(essentials)\n30% Wants(non-essentials)\n20% Savings.\n\nBy default this app provides following sub-categories:\nNeeds: Housing, Vehicle costs, Insurance, Food and Banking\nWants: Entertainment, Wellbeing and Travel\n* Savings is what is meant to be left untouched and used only in case there is\nabsolute need for it. It can cover any unexpected costs.\n\nThe 70/20/10 rule is less robust investment type, where the budget is split in\nproportion:\n70% Needs\n20% Wants\n10% Savings\n")
             except:
                 print("Something went wrong. Check your income value in spreadsheet or enter income manually.")
                 self.restart_program()
