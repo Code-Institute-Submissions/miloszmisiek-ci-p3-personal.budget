@@ -40,7 +40,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
     
     def main_menu(self):
         """
-        Function to display main menu.
+        Method to display main menu.
         """
         self.clear_display()
         start_sequence = False
@@ -76,7 +76,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
 
     def enter_income(self):
         """
-        Gets user's input for income, validates the choice, clears terinal and returns user's choice.
+        Gets user's input for income, validates the choice returns user's choice.
         """
         self.clear_display()
         
@@ -126,11 +126,11 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
     
     def choose_budget_plan(self, month):
         """
-        Gets user input for budget plan based on menu presented on the screen, validates the choice, clears terinal and returns user's choice.
+        Gets user input for budget plan based on menu presented on the screen, validates the choice and returns user's choice.
         """
         self.clear_display()
+        self.clear_row('general', month)
         while True:
-            self.clear_row('general', month)
             response = pyip.inputMenu(['About plans', '50/30/20', '70/20/10'], 
                                         prompt="Please select which budget plan you choose:\n", 
                                         numbered=True)

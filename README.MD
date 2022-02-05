@@ -1,11 +1,36 @@
-<h1 align="center">Personal Budget</h1>
+<h1 align="center">Personal Budget Manager</h1>
 
-SHORT OVERVIEW
+Personal Budget Manager is a product to plan monthly costs based on income. It can be used by regular user to manage his money and to encourage for investing and saving.
 
-<!-- <h2 align="center"><img src="assets/images/readme/am-i-responsive.png" alt="Tic Tac Toe game on different screen sizes" style="max-width='100%'"></h2> -->
+The entire program runs in terminal. Users can enter their income and plan their costs using two available investing plans. Money can be spread into default or custom categories. The program runs with Google Sheets which is used to store data in the spreadsheet.
+
+All calculations are handled using Python language. Users enter data for processing and the result of calculation is returned in terminal or Google Sheets.
+
+The program can be run [here](https://personal-budget-manager.herokuapp.com/).
+
+<h2 align="center"><img src="docs/readme-files/main-page.png" alt="Program main page" style="max-width='100%'"></h2>
 
 # Contents
-
+- [Contents](#contents)
+- [User Experience](#user-experience)
+  - [User Stories](#user-stories)
+  - [Logic flow](#logic-flow)
+  - [Site Structure](#site-structure)
+    - [Fonts](#fonts)
+    - [Colour](#colour)
+- [Features](#features)
+  - [Future Features](#future-features)
+- [Technologies Used](#technologies-used)
+  - [Third Party Libraries](#third-party-libraries)
+- [Testing](#testing)
+- [Deployment](#deployment)
+  - [Using Heroku to deploy the project.](#using-heroku-to-deploy-the-project)
+  - [Fork a repository.](#fork-a-repository)
+  - [Clone a repository.](#clone-a-repository)
+- [Credits](#credits)
+  - [Content](#content)
+  - [Media](#media)
+- [Acknowledgements](#acknowledgements)
 
 # User Experience
 ## User Stories
