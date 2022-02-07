@@ -10,6 +10,7 @@ class Savings(Budget, SystemMixin):
         self.month = month
         self.money = money
         self.update_worksheet_cell('general', self.money, self.month , 'Savings')
+        self.update_worksheet_cell('general', '', self.month, 'Extra')
 
 class Needs(Budget, SystemMixin, UpdateSpreadsheetMixin):
     """

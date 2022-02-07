@@ -34,7 +34,6 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
     def __init__(self):
         self.app_logic = self.main_menu()
         self.income = self.enter_income()
-        self.update_worksheet_cell('general', self.income[0], self.income[1], 'Monthly Income')
         self.plan_elements = self.choose_budget_plan(self.income[1])
         # self.update_worksheet_cell('general', self.income[0], self.income[1], 'Monthly Income')
         
@@ -109,6 +108,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                 if input_decision == 'Enter monthly income':
                     self.clear_display()
                     income = pyip.inputFloat("Enter your monthly income (-TAX): \n")
+                    self.update_worksheet_cell('general', income, month_calc, 'Monthly Income')
                     break
                 elif input_decision == 'Get income from spreadsheet':
                     try:
@@ -131,7 +131,6 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
         Gets user input for budget plan based on menu presented on the screen, validates the choice and returns user's choice.
         """
         self.clear_display()
-        self.clear_row('general', month)
         while True:
             response = pyip.inputMenu(['About plans', '50/30/20', '70/20/10', 'Back to Main Menu'], 
                                         prompt="Please select which budget plan you choose:\n", 
@@ -156,7 +155,6 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                 except:
                     print("Something went wrong. Check your income value in spreadsheet or enter income manually.")
                     self.restart_program()
-        
         return [response, needs, wants, savings]
 
     def manage_your_budget(self, worksheet, surplus, savings, month):
