@@ -45,7 +45,7 @@ The program can be run [here](https://personal-budget-manager.herokuapp.com/).
 -	As a user, I want to handle my debt if I exceed my budget.
 
 ## Logic flow
-Logic flow was presented using [Lucidchart](https://www.lucidchart.com/pages/) to visualize how the program will run.
+Logic flow was presented using [Lucidchart](https://www.lucidchart.com/pages/) to visualize how the program will run. The final outcome differs from original concept due to complexity of program.
 
 ![Lucicdchart Logic Flow](docs/readme-files/logic-flow.png)
 
@@ -65,27 +65,32 @@ The main menu is loaded when program starts and when user decides to restart.
 
 ![Main Menu](docs/readme-files/main-page.png)
 
-1. About the app - this section can be accessed through main menu. It provides user with program operation brief description.
+1. **About the app** - this section can be accessed through main menu. It provides user with program operation brief description.
 
-2. Print tables - users can see the most recently updated worksheets: General, Needs or Wants depending on the input.
+2. **Print tables** - users can see the most recently updated worksheets: General, Needs or Wants depending on the input.
 
-3. Manage the budget - this section is starting point for all budget calulations. Step by step user is prompt to enter the data which will be handled depending on his choice.
+3. **Manage the budget** - this section is starting point for all budget calulations. Step by step user is prompt to enter the data which will be handled depending on his choice.
 
-4. Exit - if user decides to leave the program he can choose Exit and the program will be stopped.
+4. **Exit** - if user decides to leave the program he can choose Exit and the program will be stopped.
 
 ## Month Selection
 ![Month Selection](docs/readme-files/month-selection.png)
 User is prompted to select month for his calculations:
-1. Present month - calculations will be handled using Python datetime library to get present month from system.
-2. Select month - user can select month for his calculations. The input is validated with list of months. If user puts invalid entry, the message is printed.
+1. **Present month** - calculations will be handled using Python datetime library to get present month from system.
+2. **Select month** - user can select month for his calculations. The input is validated with list of months. If user puts invalid entry, the message is printed.
 
 ## Income Input
 ![Income Input](docs/readme-files/income-input.png)
 User is prompted to enter his monthly income:
-1. Enter monthly income - user inputs income manually. Input is validated - only float data type is allowed.
-2. Get income from spreadsheet - data is fetched from worksheet based on last entry. If the field is empty, the message will pop-up informing user that his entry is not valid and he will need to enter income manually.
+1. **Enter monthly income** - user inputs income manually. Input is validated - only float data type is allowed.
+2. **Get income from spreadsheet** - data is fetched from worksheet based on last entry. If the field is empty, the message will pop-up informing user that his entry is not valid and he will need to enter income manually.
 
 ## Managing Categories for Needs/Wants
+<br>
+**Important Note!**
+All procedures after **Income Input** are almost identical for Needs and Wants. After successfully completing managing budget for Needs, user goes through same steps for Wants. User is intentionally not allowed to first work on Wants budget and then on Needs - Wants what should be considered only if Needs costs are covered for the month. 
+The amount of money available to spend on Needs or Wants depends on the selected budget plan.<br>
+
 User is prompted to choose from menu how categories will be handled in later calculations and updated in Google Sheets file:
 1. **Default Categories** - user can select to use default categories. These categories are defined in the source code and are as follows:
    - Needs: Housing, Vehicle, Insurance, Food, Banking.
@@ -96,10 +101,29 @@ User is prompted to choose from menu how categories will be handled in later cal
    - Blank entry is not allowed.
 When user decides to finish his entries, he must type 'q' and hit Enter to exit the loop.
 3. **Get Categories from Spreadsheet** - user can choose to use categories fetched from spreadsheet. This option allows to re-enter values to previously determined entries.
-
+<br>
 **IMPORTANT NOTE!**
 Both *'Default Categories'* and *'Customize Categories'* options will erease all inputs in selected worksheet. This is neccessary for proper alignment of columns if user decides to enter more/less categories for different months.
 Before erasing the worksheet user will be warned and prompted to accept or reject this operation.
+<br>
+
+## Updating Needs/Wants Values
+This part appears after user's decision about handling categories.
+The top message includes amount of money users are allowed to spend for relevant section. The value is updated every time user makes an entry for category of his choice made in previous call.
+
+Only float entries are allowed, other data type will be rejected with relevant message displayed in the terminal.
+
+After successful entries the spreadsheet will be updated with passed values and user will be informed of how much he spent on relevant section.
+
+## Budget Managment
+After user completes value entries, the program will check what is the surplus of total costs for Needs or Wants:
+1. If Surplus is negative, the value of Savings will be checked to cover the differnce. 
+  - If this is still not enough, user is prompted to evaluate his spendings. From this point user can go back to Main Menu or exit the program.
+  - If Savings value can cover the debt, than Savings will transfered to Surplus.
+2. If Surplus is positive, user can decide where to allocate his money. Available options are as follows:
+  - Savings - money will be added to Savings cell in 'general' worksheet.
+  - Extra Money - money will be added to Extra cell in 'general' worksheet.
+Extra cell was made to allow user to collect his extra money if he did his budget properly. It is some kind of award user can spend to glorify his success.
 
 ## Future Features
 1. Add 'Go Back/Previous Step' option to allow user to re-enter previously visit page.
@@ -151,15 +175,12 @@ LINK HERE
 
 # Credits
 ## Content
+- The program structure and layout was inspired by Code Institute student project [Vaccination Manager](https://github.com/neil314159/portfolio-project-3) by 'neil314159'.
 - Setting up the Google APIs origin is [Code Institute](https://codeinstitute.net/) 'Love Sandwiches' Essential Project.
 - README file is based on game’s owner previous project [ECOCITY](https://github.com/miloszmisiek/ci_p1_ecocity) and some concepts are inspired by fellow Code Institute student [Mycrosys](https://github.com/Mycrosys/marblesgame) project.
 - README and TESTING files text grammar and typing were checked using [Microsoft Word](https://www.microsoft.com/pl-pl/microsoft-365/word).
 - Markdown table for Responsiveness section in TESTING file was created using [Tables Generator](https://www.tablesgenerator.com/markdown_tables).
 - GitHub Deployment section come from [GitHub Docs](https://docs.github.com/en/get-started/quickstart/fork-a-repo).
-
-## Media
-
-
 
 # Acknowledgements
 Personal Budget application was created as part of [Code Institute](https://codeinstitute.net/) Full Stack Software Developer (e-Commerce) Diploma. I would like to express my gratitude and appreciation to my mentor [Precious Ijege](https://www.linkedin.com/in/precious-ijege-908a00168/) for his guidance on this project and flexibility with arranging sessions, [Code Institute](https://codeinstitute.net/) support team to always be there in case of need and fellow students for being in this learning journey together.
