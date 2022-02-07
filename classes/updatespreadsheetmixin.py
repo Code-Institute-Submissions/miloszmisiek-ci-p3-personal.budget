@@ -38,7 +38,7 @@ class UpdateSpreadsheetMixin:
         month_cell = SHEET.worksheet(worksheet).find(row)
         month_income = SHEET.worksheet(worksheet).find(column)
         SHEET.worksheet(worksheet).update_cell(month_cell.row, month_income.col, value)
-        print(f"{column.capitalize()} updated successfully!\n\n")
+        print(f"{column.title()} updated successfully!\n\n")
         time.sleep(3)
 
     def input_values_for_worksheet(self, worksheet, month, value):
@@ -131,10 +131,10 @@ class UpdateSpreadsheetMixin:
         flow = True
         while flow:
             self.clear_display()
-            options_menu = pyip.inputMenu(['Default Categories', 'Customize Categories', 'Get Categories from Spreadsheet'], 
+            options_menu = pyip.inputMenu(['Default Categories', 'Customize Categories', 'Get Categories from Spreadsheet', 'Back to Main Menu'], 
                                             prompt=f"Select how do you want to manage your {worksheet.capitalize()}:\n", 
                                             numbered=True)
-            if options_menu != 'Get Categories from Spreadsheet':
+            if options_menu == 'Default Categories' or options_menu == 'Customize Categories':
                 print(f"\n{options_menu} will delete all values in the worksheet.")
                 continue_bool = pyip.inputYesNo("\nDo you want to continue? Type Yes or No:\n")
                 if continue_bool.lower() == 'yes':
@@ -159,7 +159,7 @@ class UpdateSpreadsheetMixin:
                         flow = False
                 else:
                     continue
-            else:
+            elif options_menu == 'Get Categories from Spreadsheet':
                 all_values = SHEET.worksheet(worksheet).get_all_values()
                 get_categories = all_values[0][1:]
                 categories_string = ''
@@ -173,5 +173,7 @@ class UpdateSpreadsheetMixin:
                     flow = True
                 else:
                     flow = False
+            else:
+                os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
 
         return user_categories + ',TOTAL' + ',SURPLUS'

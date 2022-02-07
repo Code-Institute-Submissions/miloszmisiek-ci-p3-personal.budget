@@ -34,8 +34,9 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
     def __init__(self):
         self.app_logic = self.main_menu()
         self.income = self.enter_income()
-        self.plan_elements = self.choose_budget_plan(self.income[1])
         self.update_worksheet_cell('general', self.income[0], self.income[1], 'Monthly Income')
+        self.plan_elements = self.choose_budget_plan(self.income[1])
+        # self.update_worksheet_cell('general', self.income[0], self.income[1], 'Monthly Income')
         
     
     def main_menu(self):
@@ -83,44 +84,45 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
         all_values = SHEET.worksheet('general').get_all_records()
         
         if self.app_logic == True:
-            month = pyip.inputMenu(['Present month', 'Select month'], 
+            month = pyip.inputMenu(['Present month', 'Select month', 'Back to Main Menu'], 
                                     prompt="Select which month will include calculations:\n", 
                                     numbered=True)
             if month == 'Present month':
                 month_calc = MONTH_NOW
-            else:
+            elif month == 'Select month':
                 while True:
                     self.clear_display()
-                    month_calc = pyip.inputStr("Type month for calculations:\n")
-                    if month_calc in MONTHS:
+                    month_calc = pyip.inputStr("Type month for calculations:\n").capitalize()
+                    if month_calc.capitalize() in MONTHS:
                         break
                     else:
-                        print("Incorrect input. Make sure it is capitalized name of the month.\nExample: July")
+                        print("Incorrect input. Make sure your input is a name of the month.\nExample: July")
+                        time.sleep(5)
+            else:
+                os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
             self.clear_display()
             
             while True:
-                input_decision = pyip.inputMenu(['Enter monthly income', 'Get income from spreadsheet'], 
+                input_decision = pyip.inputMenu(['Enter monthly income', 'Get income from spreadsheet', 'Back to Main Menu'], 
                                                 prompt="Select income for calculations:\n", 
                                                 numbered=True)
                 if input_decision == 'Enter monthly income':
                     self.clear_display()
                     income = pyip.inputFloat("Enter your monthly income (-TAX): \n")
                     break
-                else:
+                elif input_decision == 'Get income from spreadsheet':
                     try:
                         for dict in all_values:
                             if dict['Month'] == month_calc and dict['Monthly Income'] != '':
-                                print(month_calc)
-                                print(dict['Month'])
-                                print(dict['Monthly Income'])
                                 income = dict['Monthly Income']
-                                print(income)
                             elif dict['Month'] == month_calc and dict['Monthly Income'] == '':
                                 raise ValueError()
                         break
                     except:
                         print("Something went wrong. Check if name of columns and rows in spreadsheet are correct and if Monthly Income is not empty.\n")
                         continue
+                else:
+                    os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
         
         return income, month_calc
     
@@ -131,26 +133,29 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
         self.clear_display()
         self.clear_row('general', month)
         while True:
-            response = pyip.inputMenu(['About plans', '50/30/20', '70/20/10'], 
+            response = pyip.inputMenu(['About plans', '50/30/20', '70/20/10', 'Back to Main Menu'], 
                                         prompt="Please select which budget plan you choose:\n", 
                                         numbered=True)
-            try:
-                if response == '50/30/20':
-                    needs = round(self.income[0] * 0.5, 1)
-                    wants = round(self.income[0] * 0.3, 1)
-                    savings = round(self.income[0] * 0.2, 1)
-                    break
-                elif response == '70/20/10':
-                    needs = round(self.income[0] * 0.7, 1)
-                    wants = round(self.income[0] * 0.2, 1)
-                    savings = round(self.income[0] * 0.1, 1)
-                    break
-                else:
-                    self.clear_display()
-                    print("The 50/30/20 rule is a money management technique that divides your income into three categories:\n50% Needs(essentials)\n30% Wants(non-essentials)\n20% Savings.\n\nBy default this app provides following sub-categories:\nNeeds: Housing, Vehicle costs, Insurance, Food and Banking\nWants: Entertainment, Wellbeing and Travel\n* Savings is what is meant to be left untouched and used only in case there is\nabsolute need for it. It can cover any unexpected costs.\n\nThe 70/20/10 rule is less robust investment type, where the budget is split in\nproportion:\n70% Needs\n20% Wants\n10% Savings\n")
-            except:
-                print("Something went wrong. Check your income value in spreadsheet or enter income manually.")
-                self.restart_program()
+            if response == 'Back to Main Menu':
+                os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
+            else:
+                try:
+                    if response == '50/30/20':
+                        needs = round(self.income[0] * 0.5, 1)
+                        wants = round(self.income[0] * 0.3, 1)
+                        savings = round(self.income[0] * 0.2, 1)
+                        break
+                    elif response == '70/20/10':
+                        needs = round(self.income[0] * 0.7, 1)
+                        wants = round(self.income[0] * 0.2, 1)
+                        savings = round(self.income[0] * 0.1, 1)
+                        break
+                    elif response == 'About plans':
+                        self.clear_display()
+                        print("The 50/30/20 rule is a money management technique that divides your income into three categories:\n50% Needs(essentials)\n30% Wants(non-essentials)\n20% Savings.\n\nBy default this app provides following sub-categories:\nNeeds: Housing, Vehicle costs, Insurance, Food and Banking\nWants: Entertainment, Wellbeing and Travel\n* Savings is what is meant to be left untouched and used only in case there is\nabsolute need for it. It can cover any unexpected costs.\n\nThe 70/20/10 rule is less robust investment type, where the budget is split in\nproportion:\n70% Needs\n20% Wants\n10% Savings\n")
+                except:
+                    print("Something went wrong. Check your income value in spreadsheet or enter income manually.")
+                    self.restart_program()
         
         return [response, needs, wants, savings]
 
@@ -185,7 +190,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
         else:
             self.clear_display()
             print(f"Your Surplus for {worksheet} is {surplus}\n")
-            add_money = pyip.inputMenu(['Savings', 'Extra Money'], 
+            add_money = pyip.inputMenu(['Savings', 'Extra Money', 'Back to Main Menu'], 
                                         prompt="Select where to invest your money:\n", 
                                         numbered=True)
             if add_money == 'Savings':
@@ -197,7 +202,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                         SHEET.worksheet('general').update_cell(month_cell.row, savings_cell.col, dict['Savings']+surplus)
                 print("Savings value up-to date!\n")
                 time.sleep(3)
-            else:
+            elif add_money == 'Extra Money':
                 self.clear_display()
                 print("Updating Extra value...\n")
                 time.sleep(3)
@@ -209,4 +214,8 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                             SHEET.worksheet('general').update_cell(month_cell.row, extra_cell.col, dict['Extra']+surplus)
                 print("Extra value up-to-date!")
                 time.sleep(3)
+            else:
+                os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
         print("\nBudget up-to-date!")
+        if worksheet == 'wants':
+            self.restart_program()
