@@ -66,18 +66,20 @@ The main menu is loaded when program starts and when user decides to restart.
 
 [Main Menu](docs/readme-files/main-page.png)
 
-## About the app
+### About the app
 This section can be accessed through main menu. It provides user with program operation brief description.
 
-## Print tables
+### Print tables
 Users can see the most recently updated worksheets: General, Needs or Wants depending on the input.
 
-## Manage the budget
+### Manage the budget
 This section is starting point for all budget calulations. Step by step user is prompt to enter the data which will be handled depending on his choice.
 
-## Exit
+### Exit
 If user decides to leave the program he can choose Exit and the program will be stopped.
 
+## Month Selection
+[Month Selection](docs/readme-files/month-selection.png)
 ## Future Features
 
 # Technologies Used
