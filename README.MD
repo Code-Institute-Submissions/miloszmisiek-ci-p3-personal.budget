@@ -64,7 +64,7 @@ Third party library [termcolor](https://pypi.org/project/termcolor/) was used to
 ## Main Menu
 The main menu is loaded when program starts and when user decides to restart.
 
-[Main Menu](docs/readme-files/main-page.png)
+![Main Menu](docs/readme-files/main-page.png)
 
 1. About the app
 This section can be accessed through main menu. It provides user with program operation brief description.
