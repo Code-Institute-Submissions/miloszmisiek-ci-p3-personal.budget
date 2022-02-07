@@ -87,16 +87,19 @@ User is prompted to enter his monthly income:
 
 ## Managing Categories for Needs/Wants
 User is prompted to choose from menu how categories will be handled in later calculations and updated in Google Sheets file:
-1. Default Categories - user can select to use default categories. These categories are defined in the source code and are as follows:
+1. **Default Categories** - user can select to use default categories. These categories are defined in the source code and are as follows:
    - Needs: Housing, Vehicle, Insurance, Food, Banking.
    - Wants: Enteraintment, Wellbeing, Travel
-2. Customize Categories - user can enter his own categories. The input is retricted for proper program operation:
+2. **Customize Categories** - user can type his own categories in a loop structured entries . The input is retricted for proper program operation:
    - Only string data is allowed,
-   - The categories must be entered without whitespaces, and commas
+   - The categories must be entered without whitespaces and commas (,),
    - Blank entry is not allowed.
-When user decides to finish his entries, he must press 'q' to exit the loop.
+When user decides to finish his entries, he must type 'q' and hit Enter to exit the loop.
+3. **Get Categories from Spreadsheet** - user can choose to use categories fetched from spreadsheet. This option allows to re-enter values to previously determined entries.
 
-
+**IMPORTANT NOTE!**
+Both *'Default Categories'* and *'Customize Categories'* options will erease all inputs in selected worksheet. This is neccessary for proper alignment of columns if user decides to enter more/less categories for different months.
+Before erasing the worksheet user will be warned and prompted to accept or reject this operation.
 
 ## Future Features
 1. Add 'Go Back/Previous Step' option to allow user to re-enter previously visit page.
