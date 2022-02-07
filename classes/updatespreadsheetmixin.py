@@ -79,11 +79,11 @@ class UpdateSpreadsheetMixin:
         """
         self.clear_display()
         month_cell = SHEET.worksheet(worksheet).find(month)
-        print(f"\nClearing {worksheet} worksheet...")
+        print(f"\nClearing {month} row in {worksheet} worksheet...")
         time.sleep(3)
         SHEET.worksheet(worksheet).batch_clear([f"{month_cell.row}:{month_cell.row}"])
         SHEET.worksheet(worksheet).update_cell(month_cell.row, month_cell.col, month)
-        print(f"\n{worksheet.capitalize()} worksheet is now clear.")
+        print(f"\n{month.capitalize()} row in {worksheet.capitalize()} worksheet is now clear.")
         time.sleep(3)
         self.clear_display()
 
