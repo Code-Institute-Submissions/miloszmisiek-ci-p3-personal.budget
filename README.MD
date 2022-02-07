@@ -19,10 +19,9 @@ The program can be run [here](https://personal-budget-manager.herokuapp.com/).
     - [Colour](#colour)
 - [Features](#features)
   - [Main Menu](#main-menu)
-  - [About the app](#about-the-app)
-  - [Print tables](#print-tables)
-  - [Manage the budget](#manage-the-budget)
-  - [Exit](#exit)
+  - [Month Selection](#month-selection)
+  - [Income Input](#income-input)
+  - [Managing Categories for Needs/Wants](#managing-categories-for-needswants)
   - [Future Features](#future-features)
 - [Technologies Used](#technologies-used)
   - [Third Party Libraries](#third-party-libraries)
@@ -83,10 +82,25 @@ User is prompted to select month for his calculations:
 ## Income Input
 ![Income Input](docs/readme-files/income-input.png)
 User is prompted to enter his monthly income:
-1. Enter monthly income - user inputs his income manually. His input is validated - only float data type is allowed.
-2. Get income from spreadsheet - data is fetched from worksheet based on last entry.
+1. Enter monthly income - user inputs income manually. Input is validated - only float data type is allowed.
+2. Get income from spreadsheet - data is fetched from worksheet based on last entry. If the field is empty, the message will pop-up informing user that his entry is not valid and he will need to enter income manually.
+
+## Managing Categories for Needs/Wants
+User is prompted to choose from menu how categories will be handled in later calculations and updated in Google Sheets file:
+1. Default Categories - user can select to use default categories. These categories are defined in the source code and are as follows:
+   - Needs: Housing, Vehicle, Insurance, Food, Banking.
+   - Wants: Enteraintment, Wellbeing, Travel
+2. Customize Categories - user can enter his own categories. The input is retricted for proper program operation:
+   - Only string data is allowed,
+   - The categories must be entered without whitespaces, and commas
+   - Blank entry is not allowed.
+When user decides to finish his entries, he must press 'q' to exit the loop.
+
+
 
 ## Future Features
+1. Add 'Go Back/Previous Step' option to allow user to re-enter previously visit page.
+2. This project is based on one spredsheet for all. In future this project could be restructured to create spreadsheet for every user.
 
 # Technologies Used
 - [Python](https://www.python.org) - interpreted high-level general-purpose programming language used to build the entire application.

@@ -156,7 +156,7 @@ class UpdateSpreadsheetMixin:
                                 flow = False
                                 break
                             elif user_choice.lower() == 'q' and user_categories == '':
-                                print("You did not enter any category! Try again.")
+                                print("\nYou did not enter any category! Try again.")
                                 time.sleep(5)
                             else:
                                 user_categories += (user_choice.capitalize() + ',')
