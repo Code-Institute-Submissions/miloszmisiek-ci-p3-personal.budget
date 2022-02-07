@@ -167,6 +167,11 @@ class UpdateSpreadsheetMixin:
                     if item != '' and item != 'TOTAL':
                         categories_string += (item + ',')
                 user_categories = categories_string[:-1]
-                flow = False
+                if user_categories == '':
+                    print(f"\nYour categories are empty. Use Default or customize {worksheet} categories yourself.")
+                    time.sleep(5)
+                    flow = True
+                else:
+                    flow = False
 
         return user_categories + ',TOTAL' + ',SURPLUS'

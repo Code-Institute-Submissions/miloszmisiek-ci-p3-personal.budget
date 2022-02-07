@@ -19,4 +19,3 @@ if __name__ == '__main__':
     wants = Wants(budget.plan_elements[2])
     wants_spendings = wants.input_values_for_worksheet('wants', budget.income[1], wants.money)
     wants.manage_your_budget('wants', wants_spendings['SURPLUS'], budget.plan_elements[3], budget.income[1])
-
