@@ -41,7 +41,7 @@ The program can be run [here](https://personal-budget-manager.herokuapp.com/).
 -	As a user, I want to handle automate my budget calculations.
 -	As a user, I want to have access to my data.
 -	As a user, I want to edit my data if needed.
--	As a user, I want to run my program without crashing.ś
+-	As a user, I want to run my program without crashing.
 -	As a user, I want to be notified if I exceeded my budget.
 -	As a user, I want to handle my debt if I exceed my budget.
 
@@ -66,20 +66,30 @@ The main menu is loaded when program starts and when user decides to restart.
 
 [Main Menu](docs/readme-files/main-page.png)
 
-### About the app
+1. About the app
 This section can be accessed through main menu. It provides user with program operation brief description.
 
-### Print tables
+2. Print tables
 Users can see the most recently updated worksheets: General, Needs or Wants depending on the input.
 
-### Manage the budget
+3. Manage the budget
 This section is starting point for all budget calulations. Step by step user is prompt to enter the data which will be handled depending on his choice.
 
-### Exit
+4. Exit
 If user decides to leave the program he can choose Exit and the program will be stopped.
 
 ## Month Selection
-[Month Selection](docs/readme-files/month-selection.png)
+![Month Selection](docs/readme-files/month-selection.png)
+User is prompted to select month for his calculations:
+1. Present month - calculations will be handled using Python datetime library to get present month from system.
+2. Select month - user can select month for his calculations. The input is validated with list of months. If user puts invalid entry, the message is printed.
+
+## Income Input
+![Income Input](docs/readme-files/income-input.png)
+User is prompted to enter his monthly income:
+1. Enter monthly income - user inputs his income manually. His input is validated - only float data type is allowed.
+2. Get income from spreadsheet - data is fetched from worksheet based on last entry.
+
 ## Future Features
 
 # Technologies Used
