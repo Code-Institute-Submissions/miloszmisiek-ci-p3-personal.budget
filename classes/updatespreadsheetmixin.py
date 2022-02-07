@@ -142,23 +142,28 @@ class UpdateSpreadsheetMixin:
                 if continue_bool.lower() == 'yes':
                     self.clear_worksheet(worksheet)
                     if options_menu == 'Customize Categories':
-                        self.clear_display()
-                        print("\nEnter your categories WITHOUT whitespaces such as spaces or tabs and seperated with commas.")
-                        print("Limit yourself to one word entries only.")
-                        print("\nExample: Vehicle,Apartment,School,Bank")
-                        commas = False
-                        while not commas:
-                            user_categories = pyip.inputStr(
-                                prompt="\nEnter your categories:\n", 
-                                blockRegexes = [r'\s|(,)\1+|^,'])
-                            if user_categories.find(',') != -1 and user_categories[-1] != ',':
-                                commas = True
+                        user_categories = ''
+                        while True:
+                            self.clear_display()
+                            print("\nEnter your categories WITHOUT whitespaces such as spaces or tabs, DO NOT use commas (,).")
+                            print("For enhanced UX, limit yourself to one word entries.")
+                            print("\nExample: Vehicle")
+                            user_choice = pyip.inputStr(
+                                prompt="\nEnter your category and hit Enter.\nIf you finish, press 'q' and hit Enter:\n", 
+                                blockRegexes = [r'\s|,+'])
+                            if user_choice.lower() == 'q' and user_categories != '':
+                                user_categories = user_categories[:-1]
                                 flow = False
+                                break
+                            elif user_choice.lower() == 'q' and user_categories == '':
+                                print("You did not enter any category! Try again.")
+                                time.sleep(5)
                             else:
-                                print("\nYour entry is invalid! Try again.")
+                                user_categories += (user_choice.capitalize() + ',')
                     else:
                         user_categories = default_cat
                         flow = False
+                        
                 else:
                     continue
             elif options_menu == 'Get Categories from Spreadsheet':
