@@ -1,10 +1,10 @@
 <h1 align="center">Personal Budget Manager</h1>
 
-Personal Budget Manager is a product to plan monthly costs based on income. It can be used by regular user to manage his money and to encourage for investing and saving.
+Personal Budget Manager is a product to plan monthly costs based on users’ income. It can be used by ordinary users to manage their money and to encourage for investing and saving.
 
 The entire program runs in terminal. Users can enter their income and plan their costs using two available investing plans. Money can be spread into default or custom categories. The program runs with Google Sheets which is used to store data in the spreadsheet.
 
-All calculations are handled using Python language. Users enter data for processing and the result of calculation is returned in terminal or Google Sheets.
+All calculations are handled using [Python](https://www.python.org) language. Users enter data for processing and the result of calculation is returned in terminal or Google Sheets.
 
 The program can be run [here](https://personal-budget-manager.herokuapp.com/).
 
@@ -24,7 +24,7 @@ The program can be run [here](https://personal-budget-manager.herokuapp.com/).
   - [Income Input](#income-input)
   - [Managing Categories for Needs/Wants](#managing-categories-for-needswants)
   - [Updating Needs/Wants Values](#updating-needswants-values)
-  - [Budget Managment](#budget-managment)
+  - [Budget Management](#budget-management)
   - [Future Features](#future-features)
 - [Technologies Used](#technologies-used)
   - [Third Party Libraries](#third-party-libraries)
@@ -47,12 +47,12 @@ The program can be run [here](https://personal-budget-manager.herokuapp.com/).
 -	As a user, I want to handle my debt if I exceed my budget.
 
 ## Logic flow
-Logic flow was presented using [Lucidchart](https://www.lucidchart.com/pages/) to visualize how the program will run. The final outcome differs from original concept due to complexity of program.
+Logic flow was presented using [Lucidchart](https://www.lucidchart.com/pages/) to visualize how the program will run. The outcome differs from original concept due to complexity of program.
 
 ![Lucicdchart Logic Flow](docs/readme-files/logic-flow.png)
 
 ## Program Structure
-Personal Budget Manager is run in terminal and Google Sheets. User inputs data through selection based on menu provided or by typing. All inputs are validated for proper program operation.
+Personal Budget Manager is run in terminal and Google Sheets. Users input data through selection based on menu provided or by typing. All inputs are validated for proper program operation.
 
 ### Colour
 Third party library [termcolor](https://pypi.org/project/termcolor/) was used to colour title heading in the terminal for enhanced UX. 
@@ -63,7 +63,7 @@ Third party library [termcolor](https://pypi.org/project/termcolor/) was used to
 # Features
 
 ## Budget Plans
-This program is build on two budgeting plans. Rules originate from the 2005 book, “All Your Worth: The Ultimate Lifetime Money Plan,” written by current US Senator Elizabeth Warren and her daughter, Amelia Warren Tyagi. 
+This program is built on two budgeting plans. Rules originate from the 2005 book, “All Your Worth: The Ultimate Lifetime Money Plan,” written by current US Senator Elizabeth Warren and her daughter, Amelia Warren Tyagi. 
 
 Elements for both plans consist of:
 
@@ -83,7 +83,7 @@ Elements for both plans consist of:
   - Entertainment subscriptions (Netflix, HBO, Amazon Prime)
   - Groceries (other than the essentials)
 
-- **Savings** - defined as money to achive your savings goals, or paying back any outstanding debts.
+- **Savings** - defined as money to achieve your savings goals or paying back any outstanding debts.
 
 Users can select one of two available budgeting plans, where they allocate their income (after TAX)  in proportion:
 
@@ -92,73 +92,73 @@ Users can select one of two available budgeting plans, where they allocate their
 2. **70/20/10** - 70% goes to **Needs**, 20% goes to **Wants**, 10% goes to **Savings**.
 
 ## Main Menu
-The main menu is loaded when program starts and when user decides to restart.
+The main menu is loaded when program starts and when users decide to restart.
 
 ![Main Menu](docs/readme-files/main-page.png)
 
-1. **About the app** - this section can be accessed through main menu. It provides user with program operation brief description.
+1. **About the app** - this section can be accessed through main menu. It provides users with program operation brief description.
 
 2. **Print tables** - users can see the most recently updated worksheets: General, Needs or Wants depending on the input.
 
-3. **Manage the budget** - this section is starting point for all budget calulations. Step by step user is prompt to enter the data which will be handled depending on his choice.
+3. **Manage the budget** - this section is starting point for all budget calculations. Step by step users are prompt to enter the data which will be handled depending on their choice.
 
-4. **Exit** - if user decides to leave the program he can choose Exit and the program will be stopped.
+4. **Exit** - if users decide to leave the program he can choose Exit and the program will be stopped.
 
 ## Month Selection
 ![Month Selection](docs/readme-files/month-selection.png)
-User is prompted to select month for his calculations:
+Users are prompted to select month for their calculations:
 1. **Present month** - calculations will be handled using Python datetime library to get present month from system.
-2. **Select month** - user can select month for his calculations. The input is validated with list of months. If user puts invalid entry, the message is printed.
+2. **Select month** - users can select month for their calculations. The input is validated with list of months. If users put invalid entry, the message is printed.
 
 ## Income Input
 ![Income Input](docs/readme-files/income-input.png)
-User is prompted to enter his monthly income:
-1. **Enter monthly income** - user inputs income manually. Input is validated - only float data type is allowed.
-2. **Get income from spreadsheet** - data is fetched from worksheet based on last entry. If the field is empty, the message will pop-up informing user that his entry is not valid and he will need to enter income manually.
+Users are prompted to enter their monthly income:
+1. **Enter monthly income** - users input income manually. Input is validated - only float data type is allowed.
+2. **Get income from spreadsheet** - data is fetched from worksheet based on last entry. If the field is empty, the message will pop-up informing users that their entry is not valid, and they will need to enter income manually.
 
 ## Managing Categories for Needs/Wants
 
 **Important Note!**
-All procedures after **Income Input** are almost identical for Needs and Wants. After successfully completing managing budget for Needs, user goes through same steps for Wants. User is intentionally not allowed to first work on Wants budget and then on Needs - Wants what should be considered only if Needs costs are covered for the month. 
+All procedures after **Income Input** are almost identical for Needs and Wants. After successfully completing managing budget for Needs, users go through same steps for Wants. Users are intentionally not allowed to first work on Wants budget and then on Needs - Wants what should be considered only if Needs costs are covered for the month. 
 The amount of money available to spend on Needs or Wants depends on the selected budget plan.
 
-User is prompted to choose from menu how categories will be handled in later calculations and updated in Google Sheets file:
-1. **Default Categories** - user can select to use default categories. These categories are defined in the source code and are as follows:
+Users are prompted to choose from menu how categories will be handled in later calculations and updated in Google Sheets file:
+1. **Default Categories** - users can select to use default categories. These categories are defined in the source code and are as follows:
    - Needs: Housing, Vehicle, Insurance, Food, Banking.
-   - Wants: Enteraintment, Wellbeing, Travel
-2. **Customize Categories** - user can type his own categories in a loop structured entries . The input is retricted for proper program operation:
+   - Wants: Entertainment, Wellbeing, Travel
+2. **Customize Categories** - users can type their own categories in a loop structured entry . The input is restricted for proper program operation:
    - Only string data is allowed,
    - The categories must be entered without whitespaces and commas (,),
    - Blank entry is not allowed.
-When user decides to finish his entries, he must type 'q' and hit Enter to exit the loop.
-3. **Get Categories from Spreadsheet** - user can choose to use categories fetched from spreadsheet. This option allows to re-enter values to previously determined entries.
+When users decide to finish their entries, they must type 'q' and hit Enter to exit the loop.
+3. **Get Categories from Spreadsheet** - users can choose to use categories fetched from spreadsheet. This option allows to re-enter values to previously determined entries.
 
 **IMPORTANT NOTE!**
-Both *'Default Categories'* and *'Customize Categories'* options will erease all inputs in selected worksheet. This is neccessary for proper alignment of columns if user decides to enter more/less categories for different months.
-Before erasing the worksheet user will be warned and prompted to accept or reject this operation.
+Both *'Default Categories'* and *'Customize Categories'* options will erase all inputs in selected worksheet. This is necessary for proper alignment of columns if users decide to enter more/less categories for different months.
+Before erasing the worksheet, users will be warned and prompted to accept or reject this operation.
 
 
 ## Updating Needs/Wants Values
 This part appears after user's decision about handling categories.
-The top message includes amount of money users are allowed to spend for relevant section. The value is updated every time user makes an entry for category of his choice made in previous call.
+The top message includes amount of money users are allowed to spend for relevant section. The value is updated every time users make entries for category of their choice made in previous call.
 
 Only float entries are allowed, other data type will be rejected with relevant message displayed in the terminal.
 
-After successful entries the spreadsheet will be updated with passed values and user will be informed of how much he spent on relevant section.
+After successful entries the spreadsheet will be updated with passed values and users will be informed of how much they spent on relevant section.
 
-## Budget Managment
-After user completes value entries, the program will check what is the surplus of total costs for Needs or Wants:
-1. If **Surplus** is **negative**, the value of Savings will be checked to cover the differnce. 
-  - If this is still not enough, user is prompted to evaluate his spendings. From this point user can go back to Main Menu or exit the program.
-  - If Savings value can cover the debt, than Savings will transfered to Surplus.
-2. If **Surplus** is **positive**, user can decide where to allocate his money. Available options are as follows:
+## Budget Management
+After users’ complete value entries, the program will check what is the surplus of total costs for Needs or Wants:
+1. If **Surplus** is **negative**, the value of Savings will be checked to cover the difference. 
+  - If this is still not enough, users are prompted to evaluate their spending. From this point users can go back to Main Menu or exit the program.
+  - If Savings value can cover the debt, then Savings will transfer to Surplus.
+2. If **Surplus** is **positive**, users can decide where to allocate their money. Available options are as follows:
   - **Savings** - money will be added to Savings cell in 'general' worksheet.
   - **Extra Money** - money will be added to Extra cell in 'general' worksheet.
-Extra cell was made to allow user to collect his extra money if he did his budget properly. It is some kind of award user can spend to glorify his success.
+Extra cell was made to allow users to collect their extra money if they did their budget properly. It is award users can spend to glorify their success.
 
 ## Future Features
-1. Add 'Go Back/Previous Step' option to allow user to re-enter previously visit page.
-2. This project is based on one spredsheet for all. In future this project could be restructured to create spreadsheet for every user.
+1. Add 'Go Back/Previous Step' option to allow users to re-enter previously visit page.
+2. This project is based on one spreadsheet for all. In future this project could be restructured to create spreadsheets for all users.
 
 # Technologies Used
 - [Python](https://www.python.org) - interpreted high-level general-purpose programming language used to build the entire application.
@@ -170,8 +170,8 @@ Extra cell was made to allow user to collect his extra money if he did his budge
 ## Third Party Libraries
 - [Gspread / Google Auth](https://docs.gspread.org/en/latest/oauth2.html) - to create API for Google Sheets spreadsheet
 - [Pyfiglet](https://pypi.org/project/pyfiglet/0.7/) - to create program's main title in terminal
-- [Termcolor](https://pypi.org/project/termcolor/) - to add colored text in terminal
-- [PyInputPlus](https://pypi.org/project/PyInputPlus/) - to automate user inputs validation
+- [Termcolor](https://pypi.org/project/termcolor/) - to add coloured text in terminal
+- [PyInputPlus](https://pypi.org/project/PyInputPlus/) - to automate users inputs validation
 - [PrettyTable](https://pypi.org/project/prettytable/) - to generate table in terminal
 
 # Testing
@@ -195,13 +195,13 @@ This project was deployed using [Heroku](https://dashboard.heroku.com/) using fo
 
 ![Heroku Conifg Vars](docs/readme-files/heroku-3.png)
 
-7. Below *Config Vars* click *Add Buildpack* to add *Python* and *NodeJS* buildpacks (the order is important: Python on top of NodeJs)
+7. Below *Config Vars* click *Add Buildpack* to add *Python* and *NodeJS* buildpacks (the order is important: Python on top of Node.js)
 
 ![Heroku Buildpacks](docs/readme-files/heroku-4.png)
 
 8. Click on *Deploy* tab.
 9. In the *Deploy* page in the *Deployment Method* select GitHub.
-10. After successfull connection to GitHub locate your repository and add it to Heroku.
+10. After successful connection to GitHub locate your repository and add it to Heroku.
 
 ![Heroku GitHub](docs/readme-files/heroku-5.png)
 
@@ -209,12 +209,14 @@ This project was deployed using [Heroku](https://dashboard.heroku.com/) using fo
 
 ![Heroku Deploy](docs/readme-files/heroku-6.png)
 
-<!-- The live link can be found here - [Tic Tac Toe](https://miloszmisiek.github.io/ci_p2_tictactoe/). -->
+The live link can be found here - [Personal Budget Manager](https://personal-budget-manager.herokuapp.com/).
+
 ## Fork a repository.
 A fork is a copy of a repository. Forking a repository allows you to freely experiment with changes without affecting the original project. The steps are as follows:
 1. On the GitHub.com navigate to repository page.
 2. In the top-right corner of the page, click **Fork**.
-LINK HERE
+
+![GitHub Fork](docs/readme-files/github-fork.png)
 
 You can fork a repository to create a copy of the repository and make changes without affecting the upstream repository.
 ## Clone a repository.
@@ -223,18 +225,18 @@ In GitHub you have option to create a local copy (clone) of your repository on y
 2. Locate the *Code* tab and click on it.
 3. In the expanded window, click the two squares icon to copy https link of the repository.
 
-LINK HERE
+![GitHub Clone](docs/readme-files/github-clone.png)
 
 4. On your computer, open **Terminal**.
 5. Navigate to the directory of choice.
 6. Type **git clone** and paste the copied link of the repository.
 7. Press **Enter** and the local clone of the repository will be created in the selected directory.
 
-LINK HERE
+![GitHub Terminal](docs/readme-files/github-terminal.png)
 
 # Credits
 ## Content
-- The program structure and layout was inspired by Code Institute student project [Vaccination Manager](https://github.com/neil314159/portfolio-project-3) by 'neil314159'.
+- The program structure and layout were inspired by Code Institute student project [Vaccination Manager](https://github.com/neil314159/portfolio-project-3) by 'neil314159'.
 - The budgeting plan section of README is taken from [n26 Digital Bank](https://n26.com/en-eu/blog/50-30-20-rule).
 - Setting up the Google APIs origin is [Code Institute](https://codeinstitute.net/) 'Love Sandwiches' Essential Project.
 - README file is based on game’s owner previous project [ECOCITY](https://github.com/miloszmisiek/ci_p1_ecocity) and some concepts are inspired by fellow Code Institute student [Mycrosys](https://github.com/Mycrosys/marblesgame) project.
