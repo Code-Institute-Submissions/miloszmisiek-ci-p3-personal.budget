@@ -180,14 +180,40 @@ All various test results are presented in separate [TESTING](TESTING.md) file.
 # Deployment
 ## Using Heroku to deploy the project.
 This project was deployed using [Heroku](https://dashboard.heroku.com/) using following steps:
-1. 
+1. Click on *New* in top-right corner and then *Create New App*.
+
+![Heroku New App](docs/readme-files/heroku-1.png)
+
+2. In the next page give app the unique name.
+3. Choose region (USA or Europe).
+4. Click *Create app*.
+
+![Heroku Unique Name](docs/readme-files/heroku-2.png)
+
+5. In the next page click in *Settings* tab.
+6. In the Settings page open *Config Vars* and add *CREDS* and *PORT* vars.
+
+![Heroku Conifg Vars](docs/readme-files/heroku-3.png)
+
+7. Below *Config Vars* click *Add Buildpack* to add *Python* and *NodeJS* buildpacks (the order is important: Python on top of NodeJs)
+
+![Heroku Buildpacks](docs/readme-files/heroku-4.png)
+
+8. Click on *Deploy* tab.
+9. In the *Deploy* page in the *Deployment Method* select GitHub.
+10. After successfull connection to GitHub locate your repository and add it to Heroku.
+
+![Heroku GitHub](docs/readme-files/heroku-5.png)
+
+11. In *Manual Deploy* section confirm *main* branch is selected and click *Deploy Branch*
+
+![Heroku Deploy](docs/readme-files/heroku-6.png)
 
 <!-- The live link can be found here - [Tic Tac Toe](https://miloszmisiek.github.io/ci_p2_tictactoe/). -->
 ## Fork a repository.
 A fork is a copy of a repository. Forking a repository allows you to freely experiment with changes without affecting the original project. The steps are as follows:
 1. On the GitHub.com navigate to repository page.
 2. In the top-right corner of the page, click **Fork**.
-
 LINK HERE
 
 You can fork a repository to create a copy of the repository and make changes without affecting the upstream repository.
