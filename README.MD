@@ -18,10 +18,13 @@ The program can be run [here](https://personal-budget-manager.herokuapp.com/).
   - [Program Structure](#program-structure)
     - [Colour](#colour)
 - [Features](#features)
+  - [Budget Plans](#budget-plans)
   - [Main Menu](#main-menu)
   - [Month Selection](#month-selection)
   - [Income Input](#income-input)
   - [Managing Categories for Needs/Wants](#managing-categories-for-needswants)
+  - [Updating Needs/Wants Values](#updating-needswants-values)
+  - [Budget Managment](#budget-managment)
   - [Future Features](#future-features)
 - [Technologies Used](#technologies-used)
   - [Third Party Libraries](#third-party-libraries)
@@ -32,7 +35,6 @@ The program can be run [here](https://personal-budget-manager.herokuapp.com/).
   - [Clone a repository.](#clone-a-repository)
 - [Credits](#credits)
   - [Content](#content)
-  - [Media](#media)
 - [Acknowledgements](#acknowledgements)
 
 # User Experience
@@ -60,6 +62,35 @@ Third party library [termcolor](https://pypi.org/project/termcolor/) was used to
 
 # Features
 
+## Budget Plans
+This program is build on two budgeting plans. Rules originate from the 2005 book, “All Your Worth: The Ultimate Lifetime Money Plan,” written by current US Senator Elizabeth Warren and her daughter, Amelia Warren Tyagi. 
+
+Elements for both plans consist of:
+
+- **Needs** - expenses that you can’t avoid—payments for all the essentials that would be difficult to live without. Needs may include:
+  - Monthly rent
+  - Electricity and gas bills
+  - Transportation
+  - Insurances (for healthcare, car, or pets)
+  - Minimum loan repayments
+  - Basic groceries
+
+- **Wants** - defined as non-essential expenses—things that you choose to spend your money on, although you could live without them if you had to. These may include:
+  - Dining out
+  - Clothes shopping
+  - Holidays
+  - Gym membership
+  - Entertainment subscriptions (Netflix, HBO, Amazon Prime)
+  - Groceries (other than the essentials)
+
+- **Savings** - defined as money to achive your savings goals, or paying back any outstanding debts.
+
+Users can select one of two available budgeting plans, where they allocate their income (after TAX)  in proportion:
+
+1. **50/30/20** - 50% goes to **Needs**, 30% goes to **Wants**, 20% goes to **Savings**,
+
+2. **70/20/10** - 70% goes to **Needs**, 20% goes to **Wants**, 10% goes to **Savings**.
+
 ## Main Menu
 The main menu is loaded when program starts and when user decides to restart.
 
@@ -86,10 +117,10 @@ User is prompted to enter his monthly income:
 2. **Get income from spreadsheet** - data is fetched from worksheet based on last entry. If the field is empty, the message will pop-up informing user that his entry is not valid and he will need to enter income manually.
 
 ## Managing Categories for Needs/Wants
-<br>
+
 **Important Note!**
 All procedures after **Income Input** are almost identical for Needs and Wants. After successfully completing managing budget for Needs, user goes through same steps for Wants. User is intentionally not allowed to first work on Wants budget and then on Needs - Wants what should be considered only if Needs costs are covered for the month. 
-The amount of money available to spend on Needs or Wants depends on the selected budget plan.<br>
+The amount of money available to spend on Needs or Wants depends on the selected budget plan.
 
 User is prompted to choose from menu how categories will be handled in later calculations and updated in Google Sheets file:
 1. **Default Categories** - user can select to use default categories. These categories are defined in the source code and are as follows:
@@ -101,11 +132,11 @@ User is prompted to choose from menu how categories will be handled in later cal
    - Blank entry is not allowed.
 When user decides to finish his entries, he must type 'q' and hit Enter to exit the loop.
 3. **Get Categories from Spreadsheet** - user can choose to use categories fetched from spreadsheet. This option allows to re-enter values to previously determined entries.
-<br>
+
 **IMPORTANT NOTE!**
 Both *'Default Categories'* and *'Customize Categories'* options will erease all inputs in selected worksheet. This is neccessary for proper alignment of columns if user decides to enter more/less categories for different months.
 Before erasing the worksheet user will be warned and prompted to accept or reject this operation.
-<br>
+
 
 ## Updating Needs/Wants Values
 This part appears after user's decision about handling categories.
@@ -137,17 +168,19 @@ Extra cell was made to allow user to collect his extra money if he did his budge
 - [LucidChart](https://www.lucidchart.com/) - intelligent diagramming application to create logic flow diagram.
 
 ## Third Party Libraries
-- Gspread / Google Auth
-- Pyfiglet
-- Termcolor
-- PyInputPlus
-- PrettyTable
+- [Gspread / Google Auth](https://docs.gspread.org/en/latest/oauth2.html) - to create API for Google Sheets spreadsheet
+- [Pyfiglet](https://pypi.org/project/pyfiglet/0.7/) - to create program's main title in terminal
+- [Termcolor](https://pypi.org/project/termcolor/) - to add colored text in terminal
+- [PyInputPlus](https://pypi.org/project/PyInputPlus/) - to automate user inputs validation
+- [PrettyTable](https://pypi.org/project/prettytable/) - to generate table in terminal
 
 # Testing
 All various test results are presented in separate [TESTING](TESTING.md) file.
 
 # Deployment
 ## Using Heroku to deploy the project.
+This project was deployed using [Heroku](https://dashboard.heroku.com/) using following steps:
+1. 
 
 <!-- The live link can be found here - [Tic Tac Toe](https://miloszmisiek.github.io/ci_p2_tictactoe/). -->
 ## Fork a repository.
@@ -176,6 +209,7 @@ LINK HERE
 # Credits
 ## Content
 - The program structure and layout was inspired by Code Institute student project [Vaccination Manager](https://github.com/neil314159/portfolio-project-3) by 'neil314159'.
+- The budgeting plan section of README is taken from [n26 Digital Bank](https://n26.com/en-eu/blog/50-30-20-rule).
 - Setting up the Google APIs origin is [Code Institute](https://codeinstitute.net/) 'Love Sandwiches' Essential Project.
 - README file is based on game’s owner previous project [ECOCITY](https://github.com/miloszmisiek/ci_p1_ecocity) and some concepts are inspired by fellow Code Institute student [Mycrosys](https://github.com/Mycrosys/marblesgame) project.
 - README and TESTING files text grammar and typing were checked using [Microsoft Word](https://www.microsoft.com/pl-pl/microsoft-365/word).
