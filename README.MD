@@ -148,12 +148,12 @@ After successful entries the spreadsheet will be updated with passed values and 
 
 ## Budget Managment
 After user completes value entries, the program will check what is the surplus of total costs for Needs or Wants:
-1. If Surplus is negative, the value of Savings will be checked to cover the differnce. 
+1. If **Surplus** is **negative**, the value of Savings will be checked to cover the differnce. 
   - If this is still not enough, user is prompted to evaluate his spendings. From this point user can go back to Main Menu or exit the program.
   - If Savings value can cover the debt, than Savings will transfered to Surplus.
-2. If Surplus is positive, user can decide where to allocate his money. Available options are as follows:
-  - Savings - money will be added to Savings cell in 'general' worksheet.
-  - Extra Money - money will be added to Extra cell in 'general' worksheet.
+2. If **Surplus** is **positive**, user can decide where to allocate his money. Available options are as follows:
+  - **Savings** - money will be added to Savings cell in 'general' worksheet.
+  - **Extra Money** - money will be added to Extra cell in 'general' worksheet.
 Extra cell was made to allow user to collect his extra money if he did his budget properly. It is some kind of award user can spend to glorify his success.
 
 ## Future Features
