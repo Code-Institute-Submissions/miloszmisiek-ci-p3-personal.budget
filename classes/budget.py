@@ -228,7 +228,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
         if surplus < 0:
             self.clear_display()
             print(f"Your Surplus for {self.color_worksheet_names(worksheet)} "
-                   "is {surplus}\n")
+                  f"is {surplus}\n")
             print("\nChecking possibles to manage your debt...")
             time.sleep(3)
             cover = savings + surplus
@@ -247,7 +247,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
         else:
             self.clear_display()
             print(f"Your Surplus for {self.color_worksheet_names(worksheet)} "
-                   "is {surplus}\n")
+                  f"is {surplus}\n")
             add_money = pyip.inputMenu(['Savings', 'Extra Money',
                                         'Back to Main Menu'],
                                        prompt="Select where to "
@@ -274,13 +274,12 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                 for dict in all_values:
                     if dict['Month'] == month:
                         if dict['Extra'] == '':
-                            SHEET.worksheet('general').\
-                            update_cell(month_cell.row,
-                                        extra_cell.col, surplus)
+                            SHEET.worksheet('general').update_cell(
+                                month_cell.row, extra_cell.col, surplus)
                         else:
-                            SHEET.worksheet('general').\
-                            update_cell(month_cell.row,
-                                        extra_cell.col, dict['Extra']+surplus)
+                            SHEET.worksheet('general').update_cell(
+                                month_cell.row, extra_cell.col,
+                                dict['Extra']+surplus)
                 print("Extra value up-to-date!")
                 time.sleep(3)
             else:

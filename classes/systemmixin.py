@@ -14,18 +14,23 @@ class SystemMixin:
         Method to clear the display - logo remains.
         """
         os.system('clear')
-        # Concept for pyfiglet styling comes from https://www.youtube.com/watch?v=U1aUteSg2a4
-        print(colored(pyfiglet.figlet_format("personal budget manager", font = "graceful", justify="center", width=80), "green"))
+        # Concept for pyfiglet styling comes from
+        # https://www.youtube.com/watch?v=U1aUteSg2a4
+        print(colored(pyfiglet.figlet_format("personal budget manager",
+                                             font="graceful", justify="center",
+                                             width=80), "green"))
 
     def restart_program(self):
         """
         Method to restart or quit the program.
         """
-        # Code copied from https://stackoverflow.com/questions/48129942/python-restart-program
-        restart = pyip.inputYesNo("\nDo you want to go back to Main Menu? Type Yes or No:\n")
+        # Code copied from
+        # https://stackoverflow.com/questions/48129942/python-restart-program
+        restart = pyip.inputYesNo("\nDo you want to go back to Main Menu? "
+                                  "Type Yes or No:\n")
 
         if restart == "yes":
-            os.execl(sys.executable, os.path.abspath(__file__), *sys.argv) 
+            os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
         else:
             self.clear_display()
             print("\nThe programm will be closed...")
