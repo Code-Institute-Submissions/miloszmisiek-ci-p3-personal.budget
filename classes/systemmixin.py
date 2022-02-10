@@ -27,6 +27,7 @@ class SystemMixin:
         if restart == "yes":
             os.execl(sys.executable, os.path.abspath(__file__), *sys.argv) 
         else:
+            self.clear_display()
             print("\nThe programm will be closed...")
             print("\nSee you next time!")
             sys.exit(0)
