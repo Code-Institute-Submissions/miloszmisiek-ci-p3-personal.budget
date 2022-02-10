@@ -28,4 +28,5 @@ class SystemMixin:
             os.execl(sys.executable, os.path.abspath(__file__), *sys.argv) 
         else:
             print("\nThe programm will be closed...")
+            print("\nSee you next time!")
             sys.exit(0)
