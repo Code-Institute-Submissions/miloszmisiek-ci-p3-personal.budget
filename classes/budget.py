@@ -172,7 +172,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
     
         if surplus < 0:
             self.clear_display()
-            print(f"Your Surplus for {worksheet} is {surplus}\n")
+            print(f"Your Surplus for {self.color_worksheet_names(worksheet)} is {surplus}\n")
             print("\nChecking possibles to manage your debt...")
             time.sleep(3)
             cover = savings + surplus
@@ -187,7 +187,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                 time.sleep(3)
         else:
             self.clear_display()
-            print(f"Your Surplus for {worksheet} is {surplus}\n")
+            print(f"Your Surplus for {self.color_worksheet_names(worksheet)} is {surplus}\n")
             add_money = pyip.inputMenu(['Savings', 'Extra Money', 'Back to Main Menu'], 
                                         prompt="Select where to invest your money:\n", 
                                         numbered=True)

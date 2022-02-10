@@ -22,7 +22,7 @@ class SystemMixin:
         Method to restart or quit the program.
         """
         # Code copied from https://stackoverflow.com/questions/48129942/python-restart-program
-        restart = pyip.inputYesNo("\nDo you want to restart the program? Type Yes or No:\n")
+        restart = pyip.inputYesNo("\nDo you want to go back to Main Menu? Type Yes or No:\n")
 
         if restart == "yes":
             os.execl(sys.executable, os.path.abspath(__file__), *sys.argv) 
