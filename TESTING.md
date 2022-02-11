@@ -30,4 +30,4 @@ The library automates validation, so no further code structure is required.
 Parts of the code required extra validation using Python built-in method *try/except*.
 
 # Known Bugs
-Most of bugs were found using [PEP8 Validator](http://pep8online.com/) which are documented in section above. During code development all bugs were caught during development process.
+Most of bugs were found using [PEP8 Validator](http://pep8online.com/) which are documented in section above. During code development all bugs were caught during code structure process.
