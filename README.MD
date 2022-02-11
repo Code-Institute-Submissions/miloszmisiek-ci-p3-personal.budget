@@ -59,8 +59,11 @@ Personal Budget Manager is run in terminal and Google Sheets. Users input data t
 ### Colour
 Third party library [termcolor](https://pypi.org/project/termcolor/) was used to colour title heading in the terminal for enhanced UX. 
 
-<span style="color: green">Green</span> was selected, inspired by Matrix movie.
+Main title/logo is green - inspired by "the Matrix" movie.
 
+'Needs' worksheet entries are in red - to focus attention on essential spends.
+
+'Wants' worksheet entries are in green - to give contrast to 'Needs' entries, this category should be secondary.
 
 # Features
 
