@@ -1,5 +1,5 @@
 # Testing User Stories
--	As a user, I want to handle automate my budget calculations.
+-	As a user, I want to automate my budget calculations.
     - All calculations for budgeting can be handled using only Python program.
 -	As a user, I want to have access to my data.
     - User can print spreadsheet tables in terminal in *Main Menu*. Values for *Needs* and *Wants* are printed and updated in terminal every time user makes an input for his categories.

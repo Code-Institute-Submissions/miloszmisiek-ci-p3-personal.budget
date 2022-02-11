@@ -8,7 +8,7 @@ All calculations are handled using [Python](https://www.python.org) language. Us
 
 The program can be run [here](https://personal-budget-manager.herokuapp.com/).
 
-The Googe Sheets file for program operation can be found [here](https://docs.google.com/spreadsheets/d/19BHSAAJUUjRaPTcDJA9t2W7f-NtQhhcySJKf-Cu2uwE/edit?usp=sharing).
+The Google Sheets file for program operation can be found [here](https://docs.google.com/spreadsheets/d/19BHSAAJUUjRaPTcDJA9t2W7f-NtQhhcySJKf-Cu2uwE/edit?usp=sharing).
 
 <h2 align="center"><img src="docs/readme-files/main-page.png" alt="Program main page" style="max-width='100%'"></h2>
 
@@ -41,7 +41,7 @@ The Googe Sheets file for program operation can be found [here](https://docs.goo
 
 # User Experience
 ## User Stories
--	As a user, I want to handle automate my budget calculations.
+-	As a user, I want to automate my budget calculations.
 -	As a user, I want to have access to my data.
 -	As a user, I want to edit my data if needed.
 -	As a user, I want to run my program without crashing.
@@ -51,7 +51,7 @@ The Googe Sheets file for program operation can be found [here](https://docs.goo
 ## Logic flow
 Logic flow was presented using [Lucidchart](https://www.lucidchart.com/pages/) to visualize how the program will run. The outcome differs from original concept due to complexity of program.
 
-![Lucicdchart Logic Flow](docs/readme-files/logic-flow.png)
+![Lucidchart Logic Flow](docs/readme-files/logic-flow.png)
 
 ## Program Structure
 Personal Budget Manager is run in terminal and Google Sheets. Users input data through selection based on menu provided or by typing. All inputs are validated for proper program operation.
@@ -122,6 +122,7 @@ Users are prompted to enter their monthly income:
 2. **Get income from spreadsheet** - data is fetched from worksheet based on last entry. If the field is empty, the message will pop-up informing users that their entry is not valid, and they will need to enter income manually.
 
 ## Managing Categories for Needs/Wants
+![Categories - Needs](docs/readme-files/manage-categories-needs.png)
 
 **Important Note!**
 All procedures after **Income Input** are almost identical for Needs and Wants. After successfully completing managing budget for Needs, users go through same steps for Wants. Users are intentionally not allowed to first work on Wants budget and then on Needs - Wants what should be considered only if Needs costs are covered for the month. 
@@ -131,7 +132,11 @@ Users are prompted to choose from menu how categories will be handled in later c
 1. **Default Categories** - users can select to use default categories. These categories are defined in the source code and are as follows:
    - Needs: Housing, Vehicle, Insurance, Food, Banking.
    - Wants: Entertainment, Wellbeing, Travel
-2. **Customize Categories** - users can type their own categories in a loop structured entry . The input is restricted for proper program operation:
+2. **Customize Categories** - users can type their own categories in a loop structured entry . 
+
+![Customize Categories](docs/readme-files/customize-categories.png)
+
+The input is restricted for proper program operation:
    - Only string data is allowed,
    - The categories must be entered without whitespaces and commas (,),
    - Blank entry is not allowed.
@@ -144,6 +149,9 @@ Before erasing the worksheet, users will be warned and prompted to accept or rej
 
 
 ## Updating Needs/Wants Values
+
+![Input Values](docs/readme-files/input-values-needs.png)
+
 This part appears after user's decision about handling categories.
 The top message includes amount of money users are allowed to spend for relevant section. The value is updated every time users make entries for category of their choice made in previous call.
 
@@ -153,10 +161,14 @@ After successful entries the spreadsheet will be updated with passed values and 
 
 ## Budget Management
 After users’ complete value entries, the program will check what is the surplus of total costs for Needs or Wants:
-1. If **Surplus** is **negative**, the value of Savings will be checked to cover the difference. 
+1. **Negative Surplus**
+![Negative Surplus - Needs](docs/readme-files/budget-negative-needs.png)
+If **Surplus** is **negative**, the value of Savings will be checked to cover the difference. 
   - If this is still not enough, users are prompted to evaluate their spending. From this point users can go back to Main Menu or exit the program.
   - If Savings value can cover the debt, then Savings will transfer to Surplus.
-2. If **Surplus** is **positive**, users can decide where to allocate their money. Available options are as follows:
+2. **Positive Surplus**
+![Positive Surplus - Needs](docs/readme-files/budget-positive-needs.png)
+If **Surplus** is **positive**, users can decide where to allocate their money. Available options are as follows:
   - **Savings** - money will be added to Savings cell in 'general' worksheet.
   - **Extra Money** - money will be added to Extra cell in 'general' worksheet.
 Extra cell was made to allow users to collect their extra money if they did their budget properly. It is award users can spend to glorify their success.
@@ -183,7 +195,7 @@ Extra cell was made to allow users to collect their extra money if they did thei
 All various test results are presented in separate [TESTING](TESTING.md) file.
 
 # Deployment
-## Using Heroku to deploy the project.
+## Using Heroku to deploy the project
 This project was deployed using [Heroku](https://dashboard.heroku.com/) using following steps:
 1. Click on *New* in top-right corner and then *Create New App*.
 
@@ -216,7 +228,7 @@ This project was deployed using [Heroku](https://dashboard.heroku.com/) using fo
 
 The live link can be found here - [Personal Budget Manager](https://personal-budget-manager.herokuapp.com/).
 
-## Fork a repository.
+## Fork a repository
 A fork is a copy of a repository. Forking a repository allows you to freely experiment with changes without affecting the original project. The steps are as follows:
 1. On the GitHub.com navigate to repository page.
 2. In the top-right corner of the page, click **Fork**.
@@ -224,7 +236,7 @@ A fork is a copy of a repository. Forking a repository allows you to freely expe
 ![GitHub Fork](docs/readme-files/github-fork.png)
 
 You can fork a repository to create a copy of the repository and make changes without affecting the upstream repository.
-## Clone a repository.
+## Clone a repository
 In GitHub you have option to create a local copy (clone) of your repository on your device hard drive. The steps are as follows:
 1. On the GitHub.com navigate to repository page.
 2. Locate the *Code* tab and click on it.
@@ -244,7 +256,6 @@ In GitHub you have option to create a local copy (clone) of your repository on y
 - The program structure and layout were inspired by Code Institute student project [Vaccination Manager](https://github.com/neil314159/portfolio-project-3) by 'neil314159'.
 - The budgeting plan section of README is taken from [n26 Digital Bank](https://n26.com/en-eu/blog/50-30-20-rule).
 - Setting up the Google APIs origin is [Code Institute](https://codeinstitute.net/) 'Love Sandwiches' Essential Project.
-- README file is based on game’s owner previous project [ECOCITY](https://github.com/miloszmisiek/ci_p1_ecocity) and some concepts are inspired by fellow Code Institute student [Mycrosys](https://github.com/Mycrosys/marblesgame) project.
 - README and TESTING files text grammar and typing were checked using [Microsoft Word](https://www.microsoft.com/pl-pl/microsoft-365/word).
 - Markdown table for Responsiveness section in TESTING file was created using [Tables Generator](https://www.tablesgenerator.com/markdown_tables).
 - GitHub Deployment section come from [GitHub Docs](https://docs.github.com/en/get-started/quickstart/fork-a-repo).
