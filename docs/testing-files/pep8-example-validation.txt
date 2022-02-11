@@ -1,0 +1,300 @@
+Check results
+=============
+
+W291:28:51:trailing whitespace
+E128:29:9:continuation line under-indented for visual indent
+E128:30:9:continuation line under-indented for visual indent
+E302:32:1:expected 2 blank lines, found 1
+E501:40:80:line too long (97 > 79 characters)
+W293:41:1:blank line contains whitespace
+W293:42:1:blank line contains whitespace
+E303:43:5:too many blank lines (2)
+E712:50:30:comparison to False should be 'if cond is False:' or 'if not cond:'
+E231:51:56:missing whitespace after ','
+E501:51:80:line too long (102 > 79 characters)
+W291:51:103:trailing whitespace
+E127:52:41:continuation line over-indented for visual indent
+E501:52:80:line too long (96 > 79 characters)
+E127:53:41:continuation line over-indented for visual indent
+E501:56:80:line too long (523 > 79 characters)
+E127:61:49:continuation line over-indented for visual indent
+E501:61:80:line too long (100 > 79 characters)
+W291:61:101:trailing whitespace
+E127:62:49:continuation line over-indented for visual indent
+W293:69:1:blank line contains whitespace
+E501:81:80:line too long (81 > 79 characters)
+W293:84:1:blank line contains whitespace
+W293:86:1:blank line contains whitespace
+E712:87:27:comparison to True should be 'if cond is True:' or 'if cond:'
+E501:88:80:line too long (90 > 79 characters)
+W291:88:91:trailing whitespace
+E127:89:37:continuation line over-indented for visual indent
+E501:89:80:line too long (93 > 79 characters)
+W291:89:94:trailing whitespace
+E127:90:37:continuation line over-indented for visual indent
+E501:96:80:line too long (93 > 79 characters)
+E501:100:80:line too long (109 > 79 characters)
+W293:105:1:blank line contains whitespace
+E501:107:80:line too long (125 > 79 characters)
+W291:107:126:trailing whitespace
+E501:108:80:line too long (91 > 79 characters)
+W291:108:92:trailing whitespace
+E501:112:80:line too long (84 > 79 characters)
+E501:113:80:line too long (95 > 79 characters)
+E501:118:80:line too long (92 > 79 characters)
+E501:120:80:line too long (94 > 79 characters)
+E501:124:80:line too long (153 > 79 characters)
+E501:127:80:line too long (82 > 79 characters)
+W293:128:1:blank line contains whitespace
+W293:130:1:blank line contains whitespace
+E501:133:80:line too long (126 > 79 characters)
+E501:137:80:line too long (99 > 79 characters)
+W291:137:100:trailing whitespace
+E127:138:41:continuation line over-indented for visual indent
+E501:138:80:line too long (95 > 79 characters)
+W291:138:96:trailing whitespace
+E127:139:41:continuation line over-indented for visual indent
+E501:156:80:line too long (626 > 79 characters)
+E501:158:80:line too long (115 > 79 characters)
+E501:164:80:line too long (97 > 79 characters)
+W293:169:1:blank line contains whitespace
+W293:174:1:blank line contains whitespace
+E501:177:80:line too long (93 > 79 characters)
+E501:182:80:line too long (102 > 79 characters)
+E501:185:80:line too long (88 > 79 characters)
+E501:187:80:line too long (95 > 79 characters)
+E501:192:80:line too long (93 > 79 characters)
+E501:193:80:line too long (87 > 79 characters)
+W291:193:88:trailing whitespace
+E127:194:41:continuation line over-indented for visual indent
+E501:194:80:line too long (86 > 79 characters)
+W291:194:87:trailing whitespace
+E127:195:41:continuation line over-indented for visual indent
+E501:202:80:line too long (121 > 79 characters)
+E501:212:80:line too long (107 > 79 characters)
+E501:214:80:line too long (121 > 79 characters)
+W292:221:35:no newline at end of file
+
+Code
+=============
+import gspread
+from google.oauth2.service_account import Credentials
+import pyinputplus as pyip
+import time
+import os
+import sys
+import pyfiglet
+from termcolor import colored
+from prettytable import PrettyTable
+from datetime import datetime
+
+from classes.systemmixin import SystemMixin
+from classes.updatespreadsheetmixin import UpdateSpreadsheetMixin
+
+# Global Variables for Google API
+SCOPE = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive.file",
+    "https://www.googleapis.com/auth/drive"
+    ]
+CREDS = Credentials.from_service_account_file('creds.json')
+SCOPED_CREDS = CREDS.with_scopes(SCOPE)
+GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
+SHEET = GSPREAD_CLIENT.open('personal-budget')
+
+# Global Variables for app processes
+MONTH_NOW = datetime.now().strftime('%B')
+MONTHS = ['January', 'February', 'March', 'April', 
+        'May', 'June', 'July', 'August', 'September',
+        'October', 'November', 'December']
+
+class Budget(SystemMixin, UpdateSpreadsheetMixin):
+    """
+    Budget class that handles user option for calculations.
+    """
+    def __init__(self):
+        self.app_logic = self.main_menu()
+        self.income = self.enter_income()
+        self.plan_elements = self.choose_budget_plan(self.income[1])
+        # self.update_worksheet_cell('general', self.income[0], self.income[1], 'Monthly Income')
+        
+    
+    def main_menu(self):
+        """
+        Method to display main menu.
+        """
+        self.clear_display()
+        start_sequence = False
+
+        while start_sequence == False:
+            show_menu = pyip.inputMenu(['About the app','Print tables', 'Manage your budget', 'Exit'], 
+                                        prompt="\nSelect one of the following and hit Enter:\n",
+                                        numbered=True)
+            if show_menu == 'About the app':
+                self.clear_display()
+                print("This app is designed to control your monthly costs.\nWith this program you will be able to:\n- Enter your income or get income from spreadsheet,\n- Choose investing plan from two available,\n- Create your own groups for costs which will be included\n  in Needs or Wants worksheets,\n- Enter your costs and receive information how much you is left\n- If you exceed your limit, the program will check if the debt can be covered,\n  if not you will be prompt to restart program and enter inputs again.")
+
+            elif show_menu == 'Print tables':
+                self.clear_display()
+                tables_choice = pyip.inputMenu(["general", "needs", "wants"],
+                                                prompt="Select which table to print in terminal:\n", 
+                                                numbered=True)
+                self.clear_display()
+                values = SHEET.worksheet(tables_choice).get_all_values()
+                table = PrettyTable()
+                table.field_names = values[0]
+                table.add_rows(values[1:])
+                print(table)
+            
+            elif show_menu == "Manage your budget":
+                self.clear_display()
+                start_sequence = True
+
+            else:
+                quit()
+
+        return start_sequence
+
+    def enter_income(self):
+        """
+        Gets user's input for income, validates the choice returns user's choice.
+        """
+        self.clear_display()
+        
+        all_values = SHEET.worksheet('general').get_all_records()
+        
+        if self.app_logic == True:
+            month = pyip.inputMenu(['Present month', 'Select month', 'Back to Main Menu'], 
+                                    prompt="Select which month will include calculations:\n", 
+                                    numbered=True)
+            if month == 'Present month':
+                month_calc = MONTH_NOW
+            elif month == 'Select month':
+                while True:
+                    self.clear_display()
+                    month_calc = pyip.inputStr("Type month for calculations:\n").capitalize()
+                    if month_calc.capitalize() in MONTHS:
+                        break
+                    else:
+                        print("Incorrect input. Make sure your input is a name of the month.\nExample: July")
+                        time.sleep(5)
+            else:
+                os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
+            self.clear_display()
+            
+            while True:
+                input_decision = pyip.inputMenu(['Enter monthly income', 'Get income from spreadsheet', 'Back to Main Menu'], 
+                                                prompt="Select income for calculations:\n", 
+                                                numbered=True)
+                if input_decision == 'Enter monthly income':
+                    self.clear_display()
+                    income = pyip.inputFloat("Enter your monthly income (-TAX): \n")
+                    self.update_worksheet_cell('general', income, month_calc, 'Monthly Income')
+                    break
+                elif input_decision == 'Get income from spreadsheet':
+                    try:
+                        for dict in all_values:
+                            if dict['Month'] == month_calc and dict['Monthly Income'] != '':
+                                income = dict['Monthly Income']
+                            elif dict['Month'] == month_calc and dict['Monthly Income'] == '':
+                                raise ValueError()
+                        break
+                    except:
+                        print("Something went wrong. Check if name of columns and rows in spreadsheet are correct and if Monthly Income is not empty.\n")
+                        continue
+                else:
+                    os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
+        
+        return income, month_calc
+    
+    def choose_budget_plan(self, month):
+        """
+        Gets user input for budget plan based on menu presented on the screen, validates the choice and returns user's choice.
+        """
+        self.clear_display()
+        while True:
+            response = pyip.inputMenu(['About plans', '50/30/20', '70/20/10', 'Back to Main Menu'], 
+                                        prompt="Please select which budget plan you choose:\n", 
+                                        numbered=True)
+            if response == 'Back to Main Menu':
+                os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
+            else:
+                try:
+                    if response == '50/30/20':
+                        needs = round(self.income[0] * 0.5, 1)
+                        wants = round(self.income[0] * 0.3, 1)
+                        savings = round(self.income[0] * 0.2, 1)
+                        break
+                    elif response == '70/20/10':
+                        needs = round(self.income[0] * 0.7, 1)
+                        wants = round(self.income[0] * 0.2, 1)
+                        savings = round(self.income[0] * 0.1, 1)
+                        break
+                    elif response == 'About plans':
+                        self.clear_display()
+                        print("The 50/30/20 rule is a money management technique that divides your income into three categories:\n50% Needs(essentials)\n30% Wants(non-essentials)\n20% Savings.\n\nBy default this app provides following sub-categories:\nNeeds: Housing, Vehicle costs, Insurance, Food and Banking\nWants: Entertainment, Wellbeing and Travel\n* Savings is what is meant to be left untouched and used only in case there is\nabsolute need for it. It can cover any unexpected costs.\n\nThe 70/20/10 rule is less robust investment type, where the budget is split in\nproportion:\n70% Needs\n20% Wants\n10% Savings\n")
+                except:
+                    print("Something went wrong. Check your income value in spreadsheet or enter income manually.")
+                    self.restart_program()
+        return [response, needs, wants, savings]
+
+    def manage_your_budget(self, worksheet, surplus, savings, month):
+        """
+        Manages SURPLUS values for selected worksheet. Transfer SURPLUS to cell selected by user.
+        """
+        self.clear_display()
+        print("Managing budget...\n")
+        time.sleep(3)
+        
+        all_values = SHEET.worksheet('general').get_all_records()
+        month_cell = SHEET.worksheet('general').find(month)
+        extra_cell = SHEET.worksheet('general').find('Extra')
+        savings_cell = SHEET.worksheet('general').find('Savings')
+    
+        if surplus < 0:
+            self.clear_display()
+            print(f"Your Surplus for {self.color_worksheet_names(worksheet)} is {surplus}\n")
+            print("\nChecking possibles to manage your debt...")
+            time.sleep(3)
+            cover = savings + surplus
+            if cover < 0:
+                print("\nYou don't have enough money for your spends! You must reduce your costs!...")
+                self.restart_program()
+            else:
+                print("\nEnough Savings to cover debt. Updating SURPLUS and Savings...")
+                time.sleep(3)
+                SHEET.worksheet('general').update_cell(month_cell.row, savings_cell.col, cover)
+                print("\nSURPLUS and Savings up-to-date.")
+                time.sleep(3)
+        else:
+            self.clear_display()
+            print(f"Your Surplus for {self.color_worksheet_names(worksheet)} is {surplus}\n")
+            add_money = pyip.inputMenu(['Savings', 'Extra Money', 'Back to Main Menu'], 
+                                        prompt="Select where to invest your money:\n", 
+                                        numbered=True)
+            if add_money == 'Savings':
+                self.clear_display()
+                print("Updating Savings value...\n")
+                time.sleep(3)
+                for dict in all_values:
+                    if dict['Month'] == month:
+                        SHEET.worksheet('general').update_cell(month_cell.row, savings_cell.col, dict['Savings']+surplus)
+                print("Savings value up-to date!\n")
+                time.sleep(3)
+            elif add_money == 'Extra Money':
+                self.clear_display()
+                print("Updating Extra value...\n")
+                time.sleep(3)
+                for dict in all_values:
+                    if dict['Month'] == month:
+                        if dict['Extra'] == '':
+                            SHEET.worksheet('general').update_cell(month_cell.row, extra_cell.col, surplus)
+                        else:
+                            SHEET.worksheet('general').update_cell(month_cell.row, extra_cell.col, dict['Extra']+surplus)
+                print("Extra value up-to-date!")
+                time.sleep(3)
+            else:
+                os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
+        print("\nBudget up-to-date!")
+        if worksheet == 'wants':
+            self.restart_program()
