@@ -8,6 +8,8 @@ All calculations are handled using [Python](https://www.python.org) language. Us
 
 The program can be run [here](https://personal-budget-manager.herokuapp.com/).
 
+The Googe Sheets file for program operation can be found [here](https://docs.google.com/spreadsheets/d/19BHSAAJUUjRaPTcDJA9t2W7f-NtQhhcySJKf-Cu2uwE/edit?usp=sharing).
+
 <h2 align="center"><img src="docs/readme-files/main-page.png" alt="Program main page" style="max-width='100%'"></h2>
 
 # Contents
