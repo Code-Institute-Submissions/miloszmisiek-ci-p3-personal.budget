@@ -5,9 +5,6 @@ import pyinputplus as pyip
 from termcolor import colored
 import os
 import sys
-
-
-import classes.budget
 import time
 
 
@@ -91,7 +88,7 @@ class UpdateSpreadsheetMixin:
                     spendings[item] = self.money - spendings['TOTAL']
         self.clear_display()
         print(f"\nUpdating {self.color_worksheet_names(worksheet)} "
-               "worksheet with passed values...")
+              "worksheet with passed values...")
         time.sleep(3)
         for key, value in spendings.items():
             if key != 'SURPLUS':
@@ -99,7 +96,7 @@ class UpdateSpreadsheetMixin:
                 SHEET.worksheet(worksheet).update_cell(month_cell.row,
                                                        key_location.col, value)
         print(f"\n{self.color_worksheet_names(worksheet)} "
-               "worksheet updated successfully!")
+              "worksheet updated successfully!")
         time.sleep(3)
         print(f"\nYour summarize costs for "
               f"{self.color_worksheet_names(worksheet)} "
@@ -124,7 +121,7 @@ class UpdateSpreadsheetMixin:
             month_cell.row, month_cell.col, month)
         print(f"\n{month.capitalize()} row in "
               f"{self.color_worksheet_names(worksheet)} "
-               "worksheet is now clear.")
+              "worksheet is now clear.")
         time.sleep(3)
         self.clear_display()
 
@@ -135,7 +132,7 @@ class UpdateSpreadsheetMixin:
         """
         self.clear_display()
         print(f"Erasing {self.color_worksheet_names(worksheet)} "
-               "worksheet...\n")
+              "worksheet...\n")
         time.sleep(3)
         get_all_values = SHEET.worksheet('needs').get_all_values()
         SHEET.worksheet(worksheet).clear()
@@ -147,7 +144,7 @@ class UpdateSpreadsheetMixin:
 
         SHEET.worksheet(worksheet).insert_rows(row_values)
         print(f"{self.color_worksheet_names(worksheet)} "
-               "worksheet is now empty.\n")
+              "worksheet is now empty.\n")
         time.sleep(3)
 
     def update_worksheet_categories(self, categories, worksheet, cell):
@@ -156,7 +153,7 @@ class UpdateSpreadsheetMixin:
         """
         self.clear_display()
         print(f"\nUpdating {self.color_worksheet_names(worksheet)} "
-               "worksheet...")
+              "worksheet...")
         time.sleep(3)
         split_categories = categories.split(',')
         month = SHEET.worksheet(worksheet).find(cell)
@@ -164,7 +161,7 @@ class UpdateSpreadsheetMixin:
             if item != 'SURPLUS':
                 SHEET.worksheet(worksheet).update_cell(month.row, num+2, item)
         print(f"\n{self.color_worksheet_names(worksheet)} "
-               "worksheet updated successfully!")
+              "worksheet updated successfully!")
         time.sleep(3)
         return split_categories
 
@@ -187,7 +184,7 @@ class UpdateSpreadsheetMixin:
             if options_menu == 'Default Categories' or \
                options_menu == 'Customize Categories':
                 print(f"\n{options_menu} will delete all "
-                       "values in the worksheet.")
+                      "values in the worksheet.")
                 continue_bool = pyip.inputYesNo("\nDo you want to continue? "
                                                 "Type Yes or No:\n")
                 if continue_bool.lower() == 'yes':
@@ -236,14 +233,14 @@ class UpdateSpreadsheetMixin:
                 user_categories = categories_string[:-1]
                 if user_categories == '':
                     print(f"\nYour categories are empty. "
-                           "Use Default or customize "
+                          "Use Default or customize "
                           f"{self.color_worksheet_names(worksheet)} "
-                           "categories yourself.")
+                          "categories yourself.")
                     time.sleep(5)
                     flow = True
                 else:
                     flow = False
             else:
-                os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
+                os.execl(sys.executable, sys.executable, *sys.argv)
 
         return user_categories + ',TOTAL' + ',SURPLUS'

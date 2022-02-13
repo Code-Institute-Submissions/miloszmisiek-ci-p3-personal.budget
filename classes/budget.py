@@ -1,13 +1,12 @@
-import gspread
-from google.oauth2.service_account import Credentials
-import pyinputplus as pyip
 import time
 import os
 import sys
-import pyfiglet
-from termcolor import colored
-from prettytable import PrettyTable
 from datetime import datetime
+import gspread
+from google.oauth2.service_account import Credentials
+import pyinputplus as pyip
+
+from prettytable import PrettyTable
 
 from classes.systemmixin import SystemMixin
 from classes.updatespreadsheetmixin import UpdateSpreadsheetMixin
@@ -37,7 +36,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
     def __init__(self):
         self.app_logic = self.main_menu()
         self.income = self.enter_income()
-        self.plan_elements = self.choose_budget_plan(self.income[1])
+        self.plan_elements = self.choose_budget_plan()
 
     def main_menu(self):
         """
@@ -49,7 +48,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
         while not start_sequence:
             show_menu = pyip.inputMenu(['About the app', 'Print tables',
                                         'Manage your budget', 'Exit'],
-                                       prompt="\nSelect one of the following"
+                                       prompt="Select one of the following"
                                               "and hit Enter:\n",
                                        numbered=True)
             if show_menu == 'About the app':
@@ -86,9 +85,36 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                 start_sequence = True
 
             else:
-                quit()
+                sys.exit(0)
 
         return start_sequence
+
+    def choose_month(self):
+        """
+        Returns month for calulations based on user input.
+        """
+        month = pyip.inputMenu(['Present month', 'Select month',
+                                'Back to Main Menu'],
+                               prompt="Select which month will "
+                               "include calculations:\n",
+                               numbered=True)
+        if month == 'Present month':
+            month_calc = MONTH_NOW
+        elif month == 'Select month':
+            while True:
+                self.clear_display()
+                month_calc = pyip.inputStr(
+                    "Type month for calculations:\n").capitalize()
+                if month_calc.capitalize() in MONTHS:
+                    break
+                print("Incorrect input. Make sure your input "
+                      "is a name of the month.\nExample: July")
+                time.sleep(5)
+        else:
+            os.execl(sys.executable, sys.executable, *sys.argv)
+        self.clear_display()
+
+        return month_calc
 
     def enter_income(self):
         """
@@ -96,68 +122,45 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
         validates the choice returns user's choice.
         """
         self.clear_display()
-
         all_values = SHEET.worksheet('general').get_all_records()
+        month_calc = self.choose_month()
 
-        if self.app_logic:
-            month = pyip.inputMenu(['Present month', 'Select month',
-                                    'Back to Main Menu'],
-                                   prompt="Select which month will "
-                                   "include calculations:\n",
-                                   numbered=True)
-            if month == 'Present month':
-                month_calc = MONTH_NOW
-            elif month == 'Select month':
-                while True:
-                    self.clear_display()
-                    month_calc = pyip.inputStr("Type month for calculations:\n"
-                                               ).capitalize()
-                    if month_calc.capitalize() in MONTHS:
-                        break
-                    else:
-                        print("Incorrect input. Make sure your input "
-                              "is a name of the month.\nExample: July")
-                        time.sleep(5)
-            else:
-                os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
-            self.clear_display()
-
-            while True:
-                input_decision = pyip.inputMenu(['Enter monthly income',
-                                                 'Get income from spreadsheet',
-                                                 'Back to Main Menu'],
-                                                prompt="Select income "
-                                                       "for calculations:\n",
-                                                numbered=True)
-                if input_decision == 'Enter monthly income':
-                    self.clear_display()
-                    income = pyip.inputFloat("Enter your monthly "
-                                             "income (-TAX): \n")
-                    self.update_worksheet_cell('general', income,
-                                               month_calc, 'Monthly Income')
+        while True:
+            input_decision = pyip.inputMenu(['Enter monthly income',
+                                             'Get income from spreadsheet',
+                                             'Back to Main Menu'],
+                                            prompt="Select income "
+                                                   "for calculations:\n",
+                                            numbered=True)
+            if input_decision == 'Enter monthly income':
+                self.clear_display()
+                income = pyip.inputFloat("Enter your monthly "
+                                         "income (-TAX): \n")
+                self.update_worksheet_cell('general', income,
+                                           month_calc, 'Monthly Income')
+                break
+            if input_decision == 'Get income from spreadsheet':
+                # bug to fix - spreadsheet wrong month or monthly income wrong naming
+                try:
+                    for dic in all_values:
+                        if dic['Month'] == month_calc and \
+                           dic['Monthly Income'] != '':
+                            income = dic['Monthly Income']
+                        elif (dic['Month'] == month_calc and
+                              dic['Monthly Income'] == ''):
+                            raise ValueError()
                     break
-                elif input_decision == 'Get income from spreadsheet':
-                    try:
-                        for dict in all_values:
-                            if dict['Month'] == month_calc and \
-                               dict['Monthly Income'] != '':
-                                income = dict['Monthly Income']
-                            elif (dict['Month'] == month_calc and
-                                  dict['Monthly Income'] == ''):
-                                    raise ValueError()
-                        break
-                    except:
-                        print("Something went wrong. Check if name of columns "
-                              "and rows in spreadsheet are correct and if "
-                              "Monthly Income is not empty.\n")
-                        continue
-                else:
-                    os.execl(sys.executable, os.path.abspath(__file__),
-                             *sys.argv)
+                except ValueError:
+                    print("Something went wrong. Check if name of columns "
+                          "and rows in spreadsheet are correct and if "
+                          "Monthly Income is not empty.\n")
+                    continue
+            else:
+                os.execl(sys.executable, sys.executable, *sys.argv)
 
         return income, month_calc
 
-    def choose_budget_plan(self, month):
+    def choose_budget_plan(self):
         """
         Gets user input for budget plan based on menu presented on the screen,
         validates the choice and returns user's choice.
@@ -170,7 +173,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                                              "you choose:\n",
                                       numbered=True)
             if response == 'Back to Main Menu':
-                os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
+                os.execl(sys.executable, sys.executable, *sys.argv)
             else:
                 try:
                     if response == '50/30/20':
@@ -204,7 +207,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                               "investment type, where the budget is "
                               "split in\nproportion:"
                               "\n70% Needs\n20% Wants\n10% Savings\n")
-                except:
+                except: # pylint: disable=bare-except
                     print("Something went wrong. "
                           "Check your income value in spreadsheet "
                           "or enter income manually.")
@@ -220,9 +223,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
         print("Managing budget...\n")
         time.sleep(3)
 
-        all_values = SHEET.worksheet('general').get_all_records()
         month_cell = SHEET.worksheet('general').find(month)
-        extra_cell = SHEET.worksheet('general').find('Extra')
         savings_cell = SHEET.worksheet('general').find('Savings')
 
         if surplus < 0:
@@ -248,42 +249,52 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
             self.clear_display()
             print(f"Your Surplus for {self.color_worksheet_names(worksheet)} "
                   f"is {surplus}\n")
-            add_money = pyip.inputMenu(['Savings', 'Extra Money',
-                                        'Back to Main Menu'],
-                                       prompt="Select where to "
-                                              "invest your money:\n",
-                                       numbered=True)
-            if add_money == 'Savings':
-                self.clear_display()
-                print("Updating Savings value...\n")
-                time.sleep(3)
-                for dict in all_values:
-                    if dict['Month'] == month:
-                        SHEET.worksheet('general').update_cell(
-                                                              month_cell.row,
-                                                              savings_cell.col,
-                                                              dict['Savings'] +
-                                                              surplus
-                                                              )
-                print("Savings value up-to date!\n")
-                time.sleep(3)
-            elif add_money == 'Extra Money':
-                self.clear_display()
-                print("Updating Extra value...\n")
-                time.sleep(3)
-                for dict in all_values:
-                    if dict['Month'] == month:
-                        if dict['Extra'] == '':
-                            SHEET.worksheet('general').update_cell(
-                                month_cell.row, extra_cell.col, surplus)
-                        else:
-                            SHEET.worksheet('general').update_cell(
-                                month_cell.row, extra_cell.col,
-                                dict['Extra']+surplus)
-                print("Extra value up-to-date!")
-                time.sleep(3)
-            else:
-                os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
+            self.invset_money(month, month_cell, savings_cell, surplus)
+
         print("\nBudget up-to-date!")
         if worksheet == 'wants':
             self.restart_program()
+
+    def invset_money(self, month, month_cell, savings_cell, surplus):
+        """
+        Updates Savings or Extra in spreadsheet depending on user input.
+        """
+        all_values = SHEET.worksheet('general').get_all_records()
+        extra_cell = SHEET.worksheet('general').find('Extra')
+
+        add_money = pyip.inputMenu(['Savings', 'Extra Money',
+                                    'Back to Main Menu'],
+                                   prompt="Select where to "
+                                          "invest your money:\n",
+                                   numbered=True)
+        if add_money == 'Savings':
+            self.clear_display()
+            print("Updating Savings value...\n")
+            time.sleep(3)
+            for dic in all_values:
+                if dic['Month'] == month:
+                    SHEET.worksheet('general').update_cell(
+                                                            month_cell.row,
+                                                            savings_cell.col,
+                                                            dic['Savings'] +
+                                                            surplus
+                                                            )
+            print("Savings value up-to date!\n")
+            time.sleep(3)
+        elif add_money == 'Extra Money':
+            self.clear_display()
+            print("Updating Extra value...\n")
+            time.sleep(3)
+            for dic in all_values:
+                if dic['Month'] == month:
+                    if dic['Extra'] == '':
+                        SHEET.worksheet('general').update_cell(
+                            month_cell.row, extra_cell.col, surplus)
+                    else:
+                        SHEET.worksheet('general').update_cell(
+                            month_cell.row, extra_cell.col,
+                            dic['Extra']+surplus)
+            print("Extra value up-to-date!")
+            time.sleep(3)
+        else:
+            os.execl(sys.executable, sys.executable, *sys.argv)

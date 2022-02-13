@@ -30,7 +30,7 @@ class SystemMixin:
                                   "Type Yes or No:\n")
 
         if restart == "yes":
-            os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
+            os.execl(sys.executable, sys.executable, *sys.argv)
         else:
             self.clear_display()
             print("\nThe programm will be closed...")
