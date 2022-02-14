@@ -1,5 +1,10 @@
+"""
+This module costains SystemMixin to execute methods
+used to clear terminal and restart program.
+"""
 import os
 import sys
+import time
 from termcolor import colored
 import pyfiglet
 import pyinputplus as pyip
@@ -9,7 +14,8 @@ class SystemMixin:
     """
     Mixin to clear terminal screen.
     """
-    def clear_display(self):
+    @staticmethod
+    def clear_display():
         """
         Method to clear the display - logo remains.
         """
@@ -35,4 +41,6 @@ class SystemMixin:
             self.clear_display()
             print("\nThe programm will be closed...")
             print("\nSee you next time!")
+            time.sleep(5)
+            self.clear_display()
             sys.exit(0)

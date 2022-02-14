@@ -1,11 +1,17 @@
-from classes.budget import Budget
+"""
+This module contains budget elements,
+represented with classes:
+- Savings
+- Needs
+- Wants
+"""
 from classes.systemmixin import SystemMixin
 from classes.updatespreadsheetmixin import UpdateSpreadsheetMixin
 
 
-class Savings(Budget, SystemMixin):
+class Savings(SystemMixin, UpdateSpreadsheetMixin):
     """
-    Budget child class to handle Savings calculations.
+    Class to handle Savings calculations.
     """
     def __init__(self, money, month):
         self.month = month
@@ -15,9 +21,9 @@ class Savings(Budget, SystemMixin):
         self.update_worksheet_cell('general', '', self.month, 'Extra')
 
 
-class Needs(Budget, SystemMixin, UpdateSpreadsheetMixin):
+class Needs(SystemMixin, UpdateSpreadsheetMixin):
     """
-    Budget child class to handle Needs calculations.
+    Class to handle Needs calculations.
     """
     def __init__(self, money):
         self.money = money
@@ -29,9 +35,9 @@ class Needs(Budget, SystemMixin, UpdateSpreadsheetMixin):
             self.categories_string, 'needs', 'Month')
 
 
-class Wants(Budget, SystemMixin, UpdateSpreadsheetMixin):
+class Wants(SystemMixin, UpdateSpreadsheetMixin):
     """
-    Budget child class to handle Wants calculations.
+    Class to handle Wants calculations.
     """
     def __init__(self, money):
         self.money = money

@@ -1,3 +1,8 @@
+"""
+This module contains Budget class,
+with all methods and attribiutes required
+to create instance.
+"""
 import time
 import os
 import sys
@@ -34,7 +39,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
     Budget class that handles user option for calculations.
     """
     def __init__(self):
-        self.app_logic = self.main_menu()
+        self.main_menu()
         self.income = self.enter_income()
         self.plan_elements = self.choose_budget_plan()
 
@@ -43,51 +48,46 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
         Method to display main menu.
         """
         self.clear_display()
-        start_sequence = False
 
-        while not start_sequence:
-            show_menu = pyip.inputMenu(['About the app', 'Print tables',
-                                        'Manage your budget', 'Exit'],
-                                       prompt="Select one of the following"
-                                              "and hit Enter:\n",
-                                       numbered=True)
-            if show_menu == 'About the app':
-                self.clear_display()
-                print("This app is designed to control your monthly costs."
-                      "\nWith this program you will be able to:"
-                      "\n- Enter your income or get income from spreadsheet,"
-                      "\n- Choose investing plan from two available,"
-                      "\n- Create your own groups for costs "
-                      "which will be included"
-                      "\n  in Needs or Wants worksheets,"
-                      "\n- Enter your costs and receive information "
-                      "how much you is left"
-                      "\n- If you exceed your limit, the program "
-                      "will check if the debt can be covered,"
-                      "\n  if not you will be prompt to restart "
-                      "program and enter inputs again.")
+        show_menu = pyip.inputMenu(['About the app', 'Print tables',
+                                    'Manage your budget', 'Exit'],
+                                   prompt="Select one of the following"
+                                          "and hit Enter:\n",
+                                   numbered=True)
+        if show_menu == 'About the app':
+            self.clear_display()
+            print("This app is designed to control your monthly costs."
+                  "\nWith this program you will be able to:"
+                  "\n- Enter your income or get income from spreadsheet,"
+                  "\n- Choose investing plan from two available,"
+                  "\n- Create your own groups for costs "
+                  "which will be included"
+                  "\n  in Needs or Wants worksheets,"
+                  "\n- Enter your costs and receive information "
+                  "how much you is left"
+                  "\n- If you exceed your limit, the program "
+                  "will check if the debt can be covered,"
+                  "\n  if not you will be prompt to restart "
+                  "program and enter inputs again.")
 
-            elif show_menu == 'Print tables':
-                self.clear_display()
-                tables_choice = pyip.inputMenu(["general", "needs", "wants"],
-                                               prompt="Select which table "
-                                               "to print in terminal:\n",
-                                               numbered=True)
-                self.clear_display()
-                values = SHEET.worksheet(tables_choice).get_all_values()
-                table = PrettyTable()
-                table.field_names = values[0]
-                table.add_rows(values[1:])
-                print(table)
+        elif show_menu == 'Print tables':
+            self.clear_display()
+            tables_choice = pyip.inputMenu(["general", "needs", "wants"],
+                                           prompt="Select which table "
+                                                  "to print in terminal:\n",
+                                           numbered=True)
+            self.clear_display()
+            values = SHEET.worksheet(tables_choice).get_all_values()
+            table = PrettyTable()
+            table.field_names = values[0]
+            table.add_rows(values[1:])
+            print(table)
 
-            elif show_menu == "Manage your budget":
-                self.clear_display()
-                start_sequence = True
+        elif show_menu == "Manage your budget":
+            self.clear_display()
 
-            else:
-                sys.exit(0)
-
-        return start_sequence
+        else:
+            sys.exit(0)
 
     def choose_month(self):
         """
@@ -148,9 +148,9 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                             income = dic['Monthly Income']
                         elif (dic['Month'] == month_calc and
                               dic['Monthly Income'] == ''):
-                            raise ValueError()
+                            raise TypeError()
                     break
-                except ValueError:
+                except TypeError:
                     print("Something went wrong. Check if name of columns "
                           "and rows in spreadsheet are correct and if "
                           "Monthly Income is not empty.\n")
@@ -207,8 +207,8 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                               "investment type, where the budget is "
                               "split in\nproportion:"
                               "\n70% Needs\n20% Wants\n10% Savings\n")
-                except: # pylint: disable=bare-except
-                    print("Something went wrong. "
+                except TypeError:
+                    print("\nSomething went wrong. "
                           "Check your income value in spreadsheet "
                           "or enter income manually.")
                     self.restart_program()
@@ -253,6 +253,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
 
         print("\nBudget up-to-date!")
         if worksheet == 'wants':
+            print("Your budgeting is completed.")
             self.restart_program()
 
     def invset_money(self, month, month_cell, savings_cell, surplus):

@@ -1,11 +1,15 @@
-import gspread
-from google.oauth2.service_account import Credentials
-from datetime import datetime
-import pyinputplus as pyip
-from termcolor import colored
+"""
+This module contains UpdateSpreadsheetMixin,
+with methods related to Google Sheets operations.
+"""
 import os
 import sys
 import time
+from datetime import datetime
+import pyinputplus as pyip
+from termcolor import colored
+import gspread
+from google.oauth2.service_account import Credentials
 
 
 # Global Variables for Google API
@@ -137,9 +141,9 @@ class UpdateSpreadsheetMixin:
         get_all_values = SHEET.worksheet('needs').get_all_values()
         SHEET.worksheet(worksheet).clear()
         row_values = []
-        for li in get_all_values:
+        for li_elem in get_all_values:
             li_li = []
-            li_li.append(li[0])
+            li_li.append(li_elem[0])
             row_values.append(li_li)
 
         SHEET.worksheet(worksheet).insert_rows(row_values)
