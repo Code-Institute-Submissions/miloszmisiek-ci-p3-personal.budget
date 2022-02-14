@@ -10,7 +10,6 @@ from datetime import datetime
 import gspread
 from google.oauth2.service_account import Credentials
 import pyinputplus as pyip
-
 from prettytable import PrettyTable
 
 from classes.systemmixin import SystemMixin
@@ -49,45 +48,47 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
         """
         self.clear_display()
 
-        show_menu = pyip.inputMenu(['About the app', 'Print tables',
-                                    'Manage your budget', 'Exit'],
-                                   prompt="Select one of the following"
-                                          "and hit Enter:\n",
-                                   numbered=True)
-        if show_menu == 'About the app':
-            self.clear_display()
-            print("This app is designed to control your monthly costs."
-                  "\nWith this program you will be able to:"
-                  "\n- Enter your income or get income from spreadsheet,"
-                  "\n- Choose investing plan from two available,"
-                  "\n- Create your own groups for costs "
-                  "which will be included"
-                  "\n  in Needs or Wants worksheets,"
-                  "\n- Enter your costs and receive information "
-                  "how much you is left"
-                  "\n- If you exceed your limit, the program "
-                  "will check if the debt can be covered,"
-                  "\n  if not you will be prompt to restart "
-                  "program and enter inputs again.")
+        while True:
+            show_menu = pyip.inputMenu(['About the app', 'Print tables',
+                                        'Manage your budget', 'Exit'],
+                                       prompt="Select one of the following "
+                                              "and hit Enter:\n",
+                                       numbered=True)
+            if show_menu == 'About the app':
+                self.clear_display()
+                print("This app is designed to control your monthly costs."
+                      "\nWith this program you will be able to:"
+                      "\n\n- Enter your income or get income from spreadsheet,"
+                      "\n\n- Choose investing plan from two available,"
+                      "\n\n- Create your own groups for costs "
+                      "which will be included"
+                      "\n  in Needs or Wants worksheets,"
+                      "\n\n- Enter your costs and receive information "
+                      "how much you is left,"
+                      "\n\n- If you exceed your limit, the program "
+                      "will check if the debt can be covered,"
+                      "\n  if not you will be prompt to restart "
+                      "program and enter inputs again.\n")
 
-        elif show_menu == 'Print tables':
-            self.clear_display()
-            tables_choice = pyip.inputMenu(["general", "needs", "wants"],
-                                           prompt="Select which table "
-                                                  "to print in terminal:\n",
-                                           numbered=True)
-            self.clear_display()
-            values = SHEET.worksheet(tables_choice).get_all_values()
-            table = PrettyTable()
-            table.field_names = values[0]
-            table.add_rows(values[1:])
-            print(table)
+            elif show_menu == 'Print tables':
+                self.clear_display()
+                table = pyip.inputMenu(["general", "needs", "wants"],
+                                       prompt="Select which table "
+                                              "to print in terminal:\n",
+                                       numbered=True)
+                self.clear_display()
+                values = SHEET.worksheet(table).get_all_values()
+                table = PrettyTable()
+                table.field_names = values[0]
+                table.add_rows(values[1:])
+                print(table)
 
-        elif show_menu == "Manage your budget":
-            self.clear_display()
+            elif show_menu == "Manage your budget":
+                self.clear_display()
+                break
 
-        else:
-            sys.exit(0)
+            else:
+                sys.exit(0)
 
     def choose_month(self):
         """
