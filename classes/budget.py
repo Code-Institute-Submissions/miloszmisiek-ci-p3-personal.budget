@@ -88,6 +88,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                 break
 
             else:
+                self.clear_display()
                 sys.exit(0)
 
     def choose_month(self):
