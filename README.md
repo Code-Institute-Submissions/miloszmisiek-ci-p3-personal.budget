@@ -32,9 +32,9 @@ The Google Sheets file for program operation can be found [here](https://docs.go
   - [Third Party Libraries](#third-party-libraries)
 - [Testing](#testing)
 - [Deployment](#deployment)
-  - [Using Heroku to deploy the project.](#using-heroku-to-deploy-the-project)
-  - [Fork a repository.](#fork-a-repository)
-  - [Clone a repository.](#clone-a-repository)
+  - [Using Heroku to deploy the project](#using-heroku-to-deploy-the-project)
+  - [Fork a repository](#fork-a-repository)
+  - [Clone a repository](#clone-a-repository)
 - [Credits](#credits)
   - [Content](#content)
 - [Acknowledgements](#acknowledgements)
@@ -254,6 +254,7 @@ In GitHub you have option to create a local copy (clone) of your repository on y
 # Credits
 ## Content
 - The program structure and layout were inspired by Code Institute student project [Vaccination Manager](https://github.com/neil314159/portfolio-project-3) by 'neil314159'.
+- .env file soulution to fix pylint import error come from [Stack Overflow](https://stackoverflow.com/questions/48973742/proper-relative-imports-unable-to-import-module).
 - The budgeting plan section of README is taken from [n26 Digital Bank](https://n26.com/en-eu/blog/50-30-20-rule).
 - Setting up the Google APIs origin is [Code Institute](https://codeinstitute.net/) 'Love Sandwiches' Essential Project.
 - README and TESTING files text grammar and typing were checked using [Microsoft Word](https://www.microsoft.com/pl-pl/microsoft-365/word).

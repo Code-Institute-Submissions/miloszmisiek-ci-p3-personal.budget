@@ -7,6 +7,7 @@ import time
 import os
 import sys
 from datetime import datetime
+from termcolor import colored
 import gspread
 from google.oauth2.service_account import Credentials
 import pyinputplus as pyip
@@ -51,8 +52,9 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
         while True:
             show_menu = pyip.inputMenu(['About the app', 'Print tables',
                                         'Manage your budget', 'Exit'],
-                                       prompt="Select one of the following "
-                                              "and hit Enter:\n",
+                                       prompt=colored("Select one of "
+                                       "the following and hit Enter:\n",
+                                                      "magenta"),
                                        numbered=True)
             if show_menu == 'About the app':
                 self.clear_display()
@@ -73,8 +75,8 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
             elif show_menu == 'Print tables':
                 self.clear_display()
                 table = pyip.inputMenu(["general", "needs", "wants"],
-                                       prompt="Select which table "
-                                              "to print in terminal:\n",
+                                       prompt=colored("Select which table "
+                                       "to print in terminal:\n", "magenta"),
                                        numbered=True)
                 self.clear_display()
                 values = SHEET.worksheet(table).get_all_values()
@@ -88,7 +90,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                 break
 
             else:
-                self.clear_display()
+                os.system('clear')
                 sys.exit(0)
 
     def choose_month(self):
@@ -97,8 +99,8 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
         """
         month = pyip.inputMenu(['Present month', 'Select month',
                                 'Back to Main Menu'],
-                               prompt="Select which month will "
-                               "include calculations:\n",
+                               prompt=colored("Select which month will "
+                               "include calculations:\n", "magenta"),
                                numbered=True)
         if month == 'Present month':
             month_calc = MONTH_NOW
@@ -131,8 +133,8 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
             input_decision = pyip.inputMenu(['Enter monthly income',
                                              'Get income from spreadsheet',
                                              'Back to Main Menu'],
-                                            prompt="Select income "
-                                                   "for calculations:\n",
+                                            prompt=colored("Select income "
+                                            "for calculations:\n", "magenta"),
                                             numbered=True)
             if input_decision == 'Enter monthly income':
                 self.clear_display()
@@ -171,8 +173,8 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
         while True:
             response = pyip.inputMenu(['About plans', '50/30/20', '70/20/10',
                                        'Back to Main Menu'],
-                                      prompt="Please select which budget plan "
-                                             "you choose:\n",
+                                      prompt=colored("Please select which "
+                                      "budget plan you choose:\n", "magenta"),
                                       numbered=True)
             if response == 'Back to Main Menu':
                 os.execl(sys.executable, sys.executable, *sys.argv)
@@ -254,7 +256,10 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
             self.invset_money(month, month_cell, savings_cell, surplus)
 
         print("\nBudget up-to-date!")
+        time.sleep(3)
+
         if worksheet == 'wants':
+            self.clear_display()
             print("Your budgeting is completed.")
             self.restart_program()
 
@@ -267,8 +272,8 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
 
         add_money = pyip.inputMenu(['Savings', 'Extra Money',
                                     'Back to Main Menu'],
-                                   prompt="Select where to "
-                                          "invest your money:\n",
+                                   prompt=colored("Select where to "
+                                   "invest your money:\n", "magenta"),
                                    numbered=True)
         if add_money == 'Savings':
             self.clear_display()

@@ -182,8 +182,9 @@ class UpdateSpreadsheetMixin:
                  'Customize Categories',
                  'Get Categories from Spreadsheet',
                  'Back to Main Menu'],
-                prompt=f"Select how do you want to manage your "
-                f"{self.color_worksheet_names(worksheet)}:\n",
+                prompt=colored(f"Select how do you want to manage your "
+                               f"{self.color_worksheet_names(worksheet)}:\n",
+                               "magenta"),
                 numbered=True)
             if options_menu == 'Default Categories' or \
                options_menu == 'Customize Categories':
@@ -204,9 +205,11 @@ class UpdateSpreadsheetMixin:
                                   "limit yourself to one word entries.")
                             print("\nExample: Vehicle")
                             user_choice = pyip.inputStr(
-                                prompt="\nEnter your category and hit Enter."
-                                       "\nIf you finish, press 'q' "
-                                       "and hit Enter:\n",
+                                prompt=colored("\nEnter your category "
+                                               "and hit Enter."
+                                               "\nIf you finish, press 'q' "
+                                               "and hit Enter:\n",
+                                               "magenta"),
                                 blockRegexes=[r'\s|,+'])
                             if user_choice.lower() == 'q' and \
                                user_categories != '':
