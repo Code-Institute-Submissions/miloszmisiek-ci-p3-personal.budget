@@ -1,7 +1,7 @@
 """
 This module contains Budget class,
-with all methods and attribiutes required
-to create instance.
+with all methods and attributes required
+to create an instance.
 """
 import time
 import os
@@ -36,7 +36,7 @@ MONTHS = ['January', 'February', 'March', 'April',
 
 class Budget(SystemMixin, UpdateSpreadsheetMixin):
     """
-    Budget class that handles user option for calculations.
+    The Budget class handles user options for calculations.
     """
     def __init__(self):
         self.main_menu()
@@ -45,7 +45,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
 
     def main_menu(self):
         """
-        Method to display main menu.
+        Method to display the main menu.
         """
 
         self.clear_display()
@@ -60,13 +60,14 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                 self.clear_display()
                 print("This app is designed to control your monthly costs."
                       "\nWith this program you will be able to:"
-                      "\n- Enter your income or get income from spreadsheet,"
-                      "\n- Choose investing plan from two available,"
-                      "\n- Create your own groups for costs "
+                      "\n- Enter your income or "
+                      "get income from the spreadsheet,"
+                      "\n- Choose an investing plan from two available,"
+                      "\n- Create your groups for costs "
                       "which will be included"
                       "\n  in Needs or Wants worksheets,"
                       "\n- Enter your costs and receive information "
-                      "how much you is left,"
+                      "how much is left,"
                       "\n- If you exceed your limit, the program "
                       "will check if the debt can be covered,"
                       "\n  if not you will be prompt to restart "
@@ -96,7 +97,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
 
     def choose_month(self):
         """
-        Returns month for calulations based on user input.
+        Returns month for calculations based on user input.
         """
         month = pyip.inputMenu(['Present month', 'Select month',
                                 'Back to Main Menu'],
@@ -124,7 +125,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
     def enter_income(self):
         """
         Gets user's input for income,
-        validates the choice returns user's choice.
+        validates the choice and returns the user's choice.
         """
         self.clear_display()
         all_values = SHEET.worksheet('general').get_all_records()
@@ -155,7 +156,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                             raise TypeError()
                     break
                 except TypeError:
-                    print("Something went wrong. Check if name of columns "
+                    print("Something went wrong. Check if the name of columns "
                           "and rows in spreadsheet are correct and if "
                           "Monthly Income is not empty.\n")
                     continue
@@ -166,8 +167,8 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
 
     def choose_budget_plan(self):
         """
-        Gets user input for budget plan based on menu presented on the screen,
-        validates the choice and returns user's choice.
+        Gets user input for a budget plan based on the menu presented
+        on the screen, validates the choice and returns the user's choice.
         """
         self.clear_display()
         while True:
@@ -220,8 +221,8 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
 
     def manage_your_budget(self, worksheet, surplus, savings, month):
         """
-        Manages SURPLUS values for selected worksheet.
-        Transfer SURPLUS to cell selected by user.
+        Manages SURPLUS values for selected worksheets.
+        Transfer SURPLUS to cell selected by the user.
         """
         self.clear_display()
         print("Managing budget...\n")

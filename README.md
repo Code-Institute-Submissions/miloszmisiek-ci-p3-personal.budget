@@ -27,7 +27,7 @@ The Google Sheets file for program operation can be found [here](https://docs.go
   - [Updating Needs/Wants Values](#updating-needswants-values)
   - [Budget Management](#budget-management)
   - [Future Features](#future-features)
-  - [Data Model](#data-model)
+- [Data Model](#data-model)
 - [Technologies Used](#technologies-used)
   - [Third-Party Libraries](#third-party-libraries)
 - [Testing](#testing)
@@ -125,7 +125,7 @@ Users are prompted to enter their monthly income:
 All procedures after **Income Input** are almost identical for Needs and Wants. After completing managing the budget for Needs, users go through the same steps for Wants. Users are intentionally not allowed to first work on Wants budget and then on Needs - Wants what should be considered only if Needs costs are covered for the month. 
 The amount of money available to spend on Needs or Wants depends on the selected budget plan.
 
-Users are prompted to choose from the menu how categories will be handled in later calculations and updated in the Google Sheets file. These categories are top row in Google Sheets spreadsheet, respectively for Needs and Wants worksheets:
+Users are prompted to choose from the menu how categories will be handled in later calculations and updated in the Google Sheets file. These categories are top row in Google Sheets spreadsheet, respectively for **Needs** and **Wants** worksheets:
 1. **Default Categories** - users can select to use default categories. These categories are defined in the source code and are as follows:
    - Needs: Housing, Vehicle, Insurance, Food, Banking.
    - Wants: Entertainment, Wellbeing, Travel
@@ -175,8 +175,8 @@ The extra cell was made to allow users to collect their extra money if they did 
 2. This project is based on one spreadsheet for all. In future, this project could be restructured to create spreadsheets for all users.
 3. Add Google Sheets spreadsheet formatting while using the Budget Manager Python program.
 
-## Data Model
-Budget Manager runs in terminal and Google Sheets. OOP was used as the main data model. The program is build on **Budget**, **Needs**, **Wants** and **Savings** classes with additional use of mixins: **SystemMixing** and **UpdateSpreadsheetMixin**. They are located in the *classes* folder and imported as modules. *run.py* file creates instances of classes.
+# Data Model
+Budget Manager runs in terminal and Google Sheets. The OOP was used as the main data model. The program is build on **Budget**, **Needs**, **Wants** and **Savings** classes with additional use of mixins: **SystemMixing** and **UpdateSpreadsheetMixin**. They are located in the *classes* folder and imported as modules. *run.py* file creates instances of classes.
 
 # Technologies Used
 - [Python](https://www.python.org) - interpreted high-level general-purpose programming language used to build the entire application.

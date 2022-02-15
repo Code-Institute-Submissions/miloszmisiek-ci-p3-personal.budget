@@ -131,8 +131,8 @@ class UpdateSpreadsheetMixin:
 
     def clear_worksheet(self, worksheet):
         """
-        Clears entire worksheet and populates first column
-        with previously catched values.
+        Clears the entire worksheet and populates the first column
+        with previously caught values.
         """
         self.clear_display()
         print(f"Erasing {self.color_worksheet_names(worksheet)} "
@@ -171,8 +171,8 @@ class UpdateSpreadsheetMixin:
 
     def create_categories(self, worksheet, default_cat):
         """
-        Gets user input to create peronsalized categories or
-        use default option. Validates inputs.
+        Gets user input to create personalised categories or
+        use the default option. Validates inputs.
         """
         flow = True
         while flow:

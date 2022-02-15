@@ -1,6 +1,6 @@
 """
-This module costains SystemMixin to execute methods
-used to clear terminal and restart program.
+This module contains SystemMixin to execute methods
+used to clear the terminal and restart the program.
 """
 import os
 import sys
