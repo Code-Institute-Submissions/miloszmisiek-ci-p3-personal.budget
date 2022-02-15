@@ -19,9 +19,7 @@ class SystemMixin:
         """
         Method to clear the display - logo remains.
         """
-        os.system('clear')
-        print("\n"*24)
-        os.system('clear')
+        os.system('cls' if os.name == 'nt' else 'clear')
         # Concept for pyfiglet styling comes from
         # https://www.youtube.com/watch?v=U1aUteSg2a4
         print(colored(pyfiglet.figlet_format("personal budget manager",
