@@ -184,7 +184,7 @@ class UpdateSpreadsheetMixin:
                  'Back to Main Menu'],
                 prompt=colored(f"Select how do you want to manage your "
                                f"{self.color_worksheet_names(worksheet)}:\n",
-                               "magenta"),
+                               "yellow"),
                 numbered=True)
             if options_menu == 'Default Categories' or \
                options_menu == 'Customize Categories':
@@ -209,7 +209,7 @@ class UpdateSpreadsheetMixin:
                                                "and hit Enter."
                                                "\nIf you finish, press 'q' "
                                                "and hit Enter:\n",
-                                               "magenta"),
+                                               "yellow"),
                                 blockRegexes=[r'\s|,+'])
                             if user_choice.lower() == 'q' and \
                                user_categories != '':
