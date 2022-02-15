@@ -169,6 +169,80 @@ class UpdateSpreadsheetMixin:
         time.sleep(3)
         return split_categories
 
+    def get_categories_from_spreadsheet(self, worksheet):
+        """
+        Method fethes categories from spreadsheet.
+        Returns flow value for program operation.
+        """
+        all_values = SHEET.worksheet(worksheet).get_all_values()
+        get_categories = all_values[0][1:]
+        categories_string = ''
+        for item in get_categories:
+            if item != '' and item != 'TOTAL':
+                categories_string += (item + ',')
+        user_cat = categories_string[:-1]
+        if user_cat == '':
+            print(f"\nYour categories are empty. "
+                  "Use Default or customize "
+                  f"{self.color_worksheet_names(worksheet)} "
+                  "categories yourself.")
+            time.sleep(5)
+            flow = True
+        else:
+            flow = False
+
+        return user_cat, flow
+
+    def default_custom_cat(self, options_menu, worksheet, default_cat):
+        """
+        Method to handle Default or Customized categories.
+        """
+        user_cat = None
+        flow = True
+        print(f"\n{options_menu} will delete all "
+              "values in the worksheet.")
+        continue_bool = pyip.inputYesNo("\nDo you want to continue? "
+                                        "Type Yes or No:\n")
+        if continue_bool.lower() == 'yes':
+            self.clear_worksheet(worksheet)
+            if options_menu == 'Customize Categories':
+                user_cat = ''
+                while True:
+                    self.clear_display()
+                    print("\nEnter your categories WITHOUT "
+                          "whitespaces such as spaces or tabs, "
+                          "\nEvery entry should be "
+                          "for ONE category only!"
+                          "\nDO NOT use commas (,).")
+                    print("For enhanced UX, "
+                          "limit yourself to one word entries.")
+                    print("\nExample: Vehicle")
+                    user_choice = pyip.inputStr(
+                        prompt=colored("\nEnter your category "
+                                       "and hit Enter."
+                                       "\nIf you finish, press 'q' "
+                                       "and hit Enter:\n",
+                                       "yellow"),
+                        blockRegexes=[r'\s|,+'])
+                    if user_choice.lower() == 'q' and \
+                       user_cat != '':
+                        user_cat = user_cat[:-1]
+                        flow = False
+                        break
+                    if (user_choice.lower() == 'q' and
+                            user_cat == ''):
+                        print("\nYou did not enter "
+                              "any category! Try again.")
+                        time.sleep(5)
+                    else:
+                        user_cat += (
+                            user_choice.capitalize() + ',')
+            else:
+                user_cat = default_cat
+                flow = False
+
+        return user_cat, flow, continue_bool
+
     def create_categories(self, worksheet, default_cat):
         """
         Gets user input to create personalised categories or
@@ -186,68 +260,22 @@ class UpdateSpreadsheetMixin:
                                f"{self.color_worksheet_names(worksheet)}:\n",
                                "yellow"),
                 numbered=True)
-            if options_menu == 'Default Categories' or \
-               options_menu == 'Customize Categories':
-                print(f"\n{options_menu} will delete all "
-                      "values in the worksheet.")
-                continue_bool = pyip.inputYesNo("\nDo you want to continue? "
-                                                "Type Yes or No:\n")
-                if continue_bool.lower() == 'yes':
-                    self.clear_worksheet(worksheet)
-                    if options_menu == 'Customize Categories':
-                        user_categories = ''
-                        while True:
-                            self.clear_display()
-                            print("\nEnter your categories WITHOUT "
-                                  "whitespaces such as spaces or tabs, "
-                                  "\nDO NOT use commas (,).")
-                            print("For enhanced UX, "
-                                  "limit yourself to one word entries.")
-                            print("\nExample: Vehicle")
-                            user_choice = pyip.inputStr(
-                                prompt=colored("\nEnter your category "
-                                               "and hit Enter."
-                                               "\nIf you finish, press 'q' "
-                                               "and hit Enter:\n",
-                                               "yellow"),
-                                blockRegexes=[r'\s|,+'])
-                            if user_choice.lower() == 'q' and \
-                               user_categories != '':
-                                user_categories = user_categories[:-1]
-                                flow = False
-                                break
-                            elif (user_choice.lower() == 'q' and
-                                  user_categories == ''):
-                                print("\nYou did not enter "
-                                      "any category! Try again.")
-                                time.sleep(5)
-                            else:
-                                user_categories += (
-                                    user_choice.capitalize() + ',')
-                    else:
-                        user_categories = default_cat
-                        flow = False
+            if options_menu in ('Default Categories', 'Customize Categories'):
+                def_cust_elem = self.default_custom_cat(options_menu,
+                                                        worksheet,
+                                                        default_cat)
+                user_cat = def_cust_elem[0]
+                flow = def_cust_elem[1]
+                continue_bool = def_cust_elem[2]
 
-                else:
+                if continue_bool != 'yes':
                     continue
+
             elif options_menu == 'Get Categories from Spreadsheet':
-                all_values = SHEET.worksheet(worksheet).get_all_values()
-                get_categories = all_values[0][1:]
-                categories_string = ''
-                for item in get_categories:
-                    if item != '' and item != 'TOTAL':
-                        categories_string += (item + ',')
-                user_categories = categories_string[:-1]
-                if user_categories == '':
-                    print(f"\nYour categories are empty. "
-                          "Use Default or customize "
-                          f"{self.color_worksheet_names(worksheet)} "
-                          "categories yourself.")
-                    time.sleep(5)
-                    flow = True
-                else:
-                    flow = False
+                get_cat_elem = self.get_categories_from_spreadsheet(worksheet)
+                user_cat = get_cat_elem[0]
+                flow = get_cat_elem[1]
             else:
                 os.execl(sys.executable, sys.executable, *sys.argv)
 
-        return user_categories + ',TOTAL' + ',SURPLUS'
+        return user_cat + ',TOTAL' + ',SURPLUS'
