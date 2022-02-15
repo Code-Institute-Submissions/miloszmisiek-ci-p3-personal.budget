@@ -33,8 +33,9 @@ class SystemMixin:
         """
         # Code copied from
         # https://stackoverflow.com/questions/48129942/python-restart-program
-        restart = pyip.inputYesNo("\nDo you want to go back to Main Menu? "
-                                  "Type Yes or No:\n")
+        restart = pyip.inputYesNo(colored("\nDo you want to go back "
+                                          "to Main Menu? Type Yes or No:\n",
+                                          "yellow"))
 
         if restart == "yes":
             os.execl(sys.executable, sys.executable, *sys.argv)

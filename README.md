@@ -10,7 +10,7 @@ The program can be run [here](https://personal-budget-manager.herokuapp.com/).
 
 The Google Sheets file for program operation can be found [here](https://docs.google.com/spreadsheets/d/19BHSAAJUUjRaPTcDJA9t2W7f-NtQhhcySJKf-Cu2uwE/edit?usp=sharing).
 
-<h2 align="center"><img src="docs/readme-files/main-page.png" alt="Program main page" style="max-width='100%'"></h2>
+<h2 align="center"><img src="docs/readme-files/main-menu.png" alt="Program main page" style="max-width='100%'"></h2>
 
 # Contents
 - [Contents](#contents)
@@ -23,6 +23,7 @@ The Google Sheets file for program operation can be found [here](https://docs.go
   - [Main Menu](#main-menu)
   - [Month Selection](#month-selection)
   - [Income Input](#income-input)
+  - [Plan Selection](#plan-selection)
   - [Managing Categories for Needs/Wants](#managing-categories-for-needswants)
   - [Updating Needs/Wants Values](#updating-needswants-values)
   - [Budget Management](#budget-management)
@@ -96,7 +97,7 @@ Users can select one of two available budgeting plans, where they allocate their
 ## Main Menu
 The main menu is loaded when the program starts and when users decide to restart.
 
-![Main Menu](docs/readme-files/main-page.png)
+![Main Menu](docs/readme-files/main-menu.png)
 
 1. **About the app** - this section can be accessed through the main menu. It provides users with a program operation brief description.
 
@@ -118,8 +119,15 @@ Users are prompted to enter their monthly income:
 1. **Enter monthly income** - users input income manually. Input is validated - only float data type is allowed.
 2. **Get income from spreadsheet** - data is fetched from worksheet based on last entry. If the field is empty, the message will pop-up informing users that their entry is not valid, and they will need to enter income manually.
 
+## Plan Selection
+
+Users are prompted to choose a budget plan. From this page users have the following options:
+1. **About plans** - a short overview of budgeting plans.
+2. **50/30/20** - the budgeting plan based on the 50/30/20 rule.
+3. **70/20/10** - the budgeting plan based on the 70/20/10 rule.
+
 ## Managing Categories for Needs/Wants
-![Categories - Needs](docs/readme-files/manage-categories-needs.png)
+![Categories - Needs](docs/readme-files/manage-categories.png)
 
 **Important Note!**
 All procedures after **Income Input** are almost identical for Needs and Wants. After completing managing the budget for Needs, users go through the same steps for Wants. Users are intentionally not allowed to first work on Wants budget and then on Needs - Wants what should be considered only if Needs costs are covered for the month. 
@@ -147,7 +155,7 @@ Before erasing the worksheet, users will be warned and prompted to accept or rej
 
 ## Updating Needs/Wants Values
 
-![Input Values](docs/readme-files/input-values-needs.png)
+![Input Values](docs/readme-files/value-input.png)
 
 This part appears after the user decides to handle categories.
 The top message includes the amount of money, that users are allowed to spend for the relevant section. The value is updated every time users make entries for a category of their choice made in the previous call.
@@ -159,12 +167,12 @@ After successful entries, the spreadsheet will be updated with passed values and
 ## Budget Management
 After users’ complete value entries, the program will check what is the surplus of total costs for Needs or Wants:
 1. **Negative Surplus**
-![Negative Surplus - Needs](docs/readme-files/budget-negative-needs.png)
+![Negative Surplus - Needs](docs/readme-files/negative-surplus.png)
 If **Surplus** is **negative**, the value of Savings will be checked to cover the difference. 
   - If this is still not enough, users are prompted to evaluate their spending. From this point, users can go back to Main Menu or exit the program.
   - If Savings value can cover the debt, then Savings will transfer to Surplus.
 2. **Positive Surplus**
-![Positive Surplus - Needs](docs/readme-files/budget-positive-needs.png)
+![Positive Surplus - Needs](docs/readme-files/positive-surplus.png)
 If **Surplus** is **positive**, users can decide where to allocate their money. Available options are as follows:
   - **Savings** - money will be added to the Savings cell in the 'general' worksheet.
   - **Extra Money** - money will be added to the Extra cell in the 'general' worksheet.

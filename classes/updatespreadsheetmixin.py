@@ -200,7 +200,7 @@ class UpdateSpreadsheetMixin:
                             self.clear_display()
                             print("\nEnter your categories WITHOUT "
                                   "whitespaces such as spaces or tabs, "
-                                  "DO NOT use commas (,).")
+                                  "\nDO NOT use commas (,).")
                             print("For enhanced UX, "
                                   "limit yourself to one word entries.")
                             print("\nExample: Vehicle")
