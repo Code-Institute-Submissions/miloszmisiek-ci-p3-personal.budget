@@ -47,8 +47,8 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
         """
         Method to display main menu.
         """
-        self.clear_display()
 
+        self.clear_display()
         while True:
             show_menu = pyip.inputMenu(['About the app', 'Print tables',
                                         'Manage your budget', 'Exit'],
