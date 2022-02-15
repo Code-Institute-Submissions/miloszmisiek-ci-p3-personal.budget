@@ -60,7 +60,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                 self.clear_display()
                 print("This app is designed to control your monthly costs."
                       "\nWith this program you will be able to:"
-                      "\n\n- Enter your income or get income from spreadsheet,"
+                      "\n- Enter your income or get income from spreadsheet,"
                       "\n- Choose investing plan from two available,"
                       "\n- Create your own groups for costs "
                       "which will be included"
@@ -78,7 +78,8 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                                        prompt=colored("Select which table "
                                        "to print in terminal:\n", "yellow"),
                                        numbered=True)
-                self.clear_display()
+                os.system('cls' if os.name == 'nt' else 'clear')
+                print("\n")
                 values = SHEET.worksheet(table).get_all_values()
                 table = PrettyTable()
                 table.field_names = values[0]
@@ -193,23 +194,23 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                         self.clear_display()
                         print("The 50/30/20 rule is a money management "
                               "technique that divides your income into "
-                              "three categories:"
-                              "\n50% Needs(essentials)"
-                              "\n30% Wants(non-essentials)"
-                              "\n20% Savings."
-                              "\n\nBy default this app provides "
-                              "following sub-categories:"
-                              "\nNeeds: Housing, Vehicle costs, Insurance, "
-                              "Food and Banking"
-                              "\nWants: Entertainment, Wellbeing and Travel"
-                              "\n* Savings is what is meant to be left "
-                              "untouched and used only "
-                              "in case there is\nabsolute need for it. "
-                              "It can cover any unexpected costs."
-                              "\n\nThe 70/20/10 rule is less robust "
+                              "three categories: "
+                              "50% Needs(essentials), "
+                              "30% Wants(non-essentials), "
+                              "20% Savings."
+                              "\nBy default this app provides "
+                              "following sub-categories:")
+                        print(colored("Needs: Housing, Vehicle, Insurance, "
+                                      "Food and Banking", "red"))
+                        print(colored("Wants: Entertainment, Wellbeing "
+                                      "and Travel", "green"))
+                        print("* Savings is used only in case there is "
+                              "absolute need for it. It can cover any "
+                              "\nunexpected costs."
+                              "\nThe 70/20/10 rule is less robust "
                               "investment type, where the budget is "
-                              "split in\nproportion:"
-                              "\n70% Needs\n20% Wants\n10% Savings\n")
+                              "split in\nproportion: "
+                              "70% Needs, 20% Wants, 10% Savings\n")
                 except TypeError:
                     print("\nSomething went wrong. "
                           "Check your income value in spreadsheet "

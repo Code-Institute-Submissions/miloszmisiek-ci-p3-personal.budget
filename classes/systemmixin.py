@@ -23,7 +23,8 @@ class SystemMixin:
         # Concept for pyfiglet styling comes from
         # https://www.youtube.com/watch?v=U1aUteSg2a4
         print(colored(pyfiglet.figlet_format("budget manager",
-                                             font="cybermedium", justify="center",
+                                             font="cybermedium",
+                                             justify="center",
                                              width=80), "green"))
 
     def restart_program(self):
@@ -42,5 +43,5 @@ class SystemMixin:
             print("\nThe programm will be closed...")
             print("\nSee you next time!")
             time.sleep(5)
-            self.clear_display()
+            os.system('cls' if os.name == 'nt' else 'clear')
             sys.exit(0)
