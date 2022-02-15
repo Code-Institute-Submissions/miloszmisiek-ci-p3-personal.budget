@@ -109,17 +109,21 @@ The main menu is loaded when the program starts and when users decide to restart
 
 ## Month Selection
 ![Month Selection](docs/readme-files/month-selection.png)
+
+
 Users are prompted to select a month for their calculations:
 1. **Present month** - calculations will be handled using Python datetime library to get the present month from the system.
 2. **Select month** - users can select the month for their calculations. The input is validated with a list of months. If users put an invalid entry, the message is printed.
 
 ## Income Input
 ![Income Input](docs/readme-files/income-input.png)
+
 Users are prompted to enter their monthly income:
 1. **Enter monthly income** - users input income manually. Input is validated - only float data type is allowed.
 2. **Get income from spreadsheet** - data is fetched from worksheet based on last entry. If the field is empty, the message will pop-up informing users that their entry is not valid, and they will need to enter income manually.
 
 ## Plan Selection
+![Plan Selection](docs/readme-files/plan-selection.png)
 
 Users are prompted to choose a budget plan. From this page users have the following options:
 1. **About plans** - a short overview of budgeting plans.
@@ -167,12 +171,16 @@ After successful entries, the spreadsheet will be updated with passed values and
 ## Budget Management
 After users’ complete value entries, the program will check what is the surplus of total costs for Needs or Wants:
 1. **Negative Surplus**
+
 ![Negative Surplus - Needs](docs/readme-files/negative-surplus.png)
+
 If **Surplus** is **negative**, the value of Savings will be checked to cover the difference. 
   - If this is still not enough, users are prompted to evaluate their spending. From this point, users can go back to Main Menu or exit the program.
   - If Savings value can cover the debt, then Savings will transfer to Surplus.
 2. **Positive Surplus**
+
 ![Positive Surplus - Needs](docs/readme-files/positive-surplus.png)
+
 If **Surplus** is **positive**, users can decide where to allocate their money. Available options are as follows:
   - **Savings** - money will be added to the Savings cell in the 'general' worksheet.
   - **Extra Money** - money will be added to the Extra cell in the 'general' worksheet.
@@ -184,7 +192,7 @@ The extra cell was made to allow users to collect their extra money if they did 
 3. Add Google Sheets spreadsheet formatting while using the Budget Manager Python program.
 
 # Data Model
-Budget Manager runs in terminal and Google Sheets. The OOP was used as the main data model. The program is build on **Budget**, **Needs**, **Wants** and **Savings** classes with additional use of mixins: **SystemMixing** and **UpdateSpreadsheetMixin**. They are located in the *classes* folder and imported as modules. *run.py* file creates instances of classes.
+Budget Manager runs in terminal and Google Sheets. The OOP was used as the main data model. The program is build on **Budget**, **Needs**, **Wants** and **Savings** classes with additional use of mixins: **SystemMixin** and **UpdateSpreadsheetMixin**. They are located in the *classes* folder and imported as modules. *run.py* file creates instances of classes.
 
 # Technologies Used
 - [Python](https://www.python.org) - interpreted high-level general-purpose programming language used to build the entire application.

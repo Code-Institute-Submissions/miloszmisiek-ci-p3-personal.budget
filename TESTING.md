@@ -36,6 +36,9 @@ Most of the bugs were found using [PEP8 Validator](http://pep8online.com/) which
 
 During code development, all bugs were caught along the code structure process.
 
+**Categories Input Validation**
+The first option to get users categories was to use one input entry with user categories stored as a string separated with commas. This caused a lot of issues with input validation, so it was decided to use a while loop with every category as one entry. To quit the while loop user must press 'q' and hit Enter.
+
 # Unsolved Bugs
 ## os.system('clear') not working properly in Heroku.
 This program uses heavily the *os.system('clear')* function to remove content from the terminal. During Heroku deployment, it was noticed, that the Heroku console is not clearing as expected: the top part of the console is overlapping with the new content. The decision was made to restrict content to 24 lines (Heroku console height) and when it is not possible (*Print tables* option in *Main Menu*) - remove the title logo.
