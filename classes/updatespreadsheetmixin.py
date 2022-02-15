@@ -122,7 +122,7 @@ class UpdateSpreadsheetMixin:
               "worksheet updated successfully!")
         time.sleep(3)
 
-        print(f"\nYour summarize costs for "
+        print(f"\nYour summarized cost for "
               f"{self.color_worksheet_names(worksheet)} "
               f"is: {spendings['TOTAL']}")
         time.sleep(5)
@@ -242,8 +242,8 @@ class UpdateSpreadsheetMixin:
         print(f"\n{options_menu} will delete all "
               "values in the worksheet.")
 
-        continue_bool = pyip.inputYesNo("\nDo you want to continue? "
-                                        "Type Yes or No:\n")
+        continue_bool = pyip.inputYesNo(colored("\nDo you want to continue? "
+                                        "Type Yes or No:\n", "yellow"))
 
         if continue_bool.lower() == 'yes':
             self.clear_worksheet(worksheet)

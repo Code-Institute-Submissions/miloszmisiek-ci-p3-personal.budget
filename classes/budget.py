@@ -72,11 +72,11 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                       "which will be included"
                       "\n  in Needs or Wants worksheets,"
                       "\n- Enter your costs and receive information "
-                      "how much is left,"
+                      "on how much is left,"
                       "\n- If you exceed your limit, the program "
                       "will check if the debt can be covered,"
                       "\n  if not you will be prompt to restart "
-                      "program and enter inputs again.\n")
+                      "the program and enter inputs again.\n")
 
             elif show_menu == 'Print tables':
                 self.clear_display()
@@ -223,15 +223,15 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                               "30% Wants(non-essentials), "
                               "20% Savings."
                               "\nBy default this app provides "
-                              "following sub-categories:")
+                              "the following sub-categories:")
                         print(colored("Needs: Housing, Vehicle, Insurance, "
                                       "Food and Banking", "red"))
                         print(colored("Wants: Entertainment, Wellbeing "
                                       "and Travel", "green"))
                         print("* Savings is used only in case there is "
-                              "absolute need for it. It can cover any "
+                              "an absolute need for it. It can cover any "
                               "\nunexpected costs."
-                              "\nThe 70/20/10 rule is less robust "
+                              "\nThe 70/20/10 rule is a less robust "
                               "investment type, where the budget is "
                               "split in\nproportion: "
                               "70% Needs, 20% Wants, 10% Savings\n")
