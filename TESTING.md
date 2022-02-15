@@ -26,8 +26,14 @@ The file with first validation can be found [here](docs/testing-files/pep8-examp
 All users’ inputs are validated with third party library [PyInputPlus](https://pypi.org/project/PyInputPlus/).
 The library automates validation, so no further code structure is required.
 
+I have manually tested the program by checking every option with valid and invalid entries through GitPod and Heroku terminals
+
 # Try/Except Function
 Parts of the code required extra validation using Python built-in method *try/except*.
 
 # Known Bugs
-Most of bugs were found using [PEP8 Validator](http://pep8online.com/) which are documented in section above. During code development all bugs were caught along code structure process.
+Most of the bugs were found using [PEP8 Validator](http://pep8online.com/) which are documented in the section above. During code development, all bugs were caught along the code structure process.
+
+# Unsolved Bugs
+## os.system('clear') not working properly in Heroku.
+This program uses heavily the *os.system('clear')* function to remove content from the terminal. During Heroku deployment, it was noticed, that the Heroku console is not clearing as expected: the top part of the console is overlapping with the new content. The decision was made to restrict content to 24 lines (Heroku console height) and when it is not possible (*Print tables* option in *Main Menu*) - remove the title logo.

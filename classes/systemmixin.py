@@ -14,7 +14,6 @@ class SystemMixin:
     """
     Mixin to clear terminal screen.
     """
-    # @staticmethod
     @staticmethod
     def clear_display():
         """
