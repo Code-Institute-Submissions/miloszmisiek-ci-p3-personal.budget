@@ -23,8 +23,8 @@ class SystemMixin:
         # Concept for pyfiglet styling comes from
         # https://www.youtube.com/watch?v=U1aUteSg2a4
         print(colored(pyfiglet.figlet_format("budget manager",
-                                             font="slant", justify="center",
-                                             width=100), "green"))
+                                             font="cybermedium", justify="center",
+                                             width=80), "green"))
 
     def restart_program(self):
         """

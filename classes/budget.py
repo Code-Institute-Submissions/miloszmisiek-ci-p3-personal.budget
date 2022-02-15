@@ -144,7 +144,6 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                                            month_calc, 'Monthly Income')
                 break
             if input_decision == 'Get income from spreadsheet':
-                # bug to fix - spreadsheet wrong month or monthly income wrong naming
                 try:
                     for dic in all_values:
                         if dic['Month'] == month_calc and \
