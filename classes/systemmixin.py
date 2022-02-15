@@ -22,9 +22,9 @@ class SystemMixin:
         os.system('cls' if os.name == 'nt' else 'clear')
         # Concept for pyfiglet styling comes from
         # https://www.youtube.com/watch?v=U1aUteSg2a4
-        print(colored(pyfiglet.figlet_format("personal budget manager",
-                                             font="graceful", justify="center",
-                                             width=80), "green"))
+        print(colored(pyfiglet.figlet_format("budget manager",
+                                             font="slant", justify="center",
+                                             width=100), "green"))
 
     def restart_program(self):
         """
