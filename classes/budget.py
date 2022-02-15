@@ -3,6 +3,7 @@ This module contains Budget class,
 with all methods and attributes required
 to create an instance.
 """
+
 import time
 import os
 import sys
@@ -38,6 +39,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
     """
     The Budget class handles user options for calculations.
     """
+
     def __init__(self):
         self.main_menu()
         self.income = self.enter_income()
@@ -49,13 +51,16 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
         """
 
         self.clear_display()
+
         while True:
+
             show_menu = pyip.inputMenu(['About the app', 'Print tables',
                                         'Manage your budget', 'Exit'],
                                        prompt=colored("Select one of "
                                        "the following and hit Enter:\n",
                                                       "yellow"),
                                        numbered=True)
+
             if show_menu == 'About the app':
                 self.clear_display()
                 print("This app is designed to control your monthly costs."
@@ -99,15 +104,19 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
         """
         Returns month for calculations based on user input.
         """
+
         month = pyip.inputMenu(['Present month', 'Select month',
                                 'Back to Main Menu'],
                                prompt=colored("Select which month will "
                                "include calculations:\n", "yellow"),
                                numbered=True)
+
         if month == 'Present month':
             month_calc = MONTH_NOW
+
         elif month == 'Select month':
             while True:
+
                 self.clear_display()
                 month_calc = pyip.inputStr(
                     "Type month for calculations:\n").capitalize()
@@ -116,8 +125,10 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                 print("Incorrect input. Make sure your input "
                       "is a name of the month.\nExample: July")
                 time.sleep(5)
+
         else:
             os.execl(sys.executable, sys.executable, *sys.argv)
+
         self.clear_display()
 
         return month_calc
@@ -127,7 +138,9 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
         Gets user's input for income,
         validates the choice and returns the user's choice.
         """
+
         self.clear_display()
+
         all_values = SHEET.worksheet('general').get_all_records()
         month_calc = self.choose_month()
 
@@ -138,6 +151,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                                             prompt=colored("Select income "
                                             "for calculations:\n", "yellow"),
                                             numbered=True)
+
             if input_decision == 'Enter monthly income':
                 self.clear_display()
                 income = pyip.inputFloat("Enter your monthly "
@@ -145,7 +159,9 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                 self.update_worksheet_cell('general', income,
                                            month_calc, 'Monthly Income')
                 break
+
             if input_decision == 'Get income from spreadsheet':
+
                 try:
                     for dic in all_values:
                         if dic['Month'] == month_calc and \
@@ -155,11 +171,13 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                               dic['Monthly Income'] == ''):
                             raise TypeError()
                     break
+
                 except TypeError:
                     print("Something went wrong. Check if the name of columns "
                           "and rows in spreadsheet are correct and if "
                           "Monthly Income is not empty.\n")
                     continue
+
             else:
                 os.execl(sys.executable, sys.executable, *sys.argv)
 
@@ -170,28 +188,33 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
         Gets user input for a budget plan based on the menu presented
         on the screen, validates the choice and returns the user's choice.
         """
+
         self.clear_display()
+
         while True:
             response = pyip.inputMenu(['About plans', '50/30/20', '70/20/10',
                                        'Back to Main Menu'],
                                       prompt=colored("Please select which "
                                       "budget plan you choose:\n", "yellow"),
                                       numbered=True)
+
             if response == 'Back to Main Menu':
                 os.execl(sys.executable, sys.executable, *sys.argv)
+
             else:
+
                 try:
                     if response == '50/30/20':
                         needs = round(self.income[0] * 0.5, 1)
                         wants = round(self.income[0] * 0.3, 1)
                         savings = round(self.income[0] * 0.2, 1)
                         break
-                    elif response == '70/20/10':
+                    if response == '70/20/10':
                         needs = round(self.income[0] * 0.7, 1)
                         wants = round(self.income[0] * 0.2, 1)
                         savings = round(self.income[0] * 0.1, 1)
                         break
-                    elif response == 'About plans':
+                    if response == 'About plans':
                         self.clear_display()
                         print("The 50/30/20 rule is a money management "
                               "technique that divides your income into "
@@ -212,11 +235,13 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                               "investment type, where the budget is "
                               "split in\nproportion: "
                               "70% Needs, 20% Wants, 10% Savings\n")
+
                 except TypeError:
                     print("\nSomething went wrong. "
                           "Check your income value in spreadsheet "
                           "or enter income manually.")
                     self.restart_program()
+
         return [response, needs, wants, savings]
 
     def manage_your_budget(self, worksheet, surplus, savings, month):
@@ -224,6 +249,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
         Manages SURPLUS values for selected worksheets.
         Transfer SURPLUS to cell selected by the user.
         """
+
         self.clear_display()
         print("Managing budget...\n")
         time.sleep(3)
@@ -237,11 +263,14 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                   f"is {surplus}\n")
             print("\nChecking possibles to manage your debt...")
             time.sleep(3)
+
             cover = savings + surplus
+
             if cover < 0:
                 print("\nYou don't have enough money for your spends! "
                       "You must reduce your costs!...")
                 self.restart_program()
+
             else:
                 print("\nEnough Savings to cover debt. "
                       "Updating SURPLUS and Savings...")
@@ -250,6 +279,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                                                        savings_cell.col, cover)
                 print("\nSURPLUS and Savings up-to-date.")
                 time.sleep(3)
+
         else:
             self.clear_display()
             print(f"Your Surplus for {self.color_worksheet_names(worksheet)} "
@@ -268,6 +298,7 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
         """
         Updates Savings or Extra in spreadsheet depending on user input.
         """
+
         all_values = SHEET.worksheet('general').get_all_records()
         extra_cell = SHEET.worksheet('general').find('Extra')
 
@@ -276,10 +307,12 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                                    prompt=colored("Select where to "
                                    "invest your money:\n", "yellow"),
                                    numbered=True)
+
         if add_money == 'Savings':
             self.clear_display()
             print("Updating Savings value...\n")
             time.sleep(3)
+
             for dic in all_values:
                 if dic['Month'] == month:
                     SHEET.worksheet('general').update_cell(
@@ -290,12 +323,15 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                                                             )
             print("Savings value up-to date!\n")
             time.sleep(3)
+
         elif add_money == 'Extra Money':
             self.clear_display()
             print("Updating Extra value...\n")
             time.sleep(3)
+
             for dic in all_values:
                 if dic['Month'] == month:
+
                     if dic['Extra'] == '':
                         SHEET.worksheet('general').update_cell(
                             month_cell.row, extra_cell.col, surplus)
@@ -303,7 +339,9 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                         SHEET.worksheet('general').update_cell(
                             month_cell.row, extra_cell.col,
                             dic['Extra']+surplus)
+
             print("Extra value up-to-date!")
             time.sleep(3)
+
         else:
             os.execl(sys.executable, sys.executable, *sys.argv)

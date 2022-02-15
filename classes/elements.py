@@ -5,6 +5,7 @@ represented with classes:
 - Needs
 - Wants
 """
+
 from classes.systemmixin import SystemMixin
 from classes.updatespreadsheetmixin import UpdateSpreadsheetMixin
 
@@ -13,6 +14,7 @@ class Savings(SystemMixin, UpdateSpreadsheetMixin):
     """
     Class to handle Savings calculations.
     """
+
     def __init__(self, money, month):
         self.month = month
         self.money = money
@@ -25,6 +27,7 @@ class Needs(SystemMixin, UpdateSpreadsheetMixin):
     """
     Class to handle Needs calculations.
     """
+
     def __init__(self, money):
         self.money = money
         self.categories_string = self.create_categories('needs',
@@ -39,6 +42,7 @@ class Wants(SystemMixin, UpdateSpreadsheetMixin):
     """
     Class to handle Wants calculations.
     """
+
     def __init__(self, money):
         self.money = money
         self.categories_string = self.create_categories(

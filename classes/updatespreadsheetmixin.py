@@ -2,6 +2,7 @@
 This module contains UpdateSpreadsheetMixin,
 with methods related to Google Sheets operations.
 """
+
 import os
 import sys
 import time
@@ -35,13 +36,15 @@ class UpdateSpreadsheetMixin:
     Mixin for functions related to spreadsheet operations.
     """
 
-    def color_worksheet_names(self, worksheet):
+    @staticmethod
+    def color_worksheet_names(worksheet):
         """
         Color and capitalize worksheet names.
         """
 
         if worksheet == 'wants':
             name_worksheet = colored(worksheet.capitalize(), "green")
+
         elif worksheet == 'needs':
             name_worksheet = colored(worksheet.capitalize(), "red")
 
@@ -52,13 +55,16 @@ class UpdateSpreadsheetMixin:
         Updates Google Sheet worksheet based on present month,
         value and column arguments.
         """
+
         self.clear_display()
         print(f"Updating {column} in worksheet...\n")
         time.sleep(3)
+
         month_cell = SHEET.worksheet(worksheet).find(row)
         month_income = SHEET.worksheet(worksheet).find(column)
         SHEET.worksheet(worksheet).update_cell(month_cell.row,
                                                month_income.col, value)
+
         print(f"{column.title()} updated successfully!\n\n")
         time.sleep(3)
 
@@ -66,15 +72,20 @@ class UpdateSpreadsheetMixin:
         """
         Return user input for individual categories.
         """
+
         self.clear_display()
         month_cell = SHEET.worksheet(worksheet).find(month)
         spendings = {}
+
         for item in self.categories_list:
-            if item != 'TOTAL' and item != 'SURPLUS':
+
+            if item not in ('TOTAL', 'SURPLUS'):
+
                 self.clear_display()
 
                 if worksheet == 'needs':
                     name_item = colored(item, "red")
+
                 elif worksheet == 'wants':
                     name_item = colored(item, "green")
 
@@ -85,23 +96,32 @@ class UpdateSpreadsheetMixin:
                                                   f"for {name_item}: \n"
                                                  )
                 value -= spendings[item]
+
             else:
+
                 if item == 'TOTAL':
                     spendings[item] = sum(spendings.values())
+
                 elif item == 'SURPLUS':
                     spendings[item] = self.money - spendings['TOTAL']
+
         self.clear_display()
+
         print(f"\nUpdating {self.color_worksheet_names(worksheet)} "
               "worksheet with passed values...")
         time.sleep(3)
-        for key, value in spendings.items():
+
+        for key, val in spendings.items():
+
             if key != 'SURPLUS':
                 key_location = SHEET.worksheet(worksheet).find(key)
                 SHEET.worksheet(worksheet).update_cell(month_cell.row,
-                                                       key_location.col, value)
+                                                       key_location.col, val)
+
         print(f"\n{self.color_worksheet_names(worksheet)} "
               "worksheet updated successfully!")
         time.sleep(3)
+
         print(f"\nYour summarize costs for "
               f"{self.color_worksheet_names(worksheet)} "
               f"is: {spendings['TOTAL']}")
@@ -113,16 +133,20 @@ class UpdateSpreadsheetMixin:
         """
         Function to clear cells for the selected month and worksheet.
         """
+
         self.clear_display()
+
         month_cell = SHEET.worksheet(worksheet).find(month)
+
         print(f"\nClearing {month} row in "
               f"{self.color_worksheet_names(worksheet)} worksheet...")
         time.sleep(3)
+
         SHEET.worksheet(worksheet).batch_clear(
             [f"{month_cell.row}:{month_cell.row}"])
-
         SHEET.worksheet(worksheet).update_cell(
             month_cell.row, month_cell.col, month)
+
         print(f"\n{month.capitalize()} row in "
               f"{self.color_worksheet_names(worksheet)} "
               "worksheet is now clear.")
@@ -134,19 +158,23 @@ class UpdateSpreadsheetMixin:
         Clears the entire worksheet and populates the first column
         with previously caught values.
         """
+
         self.clear_display()
         print(f"Erasing {self.color_worksheet_names(worksheet)} "
               "worksheet...\n")
         time.sleep(3)
+
         get_all_values = SHEET.worksheet('needs').get_all_values()
         SHEET.worksheet(worksheet).clear()
         row_values = []
+
         for li_elem in get_all_values:
             li_li = []
             li_li.append(li_elem[0])
             row_values.append(li_li)
 
         SHEET.worksheet(worksheet).insert_rows(row_values)
+
         print(f"{self.color_worksheet_names(worksheet)} "
               "worksheet is now empty.\n")
         time.sleep(3)
@@ -155,18 +183,23 @@ class UpdateSpreadsheetMixin:
         """
         Updates worksheet with categories of user's choice.
         """
+
         self.clear_display()
         print(f"\nUpdating {self.color_worksheet_names(worksheet)} "
               "worksheet...")
         time.sleep(3)
+
         split_categories = categories.split(',')
         month = SHEET.worksheet(worksheet).find(cell)
+
         for num, item in enumerate(split_categories):
             if item != 'SURPLUS':
                 SHEET.worksheet(worksheet).update_cell(month.row, num+2, item)
+
         print(f"\n{self.color_worksheet_names(worksheet)} "
               "worksheet updated successfully!")
         time.sleep(3)
+
         return split_categories
 
     def get_categories_from_spreadsheet(self, worksheet):
@@ -174,13 +207,17 @@ class UpdateSpreadsheetMixin:
         Method fethes categories from spreadsheet.
         Returns flow value for program operation.
         """
+
         all_values = SHEET.worksheet(worksheet).get_all_values()
         get_categories = all_values[0][1:]
         categories_string = ''
+
         for item in get_categories:
             if item != '' and item != 'TOTAL':
                 categories_string += (item + ',')
+
         user_cat = categories_string[:-1]
+
         if user_cat == '':
             print(f"\nYour categories are empty. "
                   "Use Default or customize "
@@ -188,6 +225,7 @@ class UpdateSpreadsheetMixin:
                   "categories yourself.")
             time.sleep(5)
             flow = True
+
         else:
             flow = False
 
@@ -197,16 +235,22 @@ class UpdateSpreadsheetMixin:
         """
         Method to handle Default or Customized categories.
         """
+
         user_cat = None
         flow = True
+
         print(f"\n{options_menu} will delete all "
               "values in the worksheet.")
+
         continue_bool = pyip.inputYesNo("\nDo you want to continue? "
                                         "Type Yes or No:\n")
+
         if continue_bool.lower() == 'yes':
             self.clear_worksheet(worksheet)
+
             if options_menu == 'Customize Categories':
                 user_cat = ''
+
                 while True:
                     self.clear_display()
                     print("\nEnter your categories WITHOUT "
@@ -224,19 +268,23 @@ class UpdateSpreadsheetMixin:
                                        "and hit Enter:\n",
                                        "yellow"),
                         blockRegexes=[r'\s|,+'])
+
                     if user_choice.lower() == 'q' and \
                        user_cat != '':
                         user_cat = user_cat[:-1]
                         flow = False
                         break
+
                     if (user_choice.lower() == 'q' and
                             user_cat == ''):
                         print("\nYou did not enter "
                               "any category! Try again.")
                         time.sleep(5)
+
                     else:
                         user_cat += (
                             user_choice.capitalize() + ',')
+
             else:
                 user_cat = default_cat
                 flow = False
@@ -248,9 +296,12 @@ class UpdateSpreadsheetMixin:
         Gets user input to create personalised categories or
         use the default option. Validates inputs.
         """
+
         flow = True
+
         while flow:
             self.clear_display()
+
             options_menu = pyip.inputMenu(
                 ['Default Categories',
                  'Customize Categories',
@@ -260,6 +311,7 @@ class UpdateSpreadsheetMixin:
                                f"{self.color_worksheet_names(worksheet)}:\n",
                                "yellow"),
                 numbered=True)
+
             if options_menu in ('Default Categories', 'Customize Categories'):
                 def_cust_elem = self.default_custom_cat(options_menu,
                                                         worksheet,
@@ -275,6 +327,7 @@ class UpdateSpreadsheetMixin:
                 get_cat_elem = self.get_categories_from_spreadsheet(worksheet)
                 user_cat = get_cat_elem[0]
                 flow = get_cat_elem[1]
+
             else:
                 os.execl(sys.executable, sys.executable, *sys.argv)
 
