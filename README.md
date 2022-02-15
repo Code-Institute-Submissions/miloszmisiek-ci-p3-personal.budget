@@ -192,6 +192,7 @@ The extra cell was made to allow users to collect their extra money if they did 
 1. Add the 'Go Back/Previous Step' option to allow users to re-enter the previously visited page.
 2. This project is based on one spreadsheet for all. In future, this project could be restructured to create spreadsheets for all users.
 3. Add Google Sheets spreadsheet formatting while using the Budget Manager Python program.
+4. Use **Extra** values as a backup for **Savings** in the *manage_your_budget* method.
 
 # Data Model
 Budget Manager runs in terminal and Google Sheets. The OOP was used as the main data model. The program is build on **Budget**, **Needs**, **Wants** and **Savings** classes with additional use of mixins: **SystemMixin** and **UpdateSpreadsheetMixin**. They are located in the *classes* folder and imported as modules. *run.py* file creates instances of classes.
