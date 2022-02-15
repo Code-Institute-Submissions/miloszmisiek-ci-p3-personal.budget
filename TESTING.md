@@ -29,14 +29,14 @@ The library automates validation, so no further code structure is required.
 I have manually tested the program by checking every option with valid and invalid entries through GitPod and Heroku terminals. During the code development, I was heavily relying on GitPod 'pylint' built-in feature. It checks for any pep8 errors or warnings.
 
 # Try/Except Function
-Parts of the code that required extra validation use Python built-in method *try/except*.
+Parts of the code that require extra validation use Python built-in method *try/except*.
 
 # Known Bugs
 Most of the bugs were found using [PEP8 Validator](http://pep8online.com/) which are documented in the [PEP8 Validation](#pep8-validation) section. 
 
 During code development, all bugs were caught along the code structure process.
 
-**Categories Input Validation**
+**Categories Input Validation Issue**
 The first option to get users categories was to use one input entry with user categories stored as a string separated with commas. This caused a lot of issues with input validation, so it was decided to use a while loop with every category as one entry. To quit the while loop user must press 'q' and hit Enter.
 
 # Unsolved Bugs
