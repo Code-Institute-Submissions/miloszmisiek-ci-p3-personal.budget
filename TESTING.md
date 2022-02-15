@@ -45,3 +45,5 @@ The **Create Categories** method *while loop* was not breaking/continuing proper
 # Unsolved Bugs
 ## os.system('clear') not working properly in Heroku.
 This program uses heavily the *os.system('clear')* function to remove content from the terminal. During Heroku deployment, it was noticed, that the Heroku console is not clearing as expected: the top part of the console is overlapping with the new content. The decision was made to restrict content to 24 lines (Heroku console height) and when it is not possible (*Print tables* option in *Main Menu*) - remove the title logo.
+
+The problem will be still present during input validation - too many users mistakes will cause the text to accumulate and the *clear* method will not properly remove the content when it exceeds 24 lines in height.
