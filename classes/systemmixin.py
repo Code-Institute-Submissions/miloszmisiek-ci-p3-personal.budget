@@ -15,7 +15,8 @@ class SystemMixin:
     Mixin to clear terminal screen.
     """
     # @staticmethod
-    def clear_display(self):
+    @staticmethod
+    def clear_display():
         """
         Method to clear the display - logo remains.
         """
