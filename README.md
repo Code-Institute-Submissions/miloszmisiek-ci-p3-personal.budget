@@ -55,13 +55,15 @@ The logic flow was presented using [Lucidchart](https://www.lucidchart.com/pages
 ![Lucidchart Logic Flow](docs/readme-files/logic-flow.png)
 
 ### Colour
-Third-party library [termcolor](https://pypi.org/project/termcolor/) was used to colour the title heading in the terminal for enhanced UX. 
+Third-party library [termcolor](https://pypi.org/project/termcolor/) was used to colour the title heading in the terminal for enhanced UX:
 
-The main title/logo is green - inspired by "the Matrix" movie.
+- The main title/logo is green - inspired by "the Matrix" movie.
 
-'Needs' worksheet entries are in red - to focus attention on essential costs.
+- Most of the user input prompts are in yellow - to distinguish text from the rest of the message.
 
-'Wants' worksheet entries are in green - to give contrast to 'Needs' entries, this category should be secondary.
+- 'Needs' worksheet entries are in red - to focus attention on essential costs.
+
+- 'Wants' worksheet entries are in green - to give contrast to 'Needs' entries, this category should be secondary.
 
 # Features
 
