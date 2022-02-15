@@ -229,8 +229,8 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                         print(colored("Wants: Entertainment, Wellbeing "
                                       "and Travel", "green"))
                         print("* Savings is used only in case there is "
-                              "an absolute need for it. It can cover any "
-                              "\nunexpected costs."
+                              "an absolute need for it. "
+                              "\nIt can cover any unexpected costs."
                               "\nThe 70/20/10 rule is a less robust "
                               "investment type, where the budget is "
                               "split in\nproportion: "
