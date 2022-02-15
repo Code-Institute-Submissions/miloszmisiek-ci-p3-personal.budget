@@ -85,7 +85,6 @@ class Budget(SystemMixin, UpdateSpreadsheetMixin):
                                        "to print in terminal:\n", "yellow"),
                                        numbered=True)
                 os.system('cls' if os.name == 'nt' else 'clear')
-                print("\n")
                 values = SHEET.worksheet(table).get_all_values()
                 table = PrettyTable()
                 table.field_names = values[0]
