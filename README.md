@@ -2,7 +2,7 @@
 
 Personal Budget Manager is a product to plan monthly costs based on users’ income. It can be used by ordinary users to manage their money and to encourage for investing and saving.
 
-The entire program runs in terminal. Users can enter their income and plan their costs using two available investing plans. Money can be spread into default or custom categories. The program runs with Google Sheets which is used to store data in the spreadsheet.
+The entire program runs in a terminal. Users can enter their income and plan their costs using two available investing plans. Money can be spread into default or custom categories. The program runs with Google Sheets which is used to store data in the spreadsheet.
 
 All calculations are handled using [Python](https://www.python.org) language. Users enter data for processing and the result of calculation is returned in terminal or Google Sheets.
 
@@ -125,10 +125,10 @@ Users are prompted to enter their monthly income:
 ![Categories - Needs](docs/readme-files/manage-categories-needs.png)
 
 **Important Note!**
-All procedures after **Income Input** are almost identical for Needs and Wants. After successfully completing managing budget for Needs, users go through same steps for Wants. Users are intentionally not allowed to first work on Wants budget and then on Needs - Wants what should be considered only if Needs costs are covered for the month. 
+All procedures after **Income Input** are almost identical for Needs and Wants. After successfully completing managing the budget for Needs, users go through the same steps for Wants. Users are intentionally not allowed to first work on Wants budget and then on Needs - Wants what should be considered only if Needs costs are covered for the month. 
 The amount of money available to spend on Needs or Wants depends on the selected budget plan.
 
-Users are prompted to choose from menu how categories will be handled in later calculations and updated in Google Sheets file:
+Users are prompted to choose from the menu how categories will be handled in later calculations and updated in the Google Sheets file. These categories are top row in Google Sheets spreadsheet, respectively for Needs and Wants worksheets:
 1. **Default Categories** - users can select to use default categories. These categories are defined in the source code and are as follows:
    - Needs: Housing, Vehicle, Insurance, Food, Banking.
    - Wants: Entertainment, Wellbeing, Travel
@@ -258,7 +258,6 @@ In GitHub you have option to create a local copy (clone) of your repository on y
 - The budgeting plan section of README is taken from [n26 Digital Bank](https://n26.com/en-eu/blog/50-30-20-rule).
 - Setting up the Google APIs origin is [Code Institute](https://codeinstitute.net/) 'Love Sandwiches' Essential Project.
 - README and TESTING files text grammar and typing were checked using [Microsoft Word](https://www.microsoft.com/pl-pl/microsoft-365/word).
-- Markdown table for Responsiveness section in TESTING file was created using [Tables Generator](https://www.tablesgenerator.com/markdown_tables).
 - GitHub Deployment section come from [GitHub Docs](https://docs.github.com/en/get-started/quickstart/fork-a-repo).
 
 # Acknowledgements
