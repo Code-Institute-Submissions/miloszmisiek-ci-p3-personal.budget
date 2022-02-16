@@ -140,6 +140,7 @@ All procedures after **Income Input** are almost identical for Needs and Wants. 
 The amount of money available to spend on Needs or Wants depends on the selected budget plan.
 
 Users are prompted to choose from the menu how categories will be handled in later calculations and updated in the Google Sheets file. These categories are top row in Google Sheets spreadsheet, respectively for **Needs** and **Wants** worksheets:
+
 ![Worksheet Categories](docs/readme-files/worksheet-categories.png)
 
 
