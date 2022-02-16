@@ -277,6 +277,7 @@ In GitHub, you have the option to create a local copy (clone) of your repository
 
 # Credits
 ## Content
+- The program uses [Google Sheets](https://www.google.com/sheets/about/) to manipulate data.
 - The program structure and layout were inspired by the Code Institute student project [Vaccination Manager](https://github.com/neil314159/portfolio-project-3) by 'neil314159'.
 - .env file solution to fix pylint import error come from [Stack Overflow](https://stackoverflow.com/questions/48973742/proper-relative-imports-unable-to-import-module).
 - The budgeting plan section of README is taken from [n26 Digital Bank](https://n26.com/en-eu/blog/50-30-20-rule).
