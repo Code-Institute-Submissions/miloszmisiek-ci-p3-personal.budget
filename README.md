@@ -136,10 +136,13 @@ Users are prompted to choose a budget plan. From this page users have the follow
 ![Categories - Needs](docs/readme-files/manage-categories.png)
 
 **Important Note!**
-All procedures after **Income Input** are almost identical for Needs and Wants. After completing managing the budget for Needs, users go through the same steps for Wants. Users are intentionally not allowed to first work on Wants budget and then on Needs - Wants what should be considered only if Needs costs are covered for the month. 
+All procedures after **Income Input** are almost identical for Needs and Wants. After completing managing the budget for Needs, users go through the same steps for Wants. Users are intentionally not allowed to first work on Wants budget and then on Needs - Wants should be considered only if Needs costs are covered for the month. 
 The amount of money available to spend on Needs or Wants depends on the selected budget plan.
 
 Users are prompted to choose from the menu how categories will be handled in later calculations and updated in the Google Sheets file. These categories are top row in Google Sheets spreadsheet, respectively for **Needs** and **Wants** worksheets:
+![Worksheet Categories](docs/readme-files/worksheet-categories.png)
+
+
 1. **Default Categories** - users can select to use default categories. These categories are defined in the source code and are as follows:
    - Needs: Housing, Vehicle, Insurance, Food, Banking.
    - Wants: Entertainment, Wellbeing, Travel
